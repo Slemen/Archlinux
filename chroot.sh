@@ -207,3 +207,4 @@ clear
 echo ""
 echo " Установка завершена"
 exit
+exit
