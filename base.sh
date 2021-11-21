@@ -94,7 +94,7 @@ do
 done
 if [[ $int == 1 ]]; then
 
-curl -LO https://raw.githubusercontent.com/Slemen/Arch-linux/master/chroot.sh
+curl -LO https://raw.githubusercontent.com/Slemen/Archlinux/master/chroot.sh
   mv chroot.sh /mnt
   chmod +x /mnt/chroot.sh
 
@@ -107,7 +107,7 @@ reboot
   elif [[ $int == 2 ]]; then
   echo ' Первый этап готов'
   echo ' Arch-chroot'
-  arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/Slemen/Arch-linux/master/chroot.sh)"
+  arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/Slemen/Archlinux/master/chroot.sh)"
   umount -a
 reboot
 fi
