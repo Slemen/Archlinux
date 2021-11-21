@@ -108,7 +108,7 @@ pacman -S lib32-libpulse lib32-libxft lib32-libxinerama lib32-libxrandr lib32-op
 
 pacman -S lib32-sdl2_mixer nano-syntax-highlighting neofetch noto-fonts-emoji okular perl-image-exiftool --noconfirm
 
-pacman -S pcmanfm pkgfile p7zip pulseaudio-alsa tlp tlp-rdw --noconfirm
+pacman -S pcmanfm pkgfile p7zip pulseaudio-alsa --noconfirm
 
 pacman -S qbittorrent plasma5-applets-weather-widget qt5-xmlpatterns --noconfirm
 
@@ -150,6 +150,7 @@ pacman -Rns discover plasma-thunderbolt bolt plasma-firewall --noconfirm
 grub-mkfont -s 16 -o /boot/grub/ter-u16b.pf2 /usr/share/fonts/misc/ter-u16b.otb
 grub-mkconfig -o /boot/grub/grub.cfg
 clear
+
 pacman -S xorg-xinit --noconfirm
 cp /etc/X11/xinit/xinitrc /home/$username/.xinitrc
 chown $username:users /home/$username/.xinitrc
@@ -160,6 +161,7 @@ echo ""
 pacman -R konqueror --noconfirm
 clear
 echo " Plasma KDE успешно установлена"
+
 echo " Установка sddm "
 pacman -S sddm sddm-kcm --noconfirm
 systemctl enable sddm.service -f
@@ -167,10 +169,19 @@ echo "[General]" >> /etc/sddm.conf
 echo "..." >> /etc/sddm.conf
 echo "Numlock=on" >> /etc/sddm.conf
 clear
+
 echo " Установка sddm  завершена"
 pacman -S networkmanager networkmanager-openvpn network-manager-applet --noconfirm
 systemctl enable NetworkManager.service
 clear
+
+echo " TLP - Оптимизация времени автономной работы ноутбука с Linux"
+pacman -S tlp tlp-rdw --noconfirm
+systemctl enable tlp.service
+systemctl enable NetworkManager-dispatcher.service
+systemctl mask systemd-rfkill.service
+systemctl mask systemd-rfkill.socket
+
 echo ""
 echo " Установка программ закончена"
 echo ""
@@ -184,6 +195,7 @@ echo " Монтирование диска sdb1"
 echo '# /dev/sdb1 LABEL=Files
 UUID=4ad30ac8-e1fe-4ef8-930c-d743921657d8       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
 clear
+
 echo "
  Данный этап может исключить возможные ошибки при первом запуске системы
  Фаил откроется через редактор !nano!"
@@ -204,6 +216,7 @@ elif [[ $vm_fstab == 1 ]]; then
 nano /etc/fstab
 fi
 clear
+
 echo ""
 echo " Установка завершена"
 exit
