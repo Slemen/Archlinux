@@ -56,4 +56,4 @@ pacstrap /mnt base base-devel linux linux-headers linux-firmware dhcpcd netctl i
 echo 'Настройка системы'
 genfstab -pU /mnt >> /mnt/etc/fstab
 
-arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/Slemen/Archlinux/master/chroot.sh)"
+arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/Slemen/Archlinux/master/archuefi2.sh)"
