@@ -1,12 +1,14 @@
 #!/bin/bash
-echo ' Скрипт второй настройки системы в chroot'
+echo " Скрипт второй настройки системы в chroot"
 
+echo " Часовой пояс"
 ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
 hwclock --systohc
-echo " Часовой пояс установлен"
 
+echo " Добавляем русскую локаль системы и язык"
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen
+echo " Обновим текущую локаль системы"
 locale-gen
 echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 echo "KEYMAP=ru" >> /etc/vconsole.conf
@@ -20,6 +22,7 @@ echo ""
 read -p " Введите имя пользователя: " username
 clear
 
+echo " Создадим загрузочный RAM диск"
 mkinitcpio -p linux
 clear
 
@@ -32,16 +35,18 @@ echo ' Добавляем пароль для пользователя '$usernam
 echo ""
 passwd $username
 
+echo " Устанавливаем SUDO"
 nano /etc/sudoers
 clear
 
 pacman -Syy --noconfirm
 clear
 
-echo ""
-echo " Установка UEFI-GRUB"
+echo " Устанавливаем загрузчик UEFI-GRUB"
 pacman -S grub --noconfirm
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=grub
+
+echo " Обновляем grub.cfg"
 grub-mkconfig -o /boot/grub/grub.cfg
 clear
 
@@ -68,6 +73,7 @@ fi
 pacman -Syy --noconfirm
 clear
 
+echo " Ставим иксы и драйвера"
 pacman -S xorg xorg-server xf86-video-intel --noconfirm
 clear
 
@@ -86,7 +92,6 @@ Exec = /usr/bin/paccache -rvk0" >> /usr/share/libalpm/hooks/cleanup.hook
 echo " Хук добавлен "
 clear
 
-echo ""
 echo " Установка KDE и набора программ"
 
 pacman -S plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
@@ -115,19 +120,15 @@ pacman -S ttf-liberation ttf-sazanami unrar xclip xorg-xrandr zim yt-dlp starshi
 
 sudo ln -s /usr/bin/yt-dlp /usr/bin/youtube-dl
 
-echo ""
 echo " Добавление репозитория Archlinuxcn"
 echo '[archlinuxcn]' >> /etc/pacman.conf
 echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
 nano /etc/pacman.conf
 clear
-echo " Archlinuxcn репозиторий добавлен"
 pacman -Syy --noconfirm
 clear
-
 pacman -S archlinuxcn-keyring --noconfirm
 clear
-
 pacman -S downgrade yay timeshift ventoy-bin --noconfirm
 clear
 
@@ -156,9 +157,8 @@ echo ' [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx ' >> /etc/profile
 echo ""
 pacman -R konqueror --noconfirm
 clear
-echo " Plasma KDE успешно установлена"
 
-echo " Установка sddm "
+echo " Установка sddm"
 pacman -S sddm sddm-kcm --noconfirm
 systemctl enable sddm.service -f
 echo "[General]" >> /etc/sddm.conf
@@ -166,7 +166,7 @@ echo "..." >> /etc/sddm.conf
 echo "Numlock=on" >> /etc/sddm.conf
 clear
 
-echo " Установка sddm  завершена"
+echo " Установка сетевых утилит"
 pacman -S networkmanager networkmanager-openvpn network-manager-applet --noconfirm
 systemctl enable NetworkManager.service
 clear
@@ -179,15 +179,11 @@ systemctl mask systemd-rfkill.service
 systemctl mask systemd-rfkill.socket
 clear
 
-echo ""
-echo " Установка программ закончена"
-echo ""
 echo " Оболочка изменена с bash на fish"
 chsh -s /bin/fish
 chsh -s /bin/fish $username
 clear
 
-echo ""
 echo " Монтирование диска sdb1"
 echo '# /dev/sdb1 LABEL=Files
 UUID=4ad30ac8-e1fe-4ef8-930c-d743921657d8       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
