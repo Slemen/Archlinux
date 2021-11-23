@@ -19,13 +19,6 @@ echo " Используйте в имени только буквы латинс
 echo ""
 read -p " Введите имя пользователя: " username
 
-echo $hostname > /etc/hostname
-echo "127.0.0.1   localhost" >> /etc/hosts
-echo "::1         localhost" >> /etc/hosts
-echo "127.0.1.1	  $hostname.localdomain $hostname" >> /etc/hosts
-nano /etc/hosts
-clear
-
 mkinitcpio -p linux
 clear
 
@@ -66,8 +59,9 @@ nano /etc/pacman.conf
 clear
 echo " Multilib репозиторий настроен"
 fi
+pacman -Syy
 
-pacman -Sy xorg xorg-server xf86-video-intel --noconfirm
+pacman -S xorg xorg-server xf86-video-intel --noconfirm
 clear
 
 echo " Добавление хука автоматической очистки кэша pacman"
@@ -88,7 +82,7 @@ clear
 echo ""
 echo " Установка KDE и набора программ"
 
-pacman -Sy plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
+pacman -S plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
 
 pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious audacious-plugins bat bind --noconfirm
 
@@ -121,8 +115,9 @@ echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
 nano /etc/pacman.conf
 clear
 echo " Archlinuxcn репозиторий добавлен"
+pacman -Syy
 
-pacman -Sy archlinuxcn-keyring --noconfirm
+pacman -S archlinuxcn-keyring --noconfirm
 clear
 
 pacman -S downgrade yay timeshift ventoy-bin --noconfirm
