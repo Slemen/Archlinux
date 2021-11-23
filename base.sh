@@ -37,7 +37,7 @@ mount /dev/sda3 /mnt
 btrfs su cr /mnt/@
 btrfs su cr /mnt/@home
 
-#umount -R /mnt
+umount -R /mnt
 
 mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/sda3 /mnt
 mkdir -p /mnt/{boot/efi,home}
