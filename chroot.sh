@@ -73,7 +73,7 @@ clear
 echo " Multilib репозиторий настроен"
 fi
 
-pacman -Sy xorg-server --noconfirm
+pacman -Sy xorg-server xf86-video-intel --noconfirm
 clear
 
 echo " Добавление хука автоматической очистки кэша pacman"
