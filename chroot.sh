@@ -33,12 +33,16 @@ passwd $username
 
 nano /etc/sudoers
 clear
+
 pacman -Syy --noconfirm
+clear
+
 echo ""
 echo " Установка UEFI-GRUB"
 pacman -S grub --noconfirm
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=grub
 grub-mkconfig -o /boot/grub/grub.cfg
+clear
 
 echo ""
 echo " Настроим multilib ?"
@@ -59,7 +63,9 @@ nano /etc/pacman.conf
 clear
 echo " Multilib репозиторий настроен"
 fi
+
 pacman -Syy --noconfirm
+clear
 
 pacman -S xorg xorg-server xf86-video-intel --noconfirm
 clear
@@ -116,6 +122,7 @@ nano /etc/pacman.conf
 clear
 echo " Archlinuxcn репозиторий добавлен"
 pacman -Syy --noconfirm
+clear
 
 pacman -S archlinuxcn-keyring --noconfirm
 clear
@@ -170,6 +177,7 @@ systemctl enable tlp.service
 systemctl enable NetworkManager-dispatcher.service
 systemctl mask systemd-rfkill.service
 systemctl mask systemd-rfkill.socket
+clear
 
 echo ""
 echo " Установка программ закончена"
