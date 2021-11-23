@@ -1,10 +1,9 @@
 #!/bin/bash
-#'Установка раскладки клавиатуры'
+
 loadkeys ru
 setfont cyr-sun16
 clear
 
-#'Синхронизация системных часов'
 timedatectl set-ntp true
 
 echo''
@@ -25,18 +24,14 @@ done
    exit
 fi
 
-#'Разметка диска'
-#wipefs --all /dev/sda
+wipefs --all /dev/sda
 cfdisk /dev/sda --zero
 clear
 
-#'Форматирование разделов'
 mkfs.vfat -F32 /dev/sda1
 mkswap -L swap /dev/sda2
-#'Включение swap'
 swapon /dev/sda2
 
-#'Создание тома и подтомов (субволумов)'
 mkfs.btrfs -f -L Root /dev/sda3
 mount /dev/sda3 /mnt
 btrfs su cr /mnt/@
@@ -44,7 +39,6 @@ btrfs su cr /mnt/@home
 
 umount -R /mnt
 
-#'Монтирование разделов'
 mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/sda3 /mnt
 mkdir -p /mnt/{boot/efi,home}
 mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/sda3 /mnt/home
@@ -52,7 +46,6 @@ mount /dev/sda1 /mnt/boot/efi
 clear
 lsblk
 pacman -Sy --noconfirm 
-######
 clear
 echo ""
 echo " Если у вас есть wifi модуль и вы сейчас его не используете, то для"
