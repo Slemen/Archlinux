@@ -31,7 +31,7 @@ nano /etc/pacman.conf
 clear
 echo " Multilib репозиторий настроен"
 fi
-pacman -Syy
+pacman -Syy --noconfirm
 
 echo 'Ставим иксы и драйвера'
 pacman -S xorg xorg-server xf86-video-intel --noconfirm
@@ -86,7 +86,7 @@ echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
 nano /etc/pacman.conf
 clear
 echo " Archlinuxcn репозиторий добавлен"
-pacman -Syy
+pacman -Syy --noconfirm
 
 pacman -S archlinuxcn-keyring --noconfirm
 clear
