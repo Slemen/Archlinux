@@ -1,9 +1,11 @@
 #!/bin/bash
 
+echo 'Установка раскладки клавиатуры'
 loadkeys ru
 setfont cyr-sun16
 clear
 
+echo 'Синхронизация системных часов'
 timedatectl set-ntp true
 
 echo''
@@ -24,10 +26,11 @@ done
    exit
 fi
 
-wipefs --all /dev/sda
+echo 'Разметка дисков'
 cfdisk /dev/sda --zero
 clear
 
+echo 'Форматирование разделов'
 mkfs.vfat -F32 /dev/sda1
 mkswap -L swap /dev/sda2
 swapon /dev/sda2
@@ -39,6 +42,7 @@ btrfs su cr /mnt/@home
 
 umount -R /mnt
 
+echo 'Монтирование разделов'
 mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/sda3 /mnt
 mkdir -p /mnt/{boot/efi,home}
 mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/sda3 /mnt/home
