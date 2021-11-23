@@ -29,9 +29,6 @@ wipefs --all /dev/sda
 cfdisk /dev/sda --zero
 clear
 
-echo 'Ваша разметка диска'
-fdisk -l
-
 echo 'Форматирование дисков'
 mkfs.vfat -F32 /dev/sda1
 mkswap -L swap /dev/sda2
@@ -48,6 +45,7 @@ mkdir -p /mnt/{boot/efi,home}
 mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/sda3 /mnt/home
 mount /dev/sda1 /mnt/boot/efi
 clear
+echo 'Ваша разметка диска'
 lsblk
 
 echo 'Установка основных пакетов'
