@@ -21,6 +21,7 @@ echo 'FONT=cyr-sun16' >> /etc/vconsole.conf
 
 echo 'Создадим загрузочный RAM диск'
 mkinitcpio -p linux
+clear
 
 echo 'Создаем root пароль'
 passwd
