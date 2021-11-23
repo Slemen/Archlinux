@@ -45,7 +45,7 @@ mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,
 mount /dev/sda1 /mnt/boot/efi
 clear
 lsblk
-#pacman -Sy --noconfirm 
+pacman -Syy --noconfirm 
 clear
 echo ""
 echo " Если у вас есть wifi модуль и вы сейчас его не используете, то для"
