@@ -18,6 +18,7 @@ echo ""
 echo " Используйте в имени только буквы латинского алфавита"
 echo ""
 read -p " Введите имя пользователя: " username
+clear
 
 mkinitcpio -p linux
 clear
