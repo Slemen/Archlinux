@@ -1,12 +1,12 @@
 #!/bin/bash
 
-echo " Установка раскладки клавиатуры"
 loadkeys ru
 setfont cyr-sun16
 clear
 
 echo " Синхронизация системных часов"
 timedatectl set-ntp true
+clear
 
 echo''
 echo " Начнём установку ?"
