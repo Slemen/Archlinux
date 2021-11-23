@@ -1,11 +1,11 @@
 #!/bin/bash
 
-echo 'Установка раскладки клавиатуры'
+echo " Установка раскладки клавиатуры"
 loadkeys ru
 setfont cyr-sun16
 clear
 
-echo 'Синхронизация системных часов'
+echo " Синхронизация системных часов"
 timedatectl set-ntp true
 
 echo''
@@ -26,11 +26,11 @@ done
    exit
 fi
 
-echo 'Разметка дисков'
+echo " Разметка дисков"
 cfdisk /dev/sda --zero
 clear
 
-echo 'Форматирование разделов'
+echo " Форматирование разделов"
 mkfs.vfat -F32 /dev/sda1
 mkswap -L swap /dev/sda2
 swapon /dev/sda2
@@ -42,7 +42,7 @@ btrfs su cr /mnt/@home
 
 umount -R /mnt
 
-echo 'Монтирование разделов'
+echo " Монтирование разделов"
 mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/sda3 /mnt
 mkdir -p /mnt/{boot/efi,home}
 mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/sda3 /mnt/home
@@ -97,15 +97,15 @@ curl -LO https://raw.githubusercontent.com/Slemen/Archlinux/master/chroot.sh
   mv chroot.sh /mnt
   chmod +x /mnt/chroot.sh
 
-  echo ' Первый этап готов'
-  echo ' Arch-chroot'
+  echo " Первый этап готов"
+  echo " Arch-chroot"
   echo ' 1. проверь  интернет для продолжения установки в черуте || 2.команда для запуска ./chroot.sh '
   arch-chroot /mnt
 umount -a
 reboot
   elif [[ $int == 2 ]]; then
-  echo ' Первый этап готов'
-  echo ' Arch-chroot'
+  echo " Первый этап готов"
+  echo " Arch-chroot"
   arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/Slemen/Archlinux/master/chroot.sh)"
   umount -a
 reboot
