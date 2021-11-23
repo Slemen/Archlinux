@@ -132,8 +132,7 @@ pacman -S downgrade yay timeshift ventoy-bin --noconfirm
 clear
 
 echo " Установка драйвера intel,vulkan и VA-API"
-pacman -S libva-utils libva-intel-driver vulkan-intel vulkan-headers --noconfirm
-pacman -S lib32-libva-intel-driver lib32-vulkan-intel --noconfirm
+pacman -S libva-utils libva-intel-driver vulkan-intel vulkan-headers lib32-libva-intel-driver lib32-vulkan-intel --noconfirm
 clear
 
 echo " Диспетчер blutooth устройств"
