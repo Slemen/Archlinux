@@ -13,6 +13,7 @@ locale-gen
 echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 echo "KEYMAP=ru" >> /etc/vconsole.conf
 echo "FONT=cyr-sun16" >> /etc/vconsole.conf
+clear
 
 echo ""
 read -p " Введите имя компьютера: " hostname
