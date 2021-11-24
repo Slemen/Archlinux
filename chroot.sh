@@ -22,6 +22,8 @@ echo ""
 read -p " Введите имя пользователя: " username
 clear
 
+echo $hostname > /etc/hostname
+
 echo " Создадим загрузочный RAM диск"
 mkinitcpio -p linux
 clear
