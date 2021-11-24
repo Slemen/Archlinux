@@ -77,7 +77,7 @@ pacman -Syy --noconfirm
 clear
 
 echo " Ставим иксы и драйвера"
-pacman -Sy xorg xorg-server xf86-video-intel --noconfirm
+pacman -Sy xorg xorg-server --noconfirm
 clear
 
 echo " Добавление хука автоматической очистки кэша pacman"
