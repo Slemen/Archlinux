@@ -50,7 +50,7 @@ mount /dev/sda1 /mnt/boot/efi
 clear
 lsblk
 
-pacman -Syy --noconfirm 
+pacman -Sy --noconfirm 
 clear
 
 echo ""
