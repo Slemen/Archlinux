@@ -77,7 +77,7 @@ pacman -Syy --noconfirm
 clear
 
 echo " Ставим иксы и драйвера"
-pacman -Sy xorg xorg-server --noconfirm
+pacman -Sy xorg xorg-server xf86-video-intel --noconfirm
 clear
 
 echo " Добавление хука автоматической очистки кэша pacman"
@@ -135,7 +135,7 @@ pacman -S downgrade yay timeshift ventoy-bin --noconfirm
 clear
 
 echo " Установка драйвера intel,vulkan и VA-API"
-pacman -S xf86-video-intel libva libva-utils libva-intel-driver vulkan-intel --noconfirm
+pacman -S libva libva-utils libva-intel-driver vulkan-intel --noconfirm
 pacman -S lib32-libva lib32-libva-intel-driver lib32-vulkan-intel --noconfirm
 clear
 
