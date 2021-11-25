@@ -46,7 +46,7 @@ pacman -Syy --noconfirm
 clear
 
 echo " Устанавливаем загрузчик UEFI-GRUB"
-pacman -S grub --noconfirm
+pacman -S grub efibootmgr --noconfirm
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=grub
 
 echo " Обновляем grub.cfg"
@@ -77,7 +77,7 @@ pacman -Syy --noconfirm
 clear
 
 echo " Ставим иксы и драйвера"
-pacman -Sy xorg xorg-server xf86-video-intel --noconfirm
+pacman -Sy xorg xorg-server --noconfirm
 clear
 
 echo " Добавление хука автоматической очистки кэша pacman"
@@ -111,7 +111,7 @@ pacman -S lib32-libpulse lib32-libxft lib32-libxinerama lib32-libxrandr lib32-op
 
 pacman -S lib32-sdl2_mixer nano-syntax-highlighting neofetch noto-fonts-emoji okular perl-image-exiftool --noconfirm
 
-pacman -S pcmanfm pkgfile p7zip pulseaudio-alsa --noconfirm
+pacman -S pcmanfm pkgfile p7zip pulseaudio-alsa mtools dosfstools --noconfirm
 
 pacman -S qbittorrent plasma5-applets-weather-widget qt5-xmlpatterns --noconfirm
 
