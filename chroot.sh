@@ -86,7 +86,6 @@ Target = *
 Description = Removing unnecessary cached files…
 When = PostTransaction
 Exec = /usr/bin/paccache -rvk0" >> /usr/share/libalpm/hooks/cleanup.hook
-echo " Хук добавлен "
 clear
 
 echo " Установка KDE и набора программ"
@@ -113,7 +112,7 @@ pacman -S kate smplayer smplayer-themes spectacle terminus-font kdeconnect sshfs
 
 pacman -S ttf-arphic-ukai ttf-arphic-uming ttf-caladea ttf-carlito ttf-croscore ttf-dejavu --noconfirm
 
-pacman -S ttf-liberation ttf-sazanami unrar xclip xorg-xrandr zim yt-dlp starship --noconfirm
+pacman -S ttf-liberation ttf-sazanami unrar xclip zim yt-dlp starship --noconfirm
 
 sudo ln -s /usr/bin/yt-dlp /usr/bin/youtube-dl
 
