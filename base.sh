@@ -69,12 +69,12 @@ do
 done
  if [[ $x_pacstrap == 1 ]]; then
   clear
-  pacstrap /mnt base base-devel linux linux-headers linux-firmware dhcpcd netctl inetutils wget pacman-contrib nano wpa_supplicant dialog efibootmgr dosfstools btrfs-progs intel-ucode
-  genfstab -U /mnt >> /mnt/etc/fstab
+  pacstrap /mnt base base-devel linux linux-headers linux-firmware dhcpcd netctl inetutils wget pacman-contrib nano wpa_supplicant dialog btrfs-progs intel-ucode
+  genfstab -pU /mnt >> /mnt/etc/fstab
 elif [[ $x_pacstrap == 2 ]]; then
   clear
-  pacstrap /mnt base base-devel linux linux-headers linux-firmware dhcpcd netctl inetutils wget pacman-contrib nano efibootmgr dosfstools btrfs-progs intel-ucode
-  genfstab -U /mnt >> /mnt/etc/fstab
+  pacstrap /mnt base base-devel linux linux-headers linux-firmware dhcpcd netctl inetutils wget pacman-contrib nano btrfs-progs intel-ucode
+  genfstab -pU /mnt >> /mnt/etc/fstab
 fi
  clear
 
