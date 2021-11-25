@@ -118,8 +118,7 @@ pacman -S ttf-liberation ttf-sazanami unrar xclip xorg-xrandr zim yt-dlp starshi
 sudo ln -s /usr/bin/yt-dlp /usr/bin/youtube-dl
 
 echo " Установка драйвера intel,vulkan и VA-API"
-pacman -S libva libva-utils libva-intel-driver vulkan-intel --noconfirm
-pacman -S lib32-libva lib32-libva-intel-driver lib32-vulkan-intel --noconfirm
+pacman -S libva libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel --noconfirm
 clear
 
 echo " Диспетчер blutooth устройств"
