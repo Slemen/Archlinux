@@ -117,22 +117,6 @@ pacman -S ttf-liberation ttf-sazanami unrar xclip xorg-xrandr zim yt-dlp starshi
 
 sudo ln -s /usr/bin/yt-dlp /usr/bin/youtube-dl
 
-echo " Добавление репозитория Archlinuxcn"
-echo '[archlinuxcn]' >> /etc/pacman.conf
-echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
-nano /etc/pacman.conf
-clear
-
-pacman -Syy --noconfirm
-clear
-
-pacman -S archlinuxcn-keyring --noconfirm
-clear
-
-echo " Устанавливаем набор программ из AUR"
-pacman -S downgrade yay timeshift ventoy-bin --noconfirm
-clear
-
 echo " Установка драйвера intel,vulkan и VA-API"
 pacman -S libva libva-utils libva-intel-driver vulkan-intel --noconfirm
 pacman -S lib32-libva lib32-libva-intel-driver lib32-vulkan-intel --noconfirm
