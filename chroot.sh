@@ -121,7 +121,7 @@ clear
 pacman -Sy archlinuxcn-keyring --noconfirm
 clear
 
-sudo pacman -S downgrade yay timeshift ventoy-bin --noconfirm
+pacman -Sy downgrade yay timeshift ventoy-bin --noconfirm
 
 echo " Установка драйвера intel,vulkan и VA-API"
 pacman -S libva libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel --noconfirm
