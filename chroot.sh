@@ -68,7 +68,7 @@ echo " Multilib репозиторий настроен"
 fi
 
 echo " Ставим иксы и драйвера"
-pacman -Sy xorg xorg-server --noconfirm
+pacman -Sy xorg xorg-server xf86-video-intel --noconfirm
 clear
 
 echo " Добавление хука автоматической очистки кэша pacman"
@@ -113,10 +113,6 @@ pacman -S ttf-liberation ttf-sazanami unrar xclip zim yt-dlp starship --noconfir
 
 sudo ln -s /usr/bin/yt-dlp /usr/bin/youtube-dl
 
-echo " Установка драйвера intel,vulkan и VA-API"
-pacman -S libva libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel --noconfirm
-clear
-
 echo "Добавление репозитория Archlinuxcn"
 echo '[archlinuxcn]' >> /etc/pacman.conf
 echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
@@ -125,7 +121,11 @@ clear
 pacman -Sy archlinuxcn-keyring --noconfirm
 clear
 
-pacman -S downgrade yay timeshift ventoy-bin --noconfirm
+sudo pacman -S downgrade yay timeshift ventoy-bin --noconfirm
+
+echo " Установка драйвера intel,vulkan и VA-API"
+pacman -S libva libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel --noconfirm
+clear
 
 echo " Диспетчер blutooth устройств"
 pacman -S bluez-utils pulseaudio-bluetooth --noconfirm
