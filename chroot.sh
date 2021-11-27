@@ -1,6 +1,6 @@
 #!/bin/bash
 echo " Скрипт второй настройки системы в chroot"
-
+pacman -Syyu --noconfirm
 echo " Часовой пояс"
 ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
 hwclock --systohc
@@ -67,11 +67,8 @@ clear
 echo " Multilib репозиторий настроен"
 fi
 
-pacman -Syy --noconfirm
-clear
-
 echo " Ставим иксы и драйвера"
-pacman -S xorg xorg-server --noconfirm
+pacman -Sy xorg xorg-server --noconfirm
 clear
 
 echo " Добавление хука автоматической очистки кэша pacman"
@@ -90,7 +87,7 @@ clear
 
 echo " Установка KDE и набора программ"
 
-pacman -S plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
+pacman -Sy plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
 
 pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious audacious-plugins bat bind --noconfirm
 
@@ -119,6 +116,16 @@ sudo ln -s /usr/bin/yt-dlp /usr/bin/youtube-dl
 echo " Установка драйвера intel,vulkan и VA-API"
 pacman -S libva libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel --noconfirm
 clear
+
+echo "Добавление репозитория Archlinuxcn"
+echo '[archlinuxcn]' >> /etc/pacman.conf
+echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
+nano /etc/pacman.conf
+clear
+pacman -Sy archlinuxcn-keyring --noconfirm
+clear
+
+pacman -S downgrade yay timeshift ventoy-bin --noconfirm
 
 echo " Диспетчер blutooth устройств"
 pacman -S bluez-utils pulseaudio-bluetooth --noconfirm
@@ -151,7 +158,7 @@ echo "Numlock=on" >> /etc/sddm.conf
 clear
 
 echo " Установка сетевых утилит"
-pacman -S networkmanager networkmanager-openvpn network-manager-applet --noconfirm
+pacman -Sy networkmanager networkmanager-openvpn network-manager-applet --noconfirm
 systemctl enable NetworkManager.service
 clear
 
