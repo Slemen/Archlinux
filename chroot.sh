@@ -158,8 +158,9 @@ echo "Numlock=on" >> /etc/sddm.conf
 clear
 
 echo " Установка сетевых утилит"
-pacman -Sy networkmanager networkmanager-openvpn network-manager-applet --noconfirm
+pacman -Sy networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
 systemctl enable NetworkManager.service
+systemctl enable ModemManager.service
 clear
 
 echo " TLP - Оптимизация времени автономной работы ноутбука с Linux"
