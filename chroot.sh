@@ -93,7 +93,7 @@ pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious audacious-plugins 
 
 pacman -S firefox firefox-i18n-ru dnsmasq dolphin-plugins fd filelight fzf git meld --noconfirm
 
-pacman -S kcalc fish telegram-desktop gvfs gvfs-mtp gvfs-gphoto2 --noconfirm
+pacman -S kcalc fish telegram-desktop gtk-engine-murrine gvfs gvfs-mtp gvfs-gphoto2 --noconfirm
 
 pacman -S gwenview haveged highlight kfind lib32-alsa-plugins lib32-freetype2 lib32-glu lib32-libcurl-gnutls --noconfirm
 
