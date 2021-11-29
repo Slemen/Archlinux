@@ -30,17 +30,17 @@ echo " Разметка дисков"
 cfdisk /dev/sda --zero
 clear
 
-echo " Форматирование разделов"
+echo " Создание файловых систем"
 mkfs.vfat -F32 /dev/sda1
 mkswap -L swap /dev/sda2
 swapon /dev/sda2
-
 mkfs.btrfs -f -L Root /dev/sda3
+
+echo " Монтирование разделов и подобтомов"
 mount /dev/sda3 /mnt
 btrfs su cr /mnt/@
 btrfs su cr /mnt/@home
-
-umount -R /mnt
+umount /mnt
 
 echo " Монтирование разделов"
 mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/sda3 /mnt
