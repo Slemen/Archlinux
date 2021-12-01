@@ -71,6 +71,7 @@ clear
 echo " Multilib репозиторий настроен"
 fi
 pacman -Syy --noconfirm
+clear
 
 echo " Ставим иксы и драйвера"
 pacman -S xorg-server xf86-video-intel --noconfirm
