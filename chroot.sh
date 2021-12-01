@@ -1,7 +1,6 @@
 #!/bin/bash
-echo " Скрипт второй настройки системы в chroot"
-pacman -Syyu --noconfirm
-echo " Часовой пояс"
+echo " Второй скрипт установки системы в arch-chroot"
+echo "  Настройка часового пояса"
 ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
 hwclock --systohc
 
@@ -27,7 +26,7 @@ echo '::1        localhost' >> /etc/hosts
 echo "127.0.1.1  $hostname.localdomain $hostname" >> /etc/hosts
 clear
 
-echo " Создадим загрузочный RAM диск"
+echo " Создание загрузочного RAM диска"
 mkinitcpio -p linux
 clear
 
@@ -71,9 +70,10 @@ nano /etc/pacman.conf
 clear
 echo " Multilib репозиторий настроен"
 fi
+pacman -Syy --noconfirm
 
 echo " Ставим иксы и драйвера"
-pacman -Sy xorg-server xf86-video-intel --noconfirm
+pacman -S xorg-server xf86-video-intel --noconfirm
 clear
 
 echo " Добавление хука автоматической очистки кэша pacman"
@@ -90,17 +90,17 @@ When = PostTransaction
 Exec = /usr/bin/paccache -rvk0" >> /usr/share/libalpm/hooks/cleanup.hook
 clear
 
-echo " Установка KDE и набора программ"
+echo " Установка Plasma KDE и дополнительных программ"
 
-pacman -Sy plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
+pacman -S plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
 
 pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious audacious-plugins bat bind --noconfirm
 
 pacman -S firefox firefox-i18n-ru dnsmasq dolphin-plugins fd filelight fzf git meld --noconfirm
 
-pacman -S kcalc fish telegram-desktop gtk-engine-murrine gvfs gvfs-mtp gvfs-gphoto2 --noconfirm
+pacman -S kcalc fish telegram-desktop gvfs gvfs-mtp gwenview haveged --noconfirm
 
-pacman -S gwenview haveged highlight kfind lib32-alsa-plugins lib32-freetype2 lib32-glu lib32-libcurl-gnutls --noconfirm
+pacman -S highlight kfind lib32-alsa-plugins lib32-freetype2 lib32-glu lib32-libcurl-gnutls --noconfirm
 
 pacman -S lib32-libpulse lib32-libxft lib32-libxinerama lib32-libxrandr lib32-openal lib32-openssl-1.0 --noconfirm
 
@@ -116,8 +116,6 @@ pacman -S ttf-arphic-ukai ttf-arphic-uming ttf-caladea ttf-carlito ttf-croscore 
 
 pacman -S ttf-liberation ttf-sazanami unrar xclip zim yt-dlp starship --noconfirm
 
-sudo ln -s /usr/bin/yt-dlp /usr/bin/youtube-dl
-
 echo "Добавление репозитория Archlinuxcn"
 echo '[archlinuxcn]' >> /etc/pacman.conf
 echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
@@ -126,7 +124,8 @@ clear
 pacman -Sy archlinuxcn-keyring --noconfirm
 clear
 
-pacman -Sy downgrade yay timeshift ventoy-bin --noconfirm
+echo " Установка дополнительных программ из AUR"
+pacman -S downgrade yay timeshift ventoy-bin --noconfirm
 
 echo " Установка драйвера intel,vulkan и VA-API"
 pacman -S libva libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel --noconfirm
@@ -151,6 +150,8 @@ chmod +x /home/$username/.xinitrc
 echo "exec startplasma-x11 " >> /home/$username/.xinitrc
 echo ' [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx ' >> /etc/profile
 echo ""
+echo " Plasma KDE и дополнительные программы успешно установлены"
+
 pacman -R konqueror --noconfirm
 clear
 
@@ -163,12 +164,12 @@ echo "Numlock=on" >> /etc/sddm.conf
 clear
 
 echo " Установка сетевых утилит"
-pacman -Sy networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
+pacman -S networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
 systemctl enable NetworkManager.service
 systemctl enable ModemManager.service
 clear
 
-echo " TLP - Оптимизация времени автономной работы ноутбука с Linux"
+echo " Установка TLP - Оптимизация времени автономной работы ноутбука с Linux"
 pacman -S tlp tlp-rdw --noconfirm
 systemctl enable tlp.service
 systemctl enable NetworkManager-dispatcher.service
@@ -208,5 +209,6 @@ fi
 clear
 
 echo ""
-echo " Установка завершена"
+echo " Второй скрипт установки готов"
+echo " Установка завершена, не забудте извлечь USB-накопитель..."
 exit
