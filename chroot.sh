@@ -7,7 +7,6 @@ hwclock --systohc
 echo " Добавляем русскую локаль системы и язык"
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen
-echo " Обновим текущую локаль системы"
 locale-gen
 echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 echo "KEYMAP=ru" >> /etc/vconsole.conf
@@ -127,6 +126,7 @@ clear
 
 echo " Установка дополнительных программ из AUR"
 pacman -S downgrade yay timeshift ventoy-bin --noconfirm
+clear
 
 echo " Установка драйвера intel,vulkan и VA-API"
 pacman -S libva libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel --noconfirm
