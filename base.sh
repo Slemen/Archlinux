@@ -50,6 +50,9 @@ mount /dev/sda1 /mnt/boot/efi
 clear
 lsblk
 
+pacman -Sy --noconfirm
+clear
+
 echo " Установка основных пакетов"
 pacstrap /mnt base base-devel linux linux-headers linux-firmware dhcpcd netctl inetutils wget pacman-contrib nano wpa_supplicant dialog btrfs-progs intel-ucode
 
