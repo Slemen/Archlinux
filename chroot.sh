@@ -1,5 +1,7 @@
 #!/bin/bash
 echo " Второй скрипт установки системы в arch-chroot"
+pacman -Syyu --noconfirm
+
 echo "  Настройка часового пояса"
 ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
 hwclock --systohc
@@ -69,11 +71,9 @@ nano /etc/pacman.conf
 clear
 echo " Multilib репозиторий настроен"
 fi
-pacman -Syy --noconfirm
-clear
 
 echo " Ставим иксы и драйвера"
-pacman -S xorg-server xf86-video-intel --noconfirm
+pacman -Sy xorg-server xf86-video-intel --noconfirm
 clear
 
 echo " Добавление хука автоматической очистки кэша pacman"
@@ -92,7 +92,7 @@ clear
 
 echo " Установка Plasma KDE и дополнительных программ"
 
-pacman -S plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
+pacman -Sy plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
 
 pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious audacious-plugins bat bind --noconfirm
 
@@ -129,7 +129,7 @@ pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
 clea
 
 echo " Установка драйвера intel,vulkan и VA-API"
-pacman -S libva libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel libvdpau-va-gl --noconfirm
+pacman -S libva libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel libvdpau-va-gl intel-compute-runtime --noconfirm
 clear
 
 echo " Диспетчер blutooth устройств"
@@ -165,7 +165,7 @@ echo "Numlock=on" >> /etc/sddm.conf
 clear
 
 echo " Установка сетевых утилит"
-pacman -S networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
+pacman -Sy networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
 systemctl enable NetworkManager.service
 systemctl enable ModemManager.service
 clear
