@@ -137,9 +137,6 @@ pacman -S bluez-utils pulseaudio-bluetooth --noconfirm
 systemctl enable bluetooth.service
 clear
 
-echo " Удаление программ"
-pacman -Rns discover plasma-thunderbolt bolt plasma-firewall --noconfirm
-
 grub-mkfont -s 16 -o /boot/grub/ter-u16b.pf2 /usr/share/fonts/misc/ter-u16b.otb
 grub-mkconfig -o /boot/grub/grub.cfg
 clear
@@ -153,6 +150,8 @@ echo ' [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx ' >> /etc/profile
 echo ""
 echo " Plasma KDE и дополнительные программы успешно установлены"
 
+echo " Удаление программ"
+pacman -Rns discover plasma-thunderbolt bolt plasma-firewall --noconfirm
 pacman -R konqueror --noconfirm
 clear
 
