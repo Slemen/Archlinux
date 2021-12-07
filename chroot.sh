@@ -159,7 +159,6 @@ echo " Установка sddm"
 pacman -S sddm sddm-kcm --noconfirm
 systemctl enable sddm.service -f
 echo "[General]" >> /etc/sddm.conf
-echo "..." >> /etc/sddm.conf
 echo "Numlock=on" >> /etc/sddm.conf
 clear
 
