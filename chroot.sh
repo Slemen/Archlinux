@@ -106,7 +106,7 @@ pacman -S lib32-libpulse lib32-libxft lib32-libxinerama lib32-libxrandr lib32-op
 
 pacman -S lib32-sdl2_mixer nano-syntax-highlighting neofetch noto-fonts-emoji okular perl-image-exiftool --noconfirm
 
-pacman -S pcmanfm p7zip pulseaudio-alsa dosfstools --noconfirm
+pacman -S pcmanfm p7zip pulseaudio-alsa --noconfirm
 
 pacman -S qbittorrent plasma5-applets-weather-widget qt5-xmlpatterns --noconfirm
 
@@ -151,7 +151,7 @@ echo ""
 echo " Plasma KDE и дополнительные программы успешно установлены"
 
 echo " Удаление программ"
-pacman -Rns discover plasma-thunderbolt bolt --noconfirm
+pacman -Rns discover plasma-thunderbolt bolt plasma-firewall --noconfirm
 pacman -R konqueror --noconfirm
 clear
 
