@@ -151,7 +151,7 @@ echo ""
 echo " Plasma KDE и дополнительные программы успешно установлены"
 
 echo " Удаление программ"
-pacman -Rns discover plasma-thunderbolt bolt plasma-firewall --noconfirm
+pacman -Rns discover plasma-thunderbolt bolt --noconfirm
 pacman -R konqueror --noconfirm
 clear
 
