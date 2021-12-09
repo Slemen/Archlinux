@@ -54,7 +54,7 @@ pacman -Sy --noconfirm
 clear
 
 echo " Установка основных пакетов"
-pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware dhcpcd netctl inetutils wget pacman-contrib nano wpa_supplicant dialog btrfs-progs intel-ucode
+pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware dhcpcd netctl inetutils wget pacman-contrib nano wpa_supplicant dialog btrfs-progs intel-ucode iucode-tool
 
 echo " Настройка системы"
 genfstab -U /mnt >> /mnt/etc/fstab
