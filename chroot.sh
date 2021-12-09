@@ -28,7 +28,7 @@ echo "127.0.1.1  $hostname.localdomain $hostname" >> /etc/hosts
 clear
 
 echo " Создание загрузочного RAM диска"
-mkinitcpio -p linux
+mkinitcpio -P
 clear
 
 echo " Укажите пароль для ROOT"
