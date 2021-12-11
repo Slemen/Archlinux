@@ -1,11 +1,9 @@
 #!/bin/bash
 echo 'скрипт второй настройки системы в chroot '
 pacman -Syyu --noconfirm
-echo ""
+
 read -p "Введите имя компьютера: " hostname
-echo ""
-echo " Используйте в имени только буквы латинского алфавита "
-echo ""
+echo "Используйте в имени только буквы латинского алфавита "
 read -p "Введите имя пользователя: " username
 
 echo $hostname > /etc/hostname
@@ -13,7 +11,7 @@ echo $hostname > /etc/hostname
 echo "Настройка localtime "
 ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
 echo "Часовой пояс установлен "
-#####################################
+
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
@@ -23,26 +21,23 @@ echo "FONT=cyr-sun16" >> /etc/vconsole.conf
 echo ""
 echo "Укажите пароль для ROOT "
 passwd
-
-echo ""
 useradd -m -g users -G wheel -s /bin/bash $username
-echo ""
 echo 'Добавляем пароль для пользователя '$username' '
-echo ""
 passwd $username
+
 pacman -Syy --noconfirm
 clear
 lsblk -f
-###########################################################################
+
 pacman -S grub efibootmgr --noconfirm
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=grub
 grub-mkconfig -o /boot/grub/grub.cfg
 mkinitcpio -P
 clear
-##########
+
 nano /etc/sudoers
 clear
-###########
+
 echo ""
 echo "Настроим multilib ?"
 while
@@ -158,6 +153,13 @@ systemctl enable ModemManager.service
 clear
 echo ""
 echo "Установка  программ закончена"
+
+pacman -S tlp tlp-rdw --noconfirm
+systemctl enable tlp.service
+systemctl enable NetworkManager-dispatcher.service
+systemctl mask systemd-rfkill.service
+systemctl mask systemd-rfkill.socket
+clear
 
 chsh -s /bin/fish
 chsh -s /bin/fish $username
