@@ -93,7 +93,7 @@ pacman -S lib32-libpulse lib32-libxft lib32-libxinerama lib32-libxrandr lib32-op
 
 pacman -S lib32-sdl2_mixer nano-syntax-highlighting neofetch noto-fonts-emoji okular perl-image-exiftool --noconfirm
 
-pacman -S pcmanfm p7zip pulseaudio-alsa --noconfirm
+pacman -S pcmanfm p7zip pulseaudio-alsa bash-language-server --noconfirm
 
 pacman -S qbittorrent plasma5-applets-weather-widget qt5-xmlpatterns --noconfirm
 
