@@ -10,8 +10,7 @@ read -p "Введите имя пользователя: " username
 
 echo $hostname > /etc/hostname
 
-echo " Настройка localtime "
-echo ""
+echo "Настройка localtime "
 ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
 echo " Часовой пояс установлен "
 #####################################
@@ -22,7 +21,7 @@ echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 echo "KEYMAP=ru" >> /etc/vconsole.conf
 echo "FONT=cyr-sun16" >> /etc/vconsole.conf
 echo ""
-echo " Укажите пароль для ROOT "
+echo "Укажите пароль для ROOT "
 passwd
 
 echo ""
@@ -45,7 +44,7 @@ nano /etc/sudoers
 clear
 ###########
 echo ""
-echo " Настроим multilib ?"
+echo "Настроим multilib ?"
 while
     read -n1 -p  "
  1 - да
@@ -58,14 +57,14 @@ do
 done
 if [[ $i_multilib  == 0 ]]; then
 clear
-echo " Настройка мультилиб репозитория пропущена"
+echo "Настройка мультилиб репозитория пропущена"
 elif [[ $i_multilib  == 1 ]]; then
 nano /etc/pacman.conf
 clear
-echo " Multilib репозиторий настроен"
+echo "Multilib репозиторий настроен"
 fi
 ######
-pacman -Sy xorg-server xf86-video-amdgpu --noconfirm
+pacman -Sy xorg-server xf86-video-intel --noconfirm
 clear
 
 echo "Добавление хука автоматической очистки кэша pacman "
@@ -83,8 +82,7 @@ Exec = /usr/bin/paccache -rvk0" >> /usr/share/libalpm/hooks/cleanup.hook
 echo "Хук добавлен "
 clear
 
-echo ""
-echo " Установка Plasma KDE и дополнительных программ"
+echo "Установка Plasma KDE и дополнительных программ"
 
 pacman -Sy plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
 
@@ -145,21 +143,21 @@ echo ' [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx ' >> /etc/profile
 echo ""
 pacman -R konqueror --noconfirm
 clear
-echo " Plasma KDE и дополнительные программы успешно установлены"
-echo " Установка sddm"
+echo "Plasma KDE и дополнительные программы успешно установлены"
+echo "Установка sddm"
 pacman -S sddm sddm-kcm --noconfirm
 systemctl enable sddm.service -f
 echo "[General]" >> /etc/sddm.conf
 echo "Numlock=on" >> /etc/sddm.conf
 clear
-echo " установка sddm  завершена "
+echo "Установка sddm  завершена "
 
 pacman -Sy networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
 systemctl enable NetworkManager.service
 systemctl enable ModemManager.service
 clear
 echo ""
-echo "  Установка  программ закончена"
+echo "Установка  программ закончена"
 
 chsh -s /bin/fish
 chsh -s /bin/fish $username
@@ -173,7 +171,7 @@ echo "
  Данный этап может исключить возможные ошибки при первом запуске системы
  Фаил откроется через редактор !nano!"
 echo ""
-echo " Просмотрим/отредактируем /etc/fstab ?"
+echo "Просмотрим/отредактируем /etc/fstab ?"
 while
     read -n1 -p  "
  1 - да
@@ -191,5 +189,5 @@ nano /etc/fstab
 fi
 clear
 echo ""
-echo " Установка завершена, не забудте извлечь USB-накопитель..."
+echo "Установка завершена, не забудте извлечь USB-накопитель..."
 exit
