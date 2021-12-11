@@ -31,7 +31,7 @@ echo ""
 echo 'Добавляем пароль для пользователя '$username' '
 echo ""
 passwd $username
-pacman -Syy
+pacman -Syy --noconfirm
 clear
 lsblk -f
 ###########################################################################
