@@ -1,5 +1,4 @@
 #!/bin/bash
-
 timedatectl set-ntp true
 
 loadkeys ru
