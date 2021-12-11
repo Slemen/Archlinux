@@ -25,9 +25,6 @@ done
    exit
 fi
 
-pacman -Syy --noconfirm
-clear
-
 cfdisk /dev/sda --zero
 clear
 
