@@ -82,6 +82,7 @@ When = PostTransaction
 Exec = /usr/bin/paccache -rvk0" >> /usr/share/libalpm/hooks/cleanup.hook
 echo "Хук добавлен "
 clear
+
 echo ""
 echo " Установка Plasma KDE и дополнительных программ"
 
@@ -115,6 +116,7 @@ echo '[archlinuxcn]' >> /etc/pacman.conf
 echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
 nano /etc/pacman.conf
 clear
+
 pacman -Sy archlinuxcn-keyring --noconfirm
 clear
 
