@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo "Установка раскладки клавиатуры"
 loadkeys ru
 setfont cyr-sun16
 clear
