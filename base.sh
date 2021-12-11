@@ -103,8 +103,10 @@ echo "###################    T H E   E N D    ######################"
 umount -a
 reboot
   elif [[ $int == 2 ]]; then
-  arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/Slemen/Archlinux/master chroot.sh)"
-echo "###################    T H E   E N D    ######################"
+  echo 'первый этап готов '
+  echo 'ARCH-LINUX chroot'
+  arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/Slemen/Archlinux/master/chroot.sh)"
+  echo "###################    T H E   E N D    ######################"
 umount -a
 reboot
 fi
