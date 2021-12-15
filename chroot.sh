@@ -1,5 +1,6 @@
 #!/bin/bash
 echo 'скрипт второй настройки системы в chroot '
+timedatectl set-ntp true
 pacman -Syyu --noconfirm
 
 read -p "Введите имя компьютера: " hostname
