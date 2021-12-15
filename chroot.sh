@@ -18,12 +18,15 @@ locale-gen
 echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 echo "KEYMAP=ru" >> /etc/vconsole.conf
 echo "FONT=cyr-sun16" >> /etc/vconsole.conf
+clear
+
 echo ""
 echo "Укажите пароль для ROOT "
 passwd
 useradd -m -g users -G wheel -s /bin/bash $username
 echo 'Добавляем пароль для пользователя '$username' '
 passwd $username
+clear
 
 pacman -Syy --noconfirm
 clear
