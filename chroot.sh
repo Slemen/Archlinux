@@ -161,8 +161,10 @@ systemctl mask systemd-rfkill.service
 systemctl mask systemd-rfkill.socket
 clear
 
+echo "Замениа терминала на fish"
 chsh -s /bin/fish
 chsh -s /bin/fish $username
+echo "Терминал изменен с bash на fish"
 clear
 
 echo '# /dev/sdb1 LABEL=Files
