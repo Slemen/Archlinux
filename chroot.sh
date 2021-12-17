@@ -2,6 +2,7 @@
 echo 'скрипт второй настройки системы в chroot '
 timedatectl set-ntp true
 pacman -Syyu --noconfirm
+clear
 
 read -p "Введите имя компьютера: " hostname
 echo "Используйте в имени только буквы латинского алфавита "
