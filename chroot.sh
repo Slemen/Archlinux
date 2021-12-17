@@ -87,7 +87,7 @@ pacman -Sy plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfi
 
 pacman -S arch-install-scripts alsa-utils ark aspell aspell-en aspell-ru hspell libvoikko hunspell-ru audacious bat bind rsync duf --noconfirm
 
-pacman -S dolphin-plugins fd filelight meld firefox firefox-i18n-ru fzf gvfs-mtp --noconfirm
+pacman -S dolphin-plugins fd filelight meld firefox firefox-i18n-ru fish fzf gvfs-mtp --noconfirm
 
 pacman -S tig git kcalc gwenview haveged highlight kfind lib32-alsa-plugins kdeconnect sshfs --noconfirm
 
@@ -164,15 +164,12 @@ systemctl mask systemd-rfkill.service
 systemctl mask systemd-rfkill.socket
 #clear
 
-echo "Замениа терминала на fish"
 chsh -s /bin/fish
 chsh -s /bin/fish $username
-echo "Терминал изменен с bash на fish"
-#clear
 
 echo '# /dev/sdb1 LABEL=Files
 UUID=4ad30ac8-e1fe-4ef8-930c-d743921657d8       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
-#clear
+clear
 
 echo "
 Данный этап может исключить возможные ошибки при первом запуске системы
