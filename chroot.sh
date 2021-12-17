@@ -106,66 +106,67 @@ pacman -S terminus-font ttf-arphic-ukai ttf-arphic-uming ttf-caladea ttf-carlito
 pacman -S ttf-dejavu ttf-liberation ttf-sazanami unrar xclip xorg-xrandr yt-dlp zim expac --noconfirm
 clear
 
-#echo ""
-#echo "Добавление репозитория Archlinuxcn"
-#echo '[archlinuxcn]' >> /etc/pacman.conf
-#echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
-#nano /etc/pacman.conf
-#clear
+echo ""
+echo "Добавление репозитория Archlinuxcn"
+echo '[archlinuxcn]' >> /etc/pacman.conf
+echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
+nano /etc/pacman.conf
+clear
 
-#pacman -Sy archlinuxcn-keyring --noconfirm
-#clear
+pacman -Sy archlinuxcn-keyring --noconfirm
+clear
 
-#pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
-#clear
+pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
+clear
 
-pacman -S libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel libvdpau-va-gl
-#clear
+pacman -S libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel libvdpau-va-gl --noconfirm
+clear
 
-pacman -S bluez-utils pulseaudio-bluetooth
+pacman -S bluez-utils pulseaudio-bluetooth --noconfirm
 systemctl enable bluetooth.service
-#clear
+clear
 
 grub-mkfont -s 16 -o /boot/grub/ter-u16b.pf2 /usr/share/fonts/misc/ter-u16b.otb
 grub-mkconfig -o /boot/grub/grub.cfg
-#clear
+clear
 
-pacman -Rns discover plasma-thunderbolt bolt plasma-firewall
+pacman -Rns discover plasma-thunderbolt bolt plasma-firewall --noconfirm
 
-pacman -S xorg-xinit
+pacman -S xorg-xinit --noconfirm
 cp /etc/X11/xinit/xinitrc /home/$username/.xinitrc
 chown $username:users /home/$username/.xinitrc
 chmod +x /home/$username/.xinitrc
 echo "exec startplasma-x11 " >> /home/$username/.xinitrc
 echo ' [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx ' >> /etc/profile
 echo ""
-pacman -R konqueror
-#clear
+pacman -R konqueror --noconfirm
+clear
 echo "Plasma KDE и дополнительные программы успешно установлены"
 echo "Установка sddm"
-pacman -S sddm sddm-kcm
+pacman -S sddm sddm-kcm --noconfirm
 systemctl enable sddm.service -f
 echo "[General]" >> /etc/sddm.conf
 echo "Numlock=on" >> /etc/sddm.conf
-#clear
+clear
 echo "Установка sddm  завершена "
 
-pacman -Sy networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch
+pacman -Sy networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
 systemctl enable NetworkManager.service
 systemctl enable ModemManager.service
-#clear
+clear
 echo ""
 echo "Установка  программ закончена"
 
-pacman -S tlp tlp-rdw
+pacman -S tlp tlp-rdw --noconfirm
 systemctl enable tlp.service
 systemctl enable NetworkManager-dispatcher.service
 systemctl mask systemd-rfkill.service
 systemctl mask systemd-rfkill.socket
-#clear
+clear
 
 chsh -s /bin/fish
 chsh -s /bin/fish $username
+clear
 
 echo '# /dev/sdb1 LABEL=Files
 UUID=4ad30ac8-e1fe-4ef8-930c-d743921657d8       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
