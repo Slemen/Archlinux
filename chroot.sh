@@ -163,17 +163,15 @@ systemctl mask systemd-rfkill.service
 systemctl mask systemd-rfkill.socket
 clear
 
-echo "Замениа терминала на fish"
 chsh -s /bin/fish
 chsh -s /bin/fish $username
-echo "Терминал изменен с bash на fish"
 
 echo '# /dev/sdb1 LABEL=Files
 UUID=4ad30ac8-e1fe-4ef8-930c-d743921657d8       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
 
 echo "
- Данный этап может исключить возможные ошибки при первом запуске системы
- Фаил откроется через редактор !nano!"
+Данный этап может исключить возможные ошибки при первом запуске системы
+Фаил откроется через редактор !nano!"
 echo ""
 echo "Просмотрим/отредактируем /etc/fstab ?"
 while
