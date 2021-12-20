@@ -1,6 +1,5 @@
 #!/bin/bash
 echo 'скрипт второй настройки системы в chroot '
-timedatectl set-ntp true
 pacman -Syyu --noconfirm
 clear
 
@@ -12,6 +11,7 @@ echo $hostname > /etc/hostname
 
 echo "Настройка localtime "
 ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
+hwclock --systohc
 echo "Часовой пояс установлен "
 
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
@@ -156,7 +156,7 @@ systemctl enable NetworkManager.service
 systemctl enable ModemManager.service
 clear
 echo ""
-echo "Установка  программ закончена"
+echo "Установка программ закончена"
 
 pacman -S tlp tlp-rdw --noconfirm
 systemctl enable tlp.service
