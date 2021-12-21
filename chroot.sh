@@ -11,6 +11,7 @@ echo $hostname > /etc/hostname
 #####################################
 echo "Настройка localtime "
 ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
+hwclock --systohc
 echo "Часовой пояс установлен "
 #####################################
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
