@@ -49,7 +49,6 @@ while
     read -n1 -p  "
  1 - да
 
-
  0 - нет : " i_multilib   # sends right after the keypress
     echo ''
     [[ "$i_multilib" =~ [^10] ]]
@@ -83,7 +82,7 @@ Exec = /usr/bin/paccache -rvk0" >> /usr/share/libalpm/hooks/cleanup.hook
 echo "Хук добавлен "
 clear
 
-echo " "
+echo ""
 echo "Установка Plasma KDE и дополнительных программ"
 
 pacman -Sy plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
@@ -142,7 +141,6 @@ chmod +x /home/$username/.xinitrc
 echo "exec startplasma-x11 " >> /home/$username/.xinitrc
 echo ' [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx ' >> /etc/profile
 echo ""
-#pacman -R konqueror --noconfirm
 clear
 echo "Plasma KDE и дополнительные программы успешно установлены"
 #echo "Установка sddm"
@@ -151,7 +149,6 @@ systemctl enable sddm.service -f
 echo "[General]" >> /etc/sddm.conf
 echo "Numlock=on" >> /etc/sddm.conf
 clear
-#echo "Установка sddm  завершена "
 
 pacman -Sy networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
 systemctl enable NetworkManager.service
