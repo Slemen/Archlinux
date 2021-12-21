@@ -22,9 +22,9 @@ done
   clear
   echo "Добро пожаловать в установку ArchLinux"
   elif [[ $hello == 0 ]]; then
-   exit
+  exit
 fi
-
+###
 cfdisk /dev/sda --zero
 clear
 
@@ -47,12 +47,14 @@ lsblk
 
 pacman -Sy --noconfirm
 clear
+##############################
 
-echo ""
-echo "Если у вас есть wifi модуль и вы сейчас его не используете, то для "
-echo "исключения ошибок в работе системы рекомендую "1" "
-echo ""
-echo 'Установка базовой системы, будете ли вы использовать wifi?'
+ echo "Если для подключения к интернету использовали wifi тогда "1" "
+ echo ""
+ echo "Если у вас есть wifi модуль и вы сейчас его не используете, но будете использовать потом то для "
+ echo " исключения ошибок в работе системы рекомендую "1" "
+ echo ""
+ echo 'Установка базовой системы, будете ли вы использовать wifi?'
 while
     read -n1 -p  "
  1 - да
@@ -66,14 +68,13 @@ done
  if [[ $x_pacstrap == 1 ]]; then
   clear
   pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware dhcpcd netctl inetutils wget pacman-contrib nano wpa_supplicant dialog btrfs-progs intel-ucode iucode-tool
-  genfstab -U /mnt >> /mnt/etc/fstab
-elif [[ $x_pacstrap == 2 ]]; then
+ genfstab -U /mnt >> /mnt/etc/fstab
+ elif [[ $x_pacstrap == 2 ]]; then
   clear
   pacstrap /mnt base dhcpcd linux linux-headers which netctl inetutils pacman-contrib base-devel wget linux-firmware nano btrfs-progs intel-ucode iucode-tool
   genfstab -U /mnt >> /mnt/etc/fstab
-fi
- clear
-###############################
+  fi
+##################################################
 clear
 echo "Если вы производите установку используя Wifi тогда рекомендую  "1" "
 echo ""
@@ -81,7 +82,7 @@ echo "если проводной интернет тогда "2" "
 echo ""
 echo 'wifi или dhcpcd ?'
 while
-    read -n1 -p "1 - wifi, 2 - dhcpcd: " int # sends right after the keypress
+    read -n1 -p  "1 - wifi, 2 - dhcpcd: " int # sends right after the keypress
     echo ''
     [[ "$int" =~ [^12] ]]
 do
@@ -92,18 +93,18 @@ if [[ $int == 1 ]]; then
   curl -LO https://raw.githubusercontent.com/Slemen/Archlinux/master/chroot.sh
   mv chroot.sh /mnt
   chmod +x /mnt/chroot.sh
+  echo ""
   echo 'первый этап готов '
-  echo 'ARCH-LINUX chroot'
+  echo 'ArchLinux chroot'
   echo '1. проверь  интернет для продолжения установки в черуте || 2.команда для запуска ./chroot.sh '
   arch-chroot /mnt
-echo "###################    T H E   E N D    ######################"
 umount -a
 reboot
   elif [[ $int == 2 ]]; then
+  echo ""
   echo 'первый этап готов '
-  echo 'ARCH-LINUX chroot'
+  echo 'ArchLinux chroot'
   arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/Slemen/Archlinux/master/chroot.sh)"
-  echo "###################    T H E   E N D    ######################"
 umount -a
 reboot
 fi
