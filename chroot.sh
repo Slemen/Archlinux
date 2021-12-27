@@ -111,6 +111,11 @@ clear
 pacman -S libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel libvdpau-va-gl --noconfirm
 clear
 
+echo "Установка PipeWire "
+yes | pacman -S pipewire-alsa pipewire-pulse pipewire-jack gst-plugin-pipewire
+systemctl start --user pipewire-pulse.service
+clear
+
 echo ""
 echo "Добавление репозитория Archlinuxcn"
 echo '[archlinuxcn]' >> /etc/pacman.conf
@@ -124,9 +129,10 @@ clear
 pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
 clear
 
-pacman -S bluez-utils pulseaudio-bluetooth --noconfirm
+pacman -S bluez-utils --noconfirm
 systemctl enable bluetooth.service
 clear
+#pulseaudio-bluetooth
 
 grub-mkfont -s 16 -o /boot/grub/ter-u16b.pf2 /usr/share/fonts/misc/ter-u16b.otb
 grub-mkconfig -o /boot/grub/grub.cfg
