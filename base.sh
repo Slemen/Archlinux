@@ -1,4 +1,5 @@
 #!/bin/bash
+
 loadkeys ru
 setfont cyr-sun16
 clear
@@ -47,7 +48,7 @@ lsblk
 
 pacman -Sy --noconfirm
 clear
-##############################
+
 echo ""
 echo 'Установка базовой системы, будете ли вы использовать wifi?'
 while
@@ -70,8 +71,7 @@ elif [[ $x_pacstrap == 2 ]]; then
   genfstab -U /mnt >> /mnt/etc/fstab
 fi
  clear
-###############################
-clear
+
 echo "Если вы производите установку используя Wifi тогда "1" "
 echo ""
 echo "если проводной интернет тогда "2" "
