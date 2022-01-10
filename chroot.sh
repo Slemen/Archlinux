@@ -1,7 +1,8 @@
 #!/bin/bash
-echo ""
+
 echo 'скрипт второй настройки системы в chroot '
 pacman -Syyu --noconfirm
+clear
 
 read -p "Введите имя компьютера: " hostname
 echo " Используйте в имени только буквы латинского алфавита "
