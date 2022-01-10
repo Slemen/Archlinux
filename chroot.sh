@@ -140,7 +140,7 @@ grub-mkfont -s 16 -o /boot/grub/ter-u16b.pf2 /usr/share/fonts/misc/ter-u16b.otb
 grub-mkconfig -o /boot/grub/grub.cfg
 clear
 
-pacman -Rns discover plasma-thunderbolt bolt --noconfirm
+pacman -Rns discover plasma-thunderbolt bolt plasma-firewall --noconfirm
 
 pacman -S xorg-xinit --noconfirm
 cp /etc/X11/xinit/xinitrc /home/$username/.xinitrc
