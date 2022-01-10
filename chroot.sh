@@ -17,6 +17,7 @@ echo "Часовой пояс установлен "
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
+#####################################
 echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 echo "KEYMAP=ru" >> /etc/vconsole.conf
 echo "FONT=cyr-sun16" >> /etc/vconsole.conf
@@ -112,7 +113,7 @@ pacman -S libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-in
 clear
 
 echo "Установка PipeWire "
-yes | pacman -S pipewire-alsa pipewire-pulse pipewire-jack gst-plugin-pipewire
+yes | pacman -S pipewire-alsa pipewire-pulse pipewire-jack gst-plugin-pipewire --noconfirm
 systemctl start --user pipewire-pulse.service
 clear
 
@@ -127,18 +128,18 @@ pacman -Sy archlinuxcn-keyring --noconfirm
 clear
 
 pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
-clear
+#clear
 
 pacman -S bluez-utils --noconfirm
 systemctl enable bluetooth.service
-clear
+#clear
 #pulseaudio-bluetooth
 
 grub-mkfont -s 16 -o /boot/grub/ter-u16b.pf2 /usr/share/fonts/misc/ter-u16b.otb
 grub-mkconfig -o /boot/grub/grub.cfg
 clear
 
-pacman -Rns discover plasma-thunderbolt bolt plasma-firewall --noconfirm
+pacman -Rns discover plasma-thunderbolt bolt --noconfirm
 
 pacman -S xorg-xinit --noconfirm
 cp /etc/X11/xinit/xinitrc /home/$username/.xinitrc
@@ -160,16 +161,16 @@ pacman -Sy networkmanager-openvpn network-manager-applet usb_modeswitch --noconf
 systemctl enable NetworkManager.service
 systemctl enable ModemManager.service
 #networkmanager
-clear
-echo ""
-echo "Установка  программ закончена"
+#clear
 
 pacman -S tlp tlp-rdw --noconfirm
 systemctl enable tlp.service
 systemctl enable NetworkManager-dispatcher.service
 systemctl mask systemd-rfkill.service
 systemctl mask systemd-rfkill.socket
-clear
+#clear
+echo ""
+echo "Установка  программ закончена"
 
 chsh -s /bin/fish
 chsh -s /bin/fish $username
