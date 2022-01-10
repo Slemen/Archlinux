@@ -9,16 +9,16 @@ echo " Используйте в имени только буквы латинс
 read -p "Введите имя пользователя: " username
 
 echo $hostname > /etc/hostname
-#####################################
+
 echo "Настройка localtime "
 ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
 hwclock --systohc
 echo "Часовой пояс установлен "
-#####################################
+
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
-#####################################
+
 echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 echo "KEYMAP=ru" >> /etc/vconsole.conf
 echo "FONT=cyr-sun16" >> /etc/vconsole.conf
@@ -35,16 +35,16 @@ clear
 pacman -Syy --noconfirm
 clear
 lsblk -f
-#####################################
+
 pacman -S grub efibootmgr --noconfirm
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=grub
 grub-mkconfig -o /boot/grub/grub.cfg
 mkinitcpio -P
 clear
-#####################################
+
 nano /etc/sudoers
 clear
-#####################################
+
 echo ""
 echo "Настроим multilib ?"
 while
@@ -65,7 +65,7 @@ nano /etc/pacman.conf
 clear
 echo "Multilib репозиторий настроен"
 fi
-#####################################
+
 pacman -Sy xorg-server xf86-video-intel --noconfirm
 clear
 
@@ -129,11 +129,11 @@ pacman -Sy archlinuxcn-keyring --noconfirm
 clear
 
 pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
-#clear
+clear
 
 pacman -S bluez-utils --noconfirm
 systemctl enable bluetooth.service
-#clear
+clear
 #pulseaudio-bluetooth
 
 grub-mkfont -s 16 -o /boot/grub/ter-u16b.pf2 /usr/share/fonts/misc/ter-u16b.otb
@@ -150,7 +150,7 @@ echo "exec startplasma-x11 " >> /home/$username/.xinitrc
 echo ' [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx ' >> /etc/profile
 echo ""
 clear
-echo "Plasma KDE и дополнительные программы успешно установлены"
+
 #echo "Установка sddm"
 #pacman -S sddm sddm-kcm --noconfirm
 systemctl enable sddm.service -f
@@ -162,16 +162,16 @@ pacman -Sy networkmanager-openvpn network-manager-applet usb_modeswitch --noconf
 systemctl enable NetworkManager.service
 systemctl enable ModemManager.service
 #networkmanager
-#clear
+clear
 
 pacman -S tlp tlp-rdw --noconfirm
 systemctl enable tlp.service
 systemctl enable NetworkManager-dispatcher.service
 systemctl mask systemd-rfkill.service
 systemctl mask systemd-rfkill.socket
-#clear
+clear
 echo ""
-echo "Установка  программ закончена"
+echo "Plasma KDE и дополнительные программы успешно установлены"
 
 chsh -s /bin/fish
 chsh -s /bin/fish $username
