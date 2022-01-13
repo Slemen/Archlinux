@@ -143,7 +143,6 @@ chown $username:users /home/$username/.xinitrc
 chmod +x /home/$username/.xinitrc
 echo "exec startplasma-x11 " >> /home/$username/.xinitrc
 echo ' [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx ' >> /etc/profile
-echo ""
 clear
 
 #echo "Установка sddm"
@@ -171,9 +170,6 @@ echo "Plasma KDE и дополнительные программы успешн
 chsh -s /bin/fish
 chsh -s /bin/fish $username
 clear
-
-echo '# /dev/sdb1 LABEL=Files
-UUID=4ad30ac8-e1fe-4ef8-930c-d743921657d8       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
 
 echo "
 Данный этап может исключить возможные ошибки при первом запуске системы,
