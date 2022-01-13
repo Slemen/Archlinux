@@ -113,11 +113,6 @@ clear
 pacman -S libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel libvdpau-va-gl --noconfirm
 clear
 
-echo "Установка PipeWire "
-yes | pacman -S pipewire-alsa pipewire-pulse pipewire-jack gst-plugin-pipewire --noconfirm
-systemctl start --user pipewire-pulse.service
-clear
-
 echo ""
 echo "Добавление репозитория Archlinuxcn"
 echo '[archlinuxcn]' >> /etc/pacman.conf
