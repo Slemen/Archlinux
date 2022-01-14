@@ -145,17 +145,16 @@ echo "exec startplasma-x11 " >> /home/$username/.xinitrc
 echo ' [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx ' >> /etc/profile
 clear
 
-#echo "Установка sddm"
-#pacman -S sddm sddm-kcm --noconfirm
+echo "Установка sddm"
+pacman -S sddm sddm-kcm --noconfirm
 systemctl enable sddm.service -f
 echo "[General]" >> /etc/sddm.conf
 echo "Numlock=on" >> /etc/sddm.conf
 clear
 
-pacman -Sy networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
+pacman -Sy networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
 systemctl enable NetworkManager.service
 systemctl enable ModemManager.service
-#networkmanager
 clear
 
 pacman -S tlp tlp-rdw --noconfirm
