@@ -30,9 +30,9 @@ cfdisk /dev/sda --zero
 clear
 
 mkfs.vfat -F32 /dev/sda1
-mkswap -L swap /dev/sda2
+mkswap /dev/sda2
 swapon /dev/sda2
-mkfs.btrfs -f -L Root /dev/sda3
+mkfs.btrfs -f /dev/sda3
 
 mount /dev/sda3 /mnt
 btrfs su cr /mnt/@
