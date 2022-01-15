@@ -10,15 +10,35 @@ read -p "Введите имя пользователя: " username
 
 echo $hostname > /etc/hostname
 
-echo "Настройка localtime "
+echo ""
+echo " Очистим папку конфигов, кеш, и скрытые каталоги в /home/$username от старой системы ? "
+while
+    read -n1 -p  "
+    1 - да
+    0 - нет: " i_rm      # sends right after the keypress
+    echo ''
+    [[ "$i_rm" =~ [^10] ]]
+do
+    :
+done
+if [[ $i_rm == 0 ]]; then
+clear
+echo " очистка пропущена "
+elif [[ $i_rm == 1 ]]; then
+rm -rf /home/$username/.*
+clear
+echo " очистка завершена "
+fi
+#####################################
+echo " Настройка localtime "
+echo ""
 ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
 hwclock --systohc
-echo "Часовой пояс установлен "
-
+echo " Часовой пояс установлен "
+#####################################
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
-
 echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 echo "KEYMAP=ru" >> /etc/vconsole.conf
 echo "FONT=cyr-sun16" >> /etc/vconsole.conf
@@ -32,24 +52,24 @@ echo 'Добавляем пароль для пользователя '$username
 passwd $username
 clear
 
-pacman -Syy --noconfirm
+nano /etc/sudoers
 clear
 
+pacman -Syy --noconfirm
+clear
+lsblk -f
+###########################################################################
 pacman -S grub efibootmgr --noconfirm
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=grub
 grub-mkconfig -o /boot/grub/grub.cfg
 mkinitcpio -P
 clear
-
-nano /etc/sudoers
-clear
-
+##########
 echo ""
 echo "Настроим multilib ?"
 while
     read -n1 -p  "
  1 - да
-
  0 - нет : " i_multilib   # sends right after the keypress
     echo ''
     [[ "$i_multilib" =~ [^10] ]]
@@ -64,7 +84,7 @@ nano /etc/pacman.conf
 clear
 echo "Multilib репозиторий настроен"
 fi
-
+######
 pacman -Sy xorg-server xf86-video-intel --noconfirm
 clear
 
@@ -109,20 +129,17 @@ pacman -S terminus-font ttf-arphic-ukai ttf-arphic-uming ttf-caladea ttf-carlito
 pacman -S ttf-dejavu ttf-liberation ttf-sazanami unrar xclip xorg-xrandr yt-dlp zim expac --noconfirm
 clear
 
-pacman -S libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel libvdpau-va-gl --noconfirm
-clear
-
 echo ""
 echo "Добавление репозитория Archlinuxcn"
 echo '[archlinuxcn]' >> /etc/pacman.conf
 echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
-nano /etc/pacman.conf
-clear
-
 pacman -Sy archlinuxcn-keyring --noconfirm
 clear
 
-pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
+nano /etc/pacman.conf
+clear
+
+sudo pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
 clear
 
 pacman -S bluez-utils --noconfirm
@@ -130,12 +147,16 @@ systemctl enable bluetooth.service
 clear
 #pulseaudio-bluetooth
 
-grub-mkfont -s 16 -o /boot/grub/ter-u16b.pf2 /usr/share/fonts/misc/ter-u16b.otb
-grub-mkconfig -o /boot/grub/grub.cfg
+echo " Установка драйверов INTEL "
+
+pacman -S libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel libvdpau-va-gl --noconfirm
 clear
 
 pacman -Rns discover plasma-thunderbolt bolt plasma-firewall --noconfirm
 
+grub-mkfont -s 16 -o /boot/grub/ter-u16b.pf2 /usr/share/fonts/misc/ter-u16b.otb
+grub-mkconfig -o /boot/grub/grub.cfg
+clear
 pacman -S xorg-xinit --noconfirm
 cp /etc/X11/xinit/xinitrc /home/$username/.xinitrc
 chown $username:users /home/$username/.xinitrc
@@ -144,12 +165,14 @@ echo "exec startplasma-x11 " >> /home/$username/.xinitrc
 echo ' [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx ' >> /etc/profile
 clear
 
-echo "Установка sddm"
+echo "Установка sddm "
 pacman -S sddm sddm-kcm --noconfirm
 systemctl enable sddm.service -f
 echo "[General]" >> /etc/sddm.conf
+echo "..." >> /etc/sddm.conf
 echo "Numlock=on" >> /etc/sddm.conf
 clear
+echo " установка sddm  завершена "
 
 pacman -Sy networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
 systemctl enable NetworkManager.service
@@ -165,6 +188,7 @@ clear
 echo ""
 echo "Plasma KDE и дополнительные программы успешно установлены"
 
+echo ""
 chsh -s /bin/fish
 chsh -s /bin/fish $username
 clear
@@ -173,12 +197,9 @@ echo "
 Данный этап может исключить возможные ошибки при первом запуске системы,
 фаил откроется через редактор !nano!"
 echo ""
-echo "Просмотрим/отредактируем /etc/fstab ?"
+echo " Просмотрим/отредактируем /etc/fstab ?"
 while
-    read -n1 -p  "
- 1 - да
-
- 0 - нет: " vm_fstab # sends right after the keypress
+    read -n1 -p  "1 - да, 0 - нет: " vm_fstab # sends right after the keypress
     echo ''
     [[ "$vm_fstab" =~ [^10] ]]
 do
@@ -190,6 +211,7 @@ elif [[ $vm_fstab == 1 ]]; then
 nano /etc/fstab
 fi
 clear
-echo ""
+echo "################################################################"
+
 echo "Установка завершена, не забудте извлечь USB-накопитель..."
 exit
