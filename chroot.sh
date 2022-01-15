@@ -10,11 +10,12 @@ read -p "Введите имя пользователя: " username
 echo $hostname > /etc/hostname
 #####################################
 echo ""
-echo " Очистим папку конфигов, кеш, и скрытые каталоги в /home/$username от старой системы ? "
+echo "Очистим папку конфигов, кеш, и скрытые каталоги в /home/$username от старой системы ? "
 while
-    read -n1 -p  "
-    1 - да
-    0 - нет: " i_rm      # sends right after the keypress
+     read -n1 -p  "
+ 1 - да
+    
+ 0 - нет: " i_rm      # sends right after the keypress
     echo ''
     [[ "$i_rm" =~ [^10] ]]
 do
@@ -67,6 +68,7 @@ echo "Настроим multilib ?"
 while
     read -n1 -p  "
  1 - да
+ 
  0 - нет : " i_multilib   # sends right after the keypress
     echo ''
     [[ "$i_multilib" =~ [^10] ]]
