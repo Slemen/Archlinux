@@ -27,7 +27,38 @@ done
 fi
 ###
 clear
-pacman -Syy --noconfirm
+pacman -Sy --noconfirm
+
+echo " Здесь вы можете удалить boot от старой системы, файлы Windows загрузчика не затрагиваются."
+echo " если вам необходимо полность очистить boot раздел, то пропустите этот этап далее установка предложит отформатировать boot раздел "
+echo " При установке дуал бут раздел не нужно форматировать!!! "
+echo ""
+echo 'удалим старый загрузчик linux'
+while
+    read -n1 -p  "
+    1 - удалим старый загрузчкик линукс
+
+    0 -(пропустить) - данный этап можно пропустить если установка производиться первый раз или несколько OS  " boots
+    echo ''
+    [[ "$boots" =~ [^10] ]]
+do
+    :
+done
+if [[ $boots == 1 ]]; then
+  clear
+ lsblk -f
+  echo ""
+read -p "Укажите boot раздел (sda2/sdb2 ( например sda2 )):" bootd
+mount /dev/$bootd /mnt
+cd /mnt
+ls | grep -v EFI | xargs rm -rfv
+cd /mnt/EFI
+ls | grep -v Boot | grep -v Microsoft | xargs rm -rfv
+cd /root
+umount /mnt
+  elif [[ $boots == 0 ]]; then
+   echo " очистка boot раздела пропущена, далее вы сможете его отформатировать! "
+fi
 
 echo "Добро пожаловать в установку ArchLinux режим UEFI "
 lsblk -f
@@ -130,6 +161,31 @@ done
  read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
  mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
 fi
+fi
+########## boot  ########
+ clear
+ lsblk -f
+  echo ""
+echo 'форматируем BOOT?'
+while
+    read -n1 -p  "
+    1 - да
+
+    0 - нет: " boots # sends right after the keypress
+    echo ''
+    [[ "$boots" =~ [^10] ]]
+do
+    :
+done
+ if [[ $boots == 1 ]]; then
+  read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
+  mkfs.fat -F32 /dev/$bootd
+  mkdir /mnt/boot
+  mount /dev/$bootd /mnt/boot
+  elif [[ $boots == 0 ]]; then
+ read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
+ mkdir /mnt/boot
+mount /dev/$bootd /mnt/boot
 fi
 ############ swap   ####################################################
  clear
