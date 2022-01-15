@@ -27,11 +27,9 @@ done
 fi
 ###
 echo ""
-#echo " Обновление ключей "
+
 clear
 pacman -Syy
-#echo "keyserver hkp://keyserver.ubuntu.com" >> /etc/pacman.d/gnupg/gpg.conf
-#pacman-key --refresh-keys
 ##
 efibootmgr
 echo "Добро пожаловать в установку ArchLinux режим UEFI "
@@ -69,7 +67,34 @@ mount /dev/$root /mnt
 
 btrfs sub cr /mnt/@
 umount /dev/$root
-#echo ""
+mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
+mkdir -p /mnt/home
+echo ""
+########## boot  ########
+ clear
+ lsblk -f
+  echo ""
+echo 'форматируем BOOT?'
+while
+    read -n1 -p  "
+    1 - да
+
+    0 - нет: " boots # sends right after the keypress
+    echo ''
+    [[ "$boots" =~ [^10] ]]
+do
+    :
+done
+ if [[ $boots == 1 ]]; then
+  read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
+  mkfs.fat -F32 /dev/$bootd
+  mkdir /mnt/boot
+  mount /dev/$bootd /mnt/boot
+  elif [[ $boots == 0 ]]; then
+ read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
+ mkdir /mnt/boot
+mount /dev/$bootd /mnt/boot
+fi
 ################  home     ############################################################
 clear
 echo ""
@@ -112,17 +137,14 @@ done
    umount /dev/$home
    lsblk -f
 
-   read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
-   mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
-   mkdir -p /mnt/home
+   #read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
+   #mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
+   #mkdir -p /mnt/home
 # mount -o noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$root /mnt/home
 
    read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
    mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
 
-#   mkfs.ext4 /dev/$home -L home
- #  mkdir /mnt/home
-  # mount /dev/$home /mnt/home
    elif [[ $homeF == 0 ]]; then
  lsblk -f
  read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
@@ -140,31 +162,7 @@ done
  # mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
 fi
 fi
-########## boot  ########
- clear
- lsblk -f
-  echo ""
-echo 'форматируем BOOT?'
-while
-    read -n1 -p  "
-    1 - да
 
-    0 - нет: " boots # sends right after the keypress
-    echo ''
-    [[ "$boots" =~ [^10] ]]
-do
-    :
-done
- if [[ $boots == 1 ]]; then
-  read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
-  mkfs.vfat -F32 /dev/$bootd
-  mkdir /mnt/boot/efi
-  mount /dev/$bootd /mnt/boot/efi
-  elif [[ $boots == 0 ]]; then
- read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
- mkdir /mnt/boot/efi
-mount /dev/$bootd /mnt/boot/efi
-fi
 ############ swap   ####################################################
  clear
  lsblk -f
