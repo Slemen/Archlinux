@@ -728,31 +728,26 @@ do
 done
 if [[ $int == 1 ]]; then
 
-  curl -LO https://raw.githubusercontent.com/alexgantera/arch/master/chroot.sh
+  curl -LO https://raw.githubusercontent.com/Slemen/Archlinux/master/chroot.sh
   mv chroot.sh /mnt
   chmod +x /mnt/chroot.sh
-
+  echo ""
   echo 'первый этап готов '
-  echo 'ARCH-LINUX chroot'
+  echo 'archLinux chroot'
   echo '1. проверь  интернет для продолжения установки в черуте || 2.команда для запуска ./chroot.sh '
   arch-chroot /mnt
-echo "################################################################"
-echo "###################    T H E   E N D      ######################"
-echo "################################################################"
 umount -a
 reboot
   elif [[ $int == 2 ]]; then
-  arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/alexgantera/arch/master/chroot.sh)"
-echo "################################################################"
-echo "###################    T H E   E N D      ######################"
-echo "################################################################"
+  echo ""
+  echo 'первый этап готов '
+  echo 'archLinux chroot'
+  arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/Slemen/Archlinux/master/chroot.sh)"
 umount -a
 reboot
-
 fi
 
-
-##############################################
 elif [[ $menu == 0 ]]; then
 exit
 fi
+
