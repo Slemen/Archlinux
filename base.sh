@@ -1,18 +1,14 @@
-#!/bin/bash
-
 loadkeys ru
-setfont ter-u18b
+setfont cyr-sun16
 clear
-echo''
-echo "UEFI или Legacy на выбор!"
-echo''
-echo '-------------------------'
+
 echo''
 echo "Начнём установку? "
 
 while
     read -n1 -p  "
     1 - да
+
     0 - нет: " hello # sends right after the keypress
     echo ''
     [[ "$hello" =~ [^10] ]]
@@ -23,120 +19,67 @@ done
   clear
   echo "Добро пожаловать в установку ArchLinux"
   elif [[ $hello == 0 ]]; then
-   exit
+  exit
 fi
 ###
-echo ""
-#echo " Обновление ключей "
 clear
-pacman -Syy
-#echo "keyserver hkp://keyserver.ubuntu.com" >> /etc/pacman.d/gnupg/gpg.conf
-#pacman-key --refresh-keys
-##
-efibootmgr
-echo "Добро пожаловать в установку ArchLinux режим UEFI "
-lsblk -f
-echo " Здесь вы можете удалить boot от старой системы, файлы Windows загрузчика не затрагиваются."
-echo " если вам необходимо полность очистить boot раздел, то пропустите этот этап далее установка предложит отформатировать boot раздел "
-echo " При установке дуал бут раздел не нужно форматировать!!! "
-echo ""
-echo 'удалим старый загрузчик linux'
-while
-    read -n1 -p  "
-    1 - удалим старый загрузчкик линукс
-    0 -(пропустить) - данный этап можно пропустить если установка производиться первый раз или несколько OS  " boots
-    echo ''
-    [[ "$boots" =~ [^10] ]]
-do
-    :
-done
-if [[ $boots == 1 ]]; then
-  clear
- lsblk -f
-  echo ""
-read -p "Укажите boot раздел (sda2/sdb2 ( например sda2 )):" bootd
-mount /dev/$bootd /mnt
-cd /mnt
-ls | grep -v EFI | xargs rm -rfv
-cd /mnt/EFI
-ls | grep -v Boot | grep -v Microsoft | xargs rm -rfv
-cd /root
-umount /mnt
-  elif [[ $boots == 0 ]]; then
-   echo " очистка boot раздела пропущена, далее вы сможете его отформатировать! "
-fi
 
-echo " Выбирайте "1", если ранее не производилась разметка диска и у вас нет разделов для ArchLinux "
+pacman -Sy --noconfirm
+echo ""
+lsblk -f
+##############################
+echo ""
+echo " Выбирайте "1 ", если ранее не производилась разметка диска и у вас нет разделов для ArchLinux "
 echo ""
 echo 'Нужна разметка диска?'
 while
-   read -n1 -p  "
-   1 - да
-   0 - нет: " cfdisk # sends right after the keypress
+    read -n1 -p  "
+    1 - да
+
+    0 - нет: " cfdisk # sends right after the keypress
     echo ''
     [[ "$cfdisk" =~ [^10] ]]
 do
-   :
+    :
 done
  if [[ $cfdisk == 1 ]]; then
-  clear
+   clear
  lsblk -f
   echo ""
-read -p " Укажите диск (sda/sdb/sdc) " cfd
+  read -p "Укажите диск (sda/sdb например sda или sdb) : " cfd
 cfdisk /dev/$cfd
+echo ""
+clear
 elif [[ $cfdisk == 0 ]]; then
-echo 'разметка пропущена.'
+   echo ""
+   clear
+   echo 'разметка пропущена.'
 fi
 #
- clear
- lsblk -f
+  clear
+  lsblk -f
   echo ""
-read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
+  read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
 echo ""
 mkfs.btrfs -f /dev/$root -L Root
 mount /dev/$root /mnt
 
 btrfs sub cr /mnt/@
-#btrfs subvolume create /mnt/@home
-
 umount /dev/$root
 mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
 mkdir -p /mnt/home
-echo ""
-##
- clear
- lsblk -f
-  echo ""
-echo 'форматируем BOOT?'
-while
-    read -n1 -p  "
-    1 - да
-    0 - нет: " boots # sends right after the keypress
-    echo ''
-    [[ "$boots" =~ [^10] ]]
-do
-    :
-done
- if [[ $boots == 1 ]]; then
-  read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
-  mkfs.fat -F32 /dev/$bootd
-  mkdir /mnt/boot
-  mount /dev/$bootd /mnt/boot
-  elif [[ $boots == 0 ]]; then
- read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
- mkdir /mnt/boot
-mount /dev/$bootd /mnt/boot
-fi
+################  home     ############################################################
 clear
 echo ""
 echo " Можно использовать раздел от предыдущей системы( и его не форматировать )
 далее в процессе установки можно будет удалить все скрытые файлы и папки в каталоге
 пользователя"
 echo ""
-echo 'Добавим раздел  HOME ?'
+echo 'Добавим раздел HOME?'
 while
     read -n1 -p  "
     1 - да
+
     0 - нет: " homes # sends right after the keypress
     echo ''
     [[ "$homes" =~ [^10] ]]
@@ -150,6 +93,7 @@ done
 while
     read -n1 -p  "
     1 - да
+
     0 - нет: " homeF # sends right after the keypress
     echo ''
     [[ "$homeF" =~ [^10] ]]
@@ -159,35 +103,79 @@ done
    if [[ $homeF == 1 ]]; then
    echo ""
    lsblk -f
-#   read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" home
-#   mkfs.ext4 /dev/$home -L home
-#   mkdir /mnt/home
-#   mount /dev/$home /mnt/home
-    read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" home
-    mkfs.btrfs -f /dev/$home -L Home
-    mount /dev/$home /mnt/home
-    btrfs sub cr /mnt/@home
-    umount /dev/$home
-    mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$home /mnt/home
+   read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" home
+   mkfs.btrfs -f /dev/$home -L Home
+   mount /dev/$home /mnt
+   btrfs sub cr /mnt/@home
+   umount /dev/$home
+   lsblk -f
+
+   #read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
+   #mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
+   #mkdir -p /mnt/home
+
+
+   read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
+   mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
+
+
    elif [[ $homeF == 0 ]]; then
  lsblk -f
-
-# read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
-# mount /dev/$homeV /mnt
-# btrfs sub cr /mnt/@home
-# umount /dev/$homeV
- lsblk -f
-
-# read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
-# mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
-# mkdir -p /mnt/home
-# mount -o noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$root /mnt/home
-
  read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
+ mkdir /mnt/home
  mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
 
-# mount /dev/$homeV /mnt/home
+ lsblk -f
+
+ read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
+ mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
 fi
+fi
+########## boot  ########
+ clear
+ lsblk -f
+  echo ""
+echo 'форматируем BOOT?'
+while
+    read -n1 -p  "
+    1 - да
+
+    0 - нет: " boots # sends right after the keypress
+    echo ''
+    [[ "$boots" =~ [^10] ]]
+do
+    :
+done
+ if [[ $boots == 1 ]]; then
+  read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
+  mkfs.fat -F32 /dev/$bootd
+  mkdir /mnt/boot/efi
+  mount /dev/$bootd /mnt/boot/efi
+  elif [[ $boots == 0 ]]; then
+ read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
+ mkdir /mnt/boot/efi
+mount /dev/$bootd /mnt/boot/efi
+fi
+############ swap   ####################################################
+ clear
+ lsblk -f
+  echo ""
+echo 'добавим swap раздел?'
+while
+    read -n1 -p  "
+    1 - да
+
+    0 - нет: " swap # sends right after the keypress
+    echo ''
+    [[ "$swap" =~ [^10] ]]
+do
+    :
+done
+ if [[ $swap == 1 ]]; then
+  read -p "Укажите swap раздел(sda/sdb 1.2.3.4 (sda7 например)):" swaps
+  mkswap /dev/$swaps -L swap
+  swapon /dev/$swaps
+  elif [[ $swap == 0 ]]; then
+   echo 'добавление swap раздела пропущено.'
 fi
 ###################  раздел  ###############################################################
-
