@@ -79,9 +79,9 @@ do
 done
  if [[ $boots == 1 ]]; then
   read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
-  mkfs.vfat -F32 /dev/$bootd boot/efi
-  mkdir /mnt/boot/efi
-  mount /dev/$bootd /mnt/boot/efi
+  mkfs.fat -F32 /dev/$bootd boot
+  mkdir /mnt/boot
+  mount /dev/$bootd /mnt/boot
   elif [[ $boots == 2 ]]; then
  echo " продолжим дальше "
 fi
