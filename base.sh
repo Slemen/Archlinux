@@ -26,7 +26,8 @@ done
    exit
 fi
 
-cfdisk /dev/sda --zero
+gdisk /dev/sda
+#cfdisk /dev/sda --zero
 clear
 
 mkfs.vfat -F32 /dev/sda1
