@@ -9,6 +9,25 @@ echo "Используйте в имени только буквы латинс�
 read -p "Введите имя пользователя: " username
 echo $hostname > /etc/hostname
 #####################################
+echo ""
+echo " Очистим папку конфигов, кеш, и скрытые каталоги в /home/$username от старой системы ? "
+while
+    read -n1 -p  "
+    1 - да
+    0 - нет: " i_rm      # sends right after the keypress
+    echo ''
+    [[ "$i_rm" =~ [^10] ]]
+do
+    :
+done
+if [[ $i_rm == 0 ]]; then
+clear
+echo " очистка пропущена "
+elif [[ $i_rm == 1 ]]; then
+rm -rf /home/$username/.*
+clear
+echo " очистка завершена "
+fi
 echo " Настройка localtime "
 echo ""
 ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
