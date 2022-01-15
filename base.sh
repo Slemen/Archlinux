@@ -27,11 +27,11 @@ done
   exit
 fi
 ###
-echo ""
-echo " Обновление ключей "
-clear
-echo "keyserver hkp://keyserver.ubuntu.com" >> /etc/pacman.d/gnupg/gpg.conf
-pacman-key --refresh-keys
+#echo ""
+#echo " Обновление ключей "
+#clear
+#echo "keyserver hkp://keyserver.ubuntu.com" >> /etc/pacman.d/gnupg/gpg.conf
+#pacman-key --refresh-keys
 ##
 clear
 echo " Здесь выбирайте то каким режимом запущен установочный образ ArchLinux"
