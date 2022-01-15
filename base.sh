@@ -68,6 +68,31 @@ btrfs sub cr /mnt/@
 umount /dev/$root
 mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
 mkdir -p /mnt/home
+
+########## boot  ########
+ clear
+ lsblk -f
+  echo ""
+echo 'форматируем BOOT?'
+while
+    read -n1 -p  "
+    1 - да
+    0 - нет: " boots # sends right after the keypress
+    echo ''
+    [[ "$boots" =~ [^10] ]]
+do
+    :
+done
+ if [[ $boots == 1 ]]; then
+  read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
+  mkfs.vfat -F32 /dev/$bootd
+  mkdir /mnt/boot/efi
+  mount /dev/$bootd /mnt/boot/efi
+  elif [[ $boots == 0 ]]; then
+ read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
+ mkdir /mnt/boot/efi
+mount /dev/$bootd /mnt/boot/efi
+fi
 ################  home     ############################################################
 clear
 echo ""
@@ -130,31 +155,6 @@ done
  read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
  mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
 fi
-fi
-########## boot  ########
- clear
- lsblk -f
-  echo ""
-echo 'форматируем BOOT?'
-while
-    read -n1 -p  "
-    1 - да
-
-    0 - нет: " boots # sends right after the keypress
-    echo ''
-    [[ "$boots" =~ [^10] ]]
-do
-    :
-done
- if [[ $boots == 1 ]]; then
-  read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
-  mkfs.fat -F32 /dev/$bootd
-  mkdir /mnt/boot/efi
-  mount /dev/$bootd /mnt/boot/efi
-  elif [[ $boots == 0 ]]; then
- read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
- mkdir /mnt/boot/efi
-mount /dev/$bootd /mnt/boot/efi
 fi
 ############ swap   ####################################################
  clear
