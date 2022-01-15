@@ -69,7 +69,6 @@ umount /dev/$root
 mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
 mkdir -p /mnt/home
 ################  home     ############################################################
-clear
 echo ""
 echo " Можно использовать раздел от предыдущей системы( и его не форматировать )
 далее в процессе установки можно будет удалить все скрытые файлы и папки в каталоге
