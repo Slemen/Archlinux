@@ -4,6 +4,8 @@ loadkeys ru
 setfont cyr-sun16
 clear
 
+timedatectl set-ntp true
+
 echo''
 echo "Начнём установку? "
 
@@ -28,7 +30,7 @@ clear
 
 pacman -Sy --noconfirm
 echo ""
-lsblk -f
+#lsblk -f
 ##############################
 echo ""
 echo " Выбирайте "1 ", если ранее не производилась разметка диска и у вас нет разделов для ArchLinux "
@@ -221,7 +223,7 @@ if [[ $int == 1 ]]; then
   chmod +x /mnt/chroot.sh
   echo ""
   echo 'первый этап готов '
-  echo 'ArchLinux chroot'
+  echo 'archLinux chroot'
   echo '1. проверь  интернет для продолжения установки в черуте || 2.команда для запуска ./chroot.sh '
   arch-chroot /mnt
 umount -a
@@ -229,7 +231,7 @@ reboot
   elif [[ $int == 2 ]]; then
   echo ""
   echo 'первый этап готов '
-  echo 'ArchLinux chroot'
+  echo 'archLinux chroot'
   arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/Slemen/Archlinux/master/chroot.sh)"
 umount -a
 reboot
