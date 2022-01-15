@@ -26,8 +26,8 @@ done
    exit
 fi
 
-cfdisk /dev/sda --zero
-clear
+#cfdisk /dev/sda --zero
+#clear
 
 mkfs.vfat -F32 /dev/sda1
 mkswap -L swap /dev/sda2
