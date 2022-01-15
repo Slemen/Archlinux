@@ -51,7 +51,7 @@ clear
 lsblk
 
 pacman -Sy --noconfirm
-#clear
+clear
 
 echo ""
 echo 'Установка базовой системы, будете ли вы использовать wifi?'
