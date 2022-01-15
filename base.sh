@@ -1,4 +1,5 @@
 loadkeys ru
+loadkeys ru
 setfont cyr-sun16
 clear
 
@@ -63,15 +64,11 @@ fi
 echo ""
 mkfs.btrfs -f /dev/$root -L Root
 mount /dev/$root /mnt
+
 btrfs sub cr /mnt/@
 umount /dev/$root
-mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
-mkdir -p /mnt/home
-################  home     ############################################################
 echo ""
-echo " Можно использовать раздел от предыдущей системы( и его не форматировать )
-далее в процессе установки можно будет удалить все скрытые файлы и папки в каталоге
-пользователя"
+################  home     ############################################################
 echo ""
 echo 'Добавим раздел HOME?'
 while
@@ -106,22 +103,29 @@ done
    mount /dev/$home /mnt
    btrfs sub cr /mnt/@home
    umount /dev/$home
-   mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
    lsblk -f
 
-  elif [[ $homeF == 0 ]]; then
+   read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
+   mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
+   mkdir -p /mnt/home
+
+   read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
+   mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
+
+   elif [[ $homeF == 0 ]]; then
  lsblk -f
- #read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
- #mkdir /mnt/home
- #mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
+ read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
+ mkdir /mnt/home
+ mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
 
- #lsblk -f
+ lsblk -f
 
- #read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
- #mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
+ read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
+ mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
+ 
 fi
 fi
-########## boot  ########
+########## boot ########
  clear
  lsblk -f
   echo ""
@@ -129,6 +133,7 @@ echo 'форматируем BOOT?'
 while
     read -n1 -p  "
     1 - да
+
     0 - нет: " boots # sends right after the keypress
     echo ''
     [[ "$boots" =~ [^10] ]]
@@ -142,10 +147,10 @@ done
   mount /dev/$bootd /mnt/boot/efi
   elif [[ $boots == 0 ]]; then
  read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
- mkdir -p /mnt/boot/efi
+ mkdir /mnt/boot/efi
 mount /dev/$bootd /mnt/boot/efi
 fi
-############ swap   ####################################################
+############ swap ####################################################
  clear
  lsblk -f
   echo ""
