@@ -54,7 +54,7 @@ read -p "Укажите boot раздел (sda2/sdb2 ( например sda2 )):
 mount /dev/$bootd /mnt
 cd /mnt
 ls | grep -v EFI | xargs rm -rfv
-cd /mnt/EFI
+cd /mnt/boot/efi
 ls | grep -v Boot | grep -v Microsoft | xargs rm -rfv
 cd /root
 umount /mnt
@@ -116,12 +116,12 @@ done
  if [[ $boots == 1 ]]; then
   read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
   mkfs.vfat -F32 /dev/$bootd
-  mkdir /mnt/boot
-  mount /dev/$bootd /mnt/boot
+  mkdir /mnt/boot/efi
+  mount /dev/$bootd /mnt/boot/efi
   elif [[ $boots == 0 ]]; then
  read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
- mkdir /mnt/boot
-mount /dev/$bootd /mnt/boot
+ mkdir /mnt/boot/efi
+mount /dev/$bootd /mnt/boot/efi
 fi
 clear
 echo ""
