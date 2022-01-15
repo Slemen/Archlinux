@@ -26,14 +26,16 @@ done
    exit
 fi
 
-gdisk /dev/sda
-#cfdisk /dev/sda --zero
+pacman -Syy --noconfirm
+clear
+
+cfdisk /dev/sda --zero
 clear
 
 mkfs.vfat -F32 /dev/sda1
-mkswap /dev/sda2
+mkswap -L swap /dev/sda2
 swapon /dev/sda2
-mkfs.btrfs -f /dev/sda3
+mkfs.btrfs -f -L Root /dev/sda3
 
 mount /dev/sda3 /mnt
 btrfs su cr /mnt/@
@@ -65,11 +67,11 @@ done
  if [[ $x_pacstrap == 1 ]]; then
   clear
   pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware dhcpcd netctl inetutils wget pacman-contrib nano wpa_supplicant dialog btrfs-progs intel-ucode iucode-tool
-  genfstab -pU /mnt >> /mnt/etc/fstab
+  genfstab -U /mnt >> /mnt/etc/fstab
 elif [[ $x_pacstrap == 2 ]]; then
   clear
   pacstrap /mnt base dhcpcd linux linux-headers which netctl inetutils pacman-contrib base-devel wget linux-firmware nano btrfs-progs intel-ucode iucode-tool
-  genfstab -pU /mnt >> /mnt/etc/fstab
+  genfstab -U /mnt >> /mnt/etc/fstab
 fi
  clear
 
