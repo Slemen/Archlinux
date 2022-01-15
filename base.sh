@@ -63,10 +63,9 @@ fi
 echo ""
 mkfs.btrfs -f /dev/$root -L Root
 mount /dev/$root /mnt
-
 btrfs sub cr /mnt/@
 umount /dev/$root
-mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
+mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
 mkdir -p /mnt/home
 ################  home     ############################################################
 echo ""
@@ -107,27 +106,19 @@ done
    mount /dev/$home /mnt
    btrfs sub cr /mnt/@home
    umount /dev/$home
+   mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
    lsblk -f
 
-   #read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
-   #mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
-   #mkdir -p /mnt/home
-
-
-   read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
-   mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
-
-
-   elif [[ $homeF == 0 ]]; then
+  elif [[ $homeF == 0 ]]; then
  lsblk -f
- read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
- mkdir /mnt/home
- mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
+ #read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
+ #mkdir /mnt/home
+ #mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
 
- lsblk -f
+ #lsblk -f
 
- read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
- mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
+ #read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
+ #mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
 fi
 fi
 ########## boot  ########
