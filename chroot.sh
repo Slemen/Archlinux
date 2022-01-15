@@ -5,7 +5,7 @@ pacman -Syyu --noconfirm
 clear
 
 read -p "Введите имя компьютера: " hostname
-echo " Используйте в имени только буквы латинского алфавита "
+echo "Используйте в имени только буквы латинского алфавита "
 read -p "Введите имя пользователя: " username
 
 echo $hostname > /etc/hostname
@@ -44,7 +44,6 @@ echo "KEYMAP=ru" >> /etc/vconsole.conf
 echo "FONT=cyr-sun16" >> /etc/vconsole.conf
 clear
 
-echo ""
 echo "Укажите пароль для ROOT "
 passwd
 useradd -m -g users -G wheel -s /bin/bash $username
