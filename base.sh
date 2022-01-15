@@ -26,13 +26,13 @@ done
    exit
 fi
 
-#cfdisk /dev/sda --zero
-#clear
+cfdisk /dev/sda --zero
+clear
 
 mkfs.vfat -F32 /dev/sda1
-mkswap -L swap /dev/sda2
+mkswap /dev/sda2
 swapon /dev/sda2
-mkfs.btrfs -L Root /dev/sda3 -f
+mkfs.btrfs -f /dev/sda3
 
 mount /dev/sda3 /mnt
 btrfs su cr /mnt/@
