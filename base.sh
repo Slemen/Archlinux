@@ -29,6 +29,7 @@ fi
 pacman -Syy --noconfirm
 clear
 
+#gdisk /dev/sda
 cfdisk /dev/sda --zero
 clear
 
