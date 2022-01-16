@@ -23,17 +23,17 @@ do
 done
 if [[ $i_rm == 0 ]]; then
 clear
-echo " очистка пропущена "
+echo "Очистка пропущена "
 elif [[ $i_rm == 1 ]]; then
 rm -rf /home/$username/.*
 clear
-echo " очистка завершена "
+echo "Очистка завершена "
 fi
-echo " Настройка localtime "
+echo "Настройка localtime "
 echo ""
 ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
 hwclock --systohc
-echo " Часовой пояс установлен "
+echo "Часовой пояс установлен "
 #####################################
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen
@@ -77,11 +77,11 @@ do
 done
 if [[ $i_multilib  == 0 ]]; then
 clear
-echo "Настройка мультилиб репозитория пропущена"
+echo "Настройка multilib репозитория пропущена "
 elif [[ $i_multilib  == 1 ]]; then
 nano /etc/pacman.conf
 clear
-echo "Multilib репозиторий настроен"
+echo "Multilib репозиторий настроен "
 fi
 ######
 pacman -Sy xorg-server xf86-video-intel --noconfirm
@@ -103,7 +103,7 @@ echo "Хук добавлен "
 clear
 
 echo ""
-echo "Установка Plasma KDE и дополнительных программ"
+echo "Установка Plasma KDE и дополнительных программ "
 
 pacman -Sy plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
 
@@ -129,7 +129,7 @@ pacman -S ttf-dejavu ttf-liberation ttf-sazanami unrar xclip xorg-xrandr yt-dlp 
 clear
 
 echo ""
-echo "Добавление репозитория Archlinuxcn"
+echo "Добавление репозитория Archlinuxcn "
 echo '[archlinuxcn]' >> /etc/pacman.conf
 echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
 pacman -Sy archlinuxcn-keyring --noconfirm
@@ -146,7 +146,7 @@ systemctl enable bluetooth.service
 clear
 #pulseaudio-bluetooth
 
-echo " Установка драйверов INTEL "
+echo "Установка драйверов INTEL "
 
 pacman -S libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel libvdpau-va-gl --noconfirm
 clear
@@ -171,7 +171,7 @@ echo "[General]" >> /etc/sddm.conf
 echo "..." >> /etc/sddm.conf
 echo "Numlock=on" >> /etc/sddm.conf
 clear
-echo " установка sddm  завершена "
+echo "Установка sddm  завершена "
 
 pacman -Sy networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
 systemctl enable NetworkManager.service
@@ -185,7 +185,7 @@ systemctl mask systemd-rfkill.service
 systemctl mask systemd-rfkill.socket
 clear
 echo ""
-echo "Plasma KDE и дополнительные программы успешно установлены"
+echo "Plasma KDE и дополнительные программы успешно установлены "
 
 echo ""
 chsh -s /bin/fish
@@ -196,7 +196,7 @@ echo "
 Данный этап может исключить возможные ошибки при первом запуске системы,
 фаил откроется через редактор !nano!"
 echo ""
-echo " Просмотрим/отредактируем /etc/fstab ?"
+echo "Просмотрим/отредактируем /etc/fstab ? "
 while
     read -n1 -p  "1 - да, 0 - нет: " vm_fstab # sends right after the keypress
     echo ''
@@ -210,7 +210,6 @@ elif [[ $vm_fstab == 1 ]]; then
 nano /etc/fstab
 fi
 clear
-echo "################################################################"
 
-echo "Установка завершена, не забудте извлечь USB-накопитель..."
+echo "Установка завершена, не забудте извлечь USB-накопитель... "
 exit
