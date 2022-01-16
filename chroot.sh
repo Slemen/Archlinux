@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo 'скрипт второй настройки системы в chroot '
+echo 'второй этап настройки системы в chroot '
 pacman -Syyu --noconfirm
 clear
 
