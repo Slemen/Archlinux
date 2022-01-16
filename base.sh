@@ -32,118 +32,48 @@ lsblk -f
 ##############################
 echo ""
 echo 'Нужна разметка диска?'
-while
-   read -n1 -p  "
-   1 - да
-   0 - нет: " cfdisk # sends right after the keypress
+while 
+    read -n1 -p  "
+    1 - да
+    
+    0 - нет: " cfdisk # sends right after the keypress
     echo ''
     [[ "$cfdisk" =~ [^10] ]]
 do
-   :
+    :
 done
  if [[ $cfdisk == 1 ]]; then
-  clear
+   clear
  lsblk -f
   echo ""
-read -p " Укажите диск (sda/sdb/sdc) " cfd
+  read -p "Укажите диск (sda/sdb например sda или sdb) : " cfd
 cfdisk /dev/$cfd
+echo ""
+clear
 elif [[ $cfdisk == 0 ]]; then
-echo 'разметка пропущена.'
+   echo ""
+   clear
+   echo 'разметка пропущена.'   
 fi
 #
- clear
- lsblk -f
+  clear
+  lsblk -f
   echo ""
-read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
+  read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
 echo ""
-mkfs.btrfs -f /dev/$root -L Root
+mkfs.ext4 /dev/$root -L root
 mount /dev/$root /mnt
-
-btrfs sub cr /mnt/@
-#btrfs subvolume create /mnt/@home
-
-umount /dev/$root
-mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
-mkdir -p /mnt/root
 echo ""
-##
- clear
- lsblk -f
-  echo ""
-
-clear
-echo ""
-echo " Можно использовать раздел от предыдущей системы( и его не форматировать )
-далее в процессе установки можно будет удалить все скрытые файлы и папки в каталоге
-пользователя"
-echo ""
-echo 'Добавим раздел  HOME ?'
-while
-    read -n1 -p  "
-    1 - да
-    0 - нет: " homes # sends right after the keypress
-    echo ''
-    [[ "$homes" =~ [^10] ]]
-do
-    :
-done
-   if [[ $homes == 0 ]]; then
-     echo 'пропущено'
-  elif [[ $homes == 1 ]]; then
-    echo ' Форматируем HOME раздел?'
-while
-    read -n1 -p  "
-    1 - да
-    0 - нет: " homeF # sends right after the keypress
-    echo ''
-    [[ "$homeF" =~ [^10] ]]
-do
-    :
-done
-   if [[ $homeF == 1 ]]; then
-   echo ""
-   lsblk -f
-#   read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" home
-#   mkfs.ext4 /dev/$home -L home
-#   mkdir /mnt/home
-#   mount /dev/$home /mnt/home
-    read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" home
-    mkfs.btrfs -f /dev/$home -L Home
-    mount /dev/$home /mnt/home
-    btrfs sub cr /mnt/home/@home
-    umount /dev/$home
-    mkdir -p /mnt/home
-    mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$home /mnt/home
-   elif [[ $homeF == 0 ]]; then
- lsblk -f
-
-# read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
-# mount /dev/$homeV /mnt
-# btrfs sub cr /mnt/@home
-# umount /dev/$homeV
- lsblk -f
-
-# read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
-# mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
-# mkdir -p /mnt/home
-# mount -o noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$root /mnt/home
-
- read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
- mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
-
-# mount /dev/$homeV /mnt/home
-fi
-fi
-########## boot ########
+########## boot  ########
  clear
  lsblk -f
   echo ""
 echo 'форматируем BOOT?'
-while
+while 
     read -n1 -p  "
- 1 - да
-
- 0 - нет: " boots # sends right after the keypress
+    1 - да
+    
+    0 - нет: " boots # sends right after the keypress
     echo ''
     [[ "$boots" =~ [^10] ]]
 do
@@ -151,24 +81,24 @@ do
 done
  if [[ $boots == 1 ]]; then
   read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
-  mkfs.vfat -F32 /dev/$bootd
-  mkdir -p /mnt/boot/efi
-  mount /dev/$bootd /mnt/boot/efi
+  mkfs.fat -F32 /dev/$bootd
+  mkdir /mnt/boot
+  mount /dev/$bootd /mnt/boot
   elif [[ $boots == 0 ]]; then
- read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
- mkdir /mnt/boot/efi
-mount /dev/$bootd /mnt/boot/efi
+ read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd 
+ mkdir /mnt/boot
+mount /dev/$bootd /mnt/boot
 fi
-############ swap ####################################################
+############ swap   ####################################################
  clear
  lsblk -f
   echo ""
 echo 'добавим swap раздел?'
-while
+while 
     read -n1 -p  "
- 1 - да
-
- 0 - нет: " swap # sends right after the keypress
+    1 - да
+    
+    0 - нет: " swap # sends right after the keypress
     echo ''
     [[ "$swap" =~ [^10] ]]
 do
@@ -179,7 +109,53 @@ done
   mkswap /dev/$swaps -L swap
   swapon /dev/$swaps
   elif [[ $swap == 0 ]]; then
-   echo 'добавление swap раздела пропущено.'
+   echo 'добавление swap раздела пропущено.'   
+fi
+################  home     ############################################################ 
+clear
+echo ""
+echo " Можно использовать раздел от предыдущей системы( и его не форматировать )  
+далее в процессе установки можно будет удалить все скрытые файлы и папки в каталоге 
+пользователя"
+echo ""
+echo 'Добавим раздел  HOME ?'
+while 
+    read -n1 -p  "
+    1 - да
+    
+    0 - нет: " homes # sends right after the keypress
+    echo ''
+    [[ "$homes" =~ [^10] ]]
+do
+    :
+done
+   if [[ $homes == 0 ]]; then
+     echo 'пропущено'
+  elif [[ $homes == 1 ]]; then
+    echo ' Форматируем HOME раздел?'
+while 
+    read -n1 -p  "
+    1 - да
+    
+    0 - нет: " homeF # sends right after the keypress
+    echo ''
+    [[ "$homeF" =~ [^10] ]]
+do
+    :
+done
+   if [[ $homeF == 1 ]]; then
+   echo ""
+   lsblk -f
+   read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" home
+   mkfs.ext4 /dev/$home -L home
+   mkdir /mnt/home 
+   mount /dev/$home /mnt/home
+   elif [[ $homeF == 0 ]]; then
+ lsblk -f
+ read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
+ mkdir /mnt/home 
+ mount /dev/$homeV /mnt/home
+fi
 fi
 ##################################################################################
 clear
