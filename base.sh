@@ -83,6 +83,7 @@ done
    if [[ $homes == 0 ]]; then
      echo 'пропущено'
   elif [[ $homes == 1 ]]; then
+  echo ""
 echo 'Форматируем HOME раздел?'
 while
     read -n1 -p  "
