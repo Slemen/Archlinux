@@ -138,7 +138,7 @@ clear
 nano /etc/pacman.conf
 clear
 
-sudo pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
+pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
 clear
 
 pacman -S bluez-utils --noconfirm
