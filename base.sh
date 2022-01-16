@@ -6,14 +6,13 @@ clear
 
 timedatectl set-ntp true
 
-echo''
+echo ""
 echo "Начнём установку? "
-
 while
     read -n1 -p  "
-    1 - да
+ 1 - да
 
-    0 - нет: " hello # sends right after the keypress
+ 0 - нет: " hello # sends right after the keypress
     echo ''
     [[ "$hello" =~ [^10] ]]
 do
@@ -27,20 +26,16 @@ done
 fi
 ###
 clear
-
 pacman -Sy --noconfirm
-echo ""
-#lsblk -f
+clear
 ##############################
-echo ""
-echo " Выбирайте "1 ", если ранее не производилась разметка диска и у вас нет разделов для ArchLinux "
 echo ""
 echo 'Нужна разметка диска?'
 while
     read -n1 -p  "
-    1 - да
+ 1 - да
 
-    0 - нет: " cfdisk # sends right after the keypress
+ 0 - нет: " cfdisk # sends right after the keypress
     echo ''
     [[ "$cfdisk" =~ [^10] ]]
 do
@@ -71,14 +66,14 @@ btrfs sub cr /mnt/@
 umount /dev/$root
 mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
 mkdir -p /mnt/home
-################  home     ############################################################
+################  home  ############################################################
 echo ""
 echo 'Добавим раздел HOME?'
 while
     read -n1 -p  "
-    1 - да
+ 1 - да
 
-    0 - нет: " homes # sends right after the keypress
+ 0 - нет: " homes # sends right after the keypress
     echo ''
     [[ "$homes" =~ [^10] ]]
 do
@@ -87,12 +82,12 @@ done
    if [[ $homes == 0 ]]; then
      echo 'пропущено'
   elif [[ $homes == 1 ]]; then
-    echo ' Форматируем HOME раздел?'
+echo 'Форматируем HOME раздел?'
 while
     read -n1 -p  "
-    1 - да
+ 1 - да
 
-    0 - нет: " homeF # sends right after the keypress
+ 0 - нет: " homeF # sends right after the keypress
     echo ''
     [[ "$homeF" =~ [^10] ]]
 do
@@ -108,10 +103,6 @@ done
    umount /dev/$home
    lsblk -f
 
-   #read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
-   #mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
-   #mkdir -p /mnt/home
-
    read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
    mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
 
@@ -120,7 +111,6 @@ done
  read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
  mkdir /mnt/home
  mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
-
  lsblk -f
 
  read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
@@ -135,9 +125,9 @@ fi
 echo 'форматируем BOOT?'
 while
     read -n1 -p  "
-    1 - да
+ 1 - да
 
-    0 - нет: " boots # sends right after the keypress
+ 0 - нет: " boots # sends right after the keypress
     echo ''
     [[ "$boots" =~ [^10] ]]
 do
@@ -160,9 +150,9 @@ fi
 echo 'добавим swap раздел?'
 while
     read -n1 -p  "
-    1 - да
+ 1 - да
 
-    0 - нет: " swap # sends right after the keypress
+ 0 - нет: " swap # sends right after the keypress
     echo ''
     [[ "$swap" =~ [^10] ]]
 do
@@ -175,12 +165,12 @@ done
   elif [[ $swap == 0 ]]; then
    echo 'добавление swap раздела пропущено.'
 fi
-###################  раздел  ###############################################################
+##################################################################################
 clear
 lsblk -f
 
 pacman -Sy --noconfirm
-#clear
+clear
 echo ""
 echo 'Установка базовой системы, будете ли вы использовать wifi?'
 while
