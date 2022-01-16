@@ -64,7 +64,7 @@ btrfs sub cr /mnt/@
 
 umount /dev/$root
 mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
-mkdir -p /mnt/home
+mkdir -p /mnt/root
 echo ""
 ##
  clear
@@ -112,6 +112,7 @@ done
     mount /dev/$home /mnt/home
     btrfs sub cr /mnt/home/@home
     umount /dev/$home
+    mkdir -p /mnt/home
     mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$home /mnt/home
    elif [[ $homeF == 0 ]]; then
  lsblk -f
