@@ -160,7 +160,7 @@ done
    elif [[ $homeF == 0 ]]; then
  lsblk -f
  read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
- mkdir -p /mnt/home
+ #mkdir -p /mnt/home
  mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
 fi
 fi
