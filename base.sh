@@ -4,8 +4,6 @@ loadkeys ru
 setfont cyr-sun16
 clear
 
-timedatectl set-ntp true
-
 echo ""
 echo "Начнём установку? "
 while
@@ -58,12 +56,12 @@ read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например
 echo ""
 mkfs.btrfs -f /dev/$root -L Root
 mount /dev/$root /mnt
-btrfs sub cr /mnt/@
+btrfs su cr /mnt/@
 umount /dev/$root
-mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
-mkdir -p /mnt/home
+mount -o rw,noatime,compress=zstd,discard=async,space_cache=v2,subvol=@ /dev/$root /mnt
+#mkdir -p /mnt/home
 echo ""
-##
+################ boot ################
  clear
  lsblk -f
   echo ""
@@ -88,7 +86,7 @@ done
   mkdir -p /mnt/boot/efi
   mount /dev/$bootd /mnt/boot/efi
 fi
-############ swap   ####################################################
+################ swap ################
  clear
  lsblk -f
 echo ""
@@ -110,7 +108,7 @@ done
   elif [[ $swap == 0 ]]; then
    echo 'Добавление swap раздела пропущено.'
 fi
-################  home     ############################################################
+################ home ################
 clear
 echo ""
 echo "Можно использовать раздел от предыдущей системы( и его не форматировать )
@@ -149,24 +147,24 @@ done
 
     read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" home
     mkfs.btrfs -f /dev/$home -L Home
+    mkdir -p /mnt/home
     mount /dev/$home /mnt/home
-    btrfs sub cr /mnt/home/@home
+    btrfs su cr /mnt/home/@home
     umount /dev/$home
-    mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$home /mnt/home
+    mount -o rw,noatime,compress=zstd,discard=async,space_cache=v2,subvol=@home /dev/$home /mnt/home
    elif [[ $homeF == 0 ]]; then
  lsblk -f
 
  read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
- mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
-
+ mount -o rw,noatime,compress=zstd,discard=async,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
 fi
 fi
-##################################################################################
+################  раздел ################
 clear
 
 pacman -Sy --noconfirm
-###################################################################################
 clear
+################
 echo ""
 echo 'Установка базовой системы, будете ли вы использовать wifi?'
 while
@@ -181,11 +179,11 @@ do
 done
  if [[ $x_pacstrap == 1 ]]; then
   clear
-  pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware dhcpcd netctl inetutils wget pacman-contrib nano wpa_supplicant dialog btrfs-progs intel-ucode iucode-tool
+  pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware dhcpcd netctl inetutils wget pacman-contrib nano wpa_supplicant dialog btrfs-progs intel-ucode
   genfstab -U /mnt >> /mnt/etc/fstab
 elif [[ $x_pacstrap == 2 ]]; then
   clear
-  pacstrap /mnt base dhcpcd linux linux-headers which netctl inetutils pacman-contrib base-devel wget linux-firmware nano btrfs-progs intel-ucode iucode-tool
+  pacstrap /mnt base dhcpcd linux linux-headers which netctl inetutils pacman-contrib base-devel wget linux-firmware nano btrfs-progs intel-ucode
   genfstab -U /mnt >> /mnt/etc/fstab
 fi
  clear
