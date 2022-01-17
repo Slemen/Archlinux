@@ -25,10 +25,10 @@ done
   exit
 fi
 ###
-clear
-pacman -Syy --noconfirm
-lsblk -f
 #clear
+pacman -Syy --noconfirm
+clear
+lsblk -f
 ##############################
 echo ""
 echo 'Нужна разметка диска?'
