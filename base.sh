@@ -33,49 +33,47 @@ lsblk -f
 echo ""
 echo 'Нужна разметка диска?'
 while
-    read -n1 -p  "
-    1 - да
-
-    0 - нет: " cfdisk # sends right after the keypress
+   read -n1 -p  "
+   1 - да
+   0 - нет: " cfdisk # sends right after the keypress
     echo ''
     [[ "$cfdisk" =~ [^10] ]]
 do
-    :
+   :
 done
  if [[ $cfdisk == 1 ]]; then
-   clear
+  clear
  lsblk -f
   echo ""
-  read -p "Укажите диск (sda/sdb например sda или sdb) : " cfd
+read -p " Укажите диск (sda/sdb/sdc) " cfd
 cfdisk /dev/$cfd
-echo ""
-clear
 elif [[ $cfdisk == 0 ]]; then
-   echo ""
-   clear
-   echo 'разметка пропущена.'
+echo 'разметка пропущена.'
 fi
 #
-  clear
-  lsblk -f
+ clear
+ lsblk -f
   echo ""
-  read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
+read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
 echo ""
 mkfs.btrfs -f /dev/$root -L Root
 mount /dev/$root /mnt
+
 btrfs sub cr /mnt/@
+#btrfs subvolume create /mnt/@home
+
 umount /dev/$root
-mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
+mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
+#mkdir -p /mnt/home
 echo ""
-########## boot  ########
+##
  clear
  lsblk -f
-echo ""
+  echo ""
 echo 'форматируем BOOT?'
 while
     read -n1 -p  "
     1 - да
-
     0 - нет: " boots # sends right after the keypress
     echo ''
     [[ "$boots" =~ [^10] ]]
@@ -100,7 +98,6 @@ echo 'добавим swap раздел?'
 while
     read -n1 -p  "
     1 - да
-
     0 - нет: " swap # sends right after the keypress
     echo ''
     [[ "$swap" =~ [^10] ]]
@@ -125,7 +122,6 @@ echo 'Добавим раздел  HOME ?'
 while
     read -n1 -p  "
     1 - да
-
     0 - нет: " homes # sends right after the keypress
     echo ''
     [[ "$homes" =~ [^10] ]]
@@ -135,12 +131,10 @@ done
    if [[ $homes == 0 ]]; then
      echo 'пропущено'
   elif [[ $homes == 1 ]]; then
-echo ""
-echo ' Форматируем HOME раздел?'
+    echo ' Форматируем HOME раздел?'
 while
     read -n1 -p  "
     1 - да
-
     0 - нет: " homeF # sends right after the keypress
     echo ''
     [[ "$homeF" =~ [^10] ]]
@@ -150,18 +144,20 @@ done
    if [[ $homeF == 1 ]]; then
    echo ""
    lsblk -f
-   read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" home
-   mkfs.btrfs -f /dev/$home -L Home
-   mkdir -p /mnt/home
-   mount /dev/$home /mnt/home
-   btrfs sub cr /mnt/home/@home
-   umount /dev/$home
-   mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$home /mnt/home
+
+    read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" home
+    mkfs.btrfs -f /dev/$home -L Home
+    mkdir -p /mnt/home
+    mount /dev/$home /mnt/home
+    btrfs sub cr /mnt/@home
+    umount /dev/$home
+    mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$home /mnt/home
    elif [[ $homeF == 0 ]]; then
  lsblk -f
+
  read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
- #mkdir -p /mnt/home
- mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
+ mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
+
 fi
 fi
 ##################################################################################
