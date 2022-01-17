@@ -171,7 +171,6 @@ echo "[General]" >> /etc/sddm.conf
 echo "..." >> /etc/sddm.conf
 echo "Numlock=on" >> /etc/sddm.conf
 clear
-echo "Установка sddm  завершена "
 
 pacman -Sy networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
 systemctl enable NetworkManager.service
