@@ -32,10 +32,10 @@ lsblk -f
 ##############################
 echo ""
 echo 'Нужна разметка диска?'
-while 
+while
     read -n1 -p  "
     1 - да
-    
+
     0 - нет: " cfdisk # sends right after the keypress
     echo ''
     [[ "$cfdisk" =~ [^10] ]]
@@ -53,7 +53,7 @@ clear
 elif [[ $cfdisk == 0 ]]; then
    echo ""
    clear
-   echo 'разметка пропущена.'   
+   echo 'разметка пропущена.'
 fi
 #
   clear
@@ -61,18 +61,21 @@ fi
   echo ""
   read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например)):" root
 echo ""
-mkfs.ext4 /dev/$root -L root
+mkfs.btrfs -f /dev/$root -L Root
 mount /dev/$root /mnt
+btrfs sub cr /mnt/@
+umount /dev/$root
+mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
 echo ""
 ########## boot  ########
  clear
  lsblk -f
-  echo ""
+echo ""
 echo 'форматируем BOOT?'
-while 
+while
     read -n1 -p  "
     1 - да
-    
+
     0 - нет: " boots # sends right after the keypress
     echo ''
     [[ "$boots" =~ [^10] ]]
@@ -81,23 +84,23 @@ do
 done
  if [[ $boots == 1 ]]; then
   read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
-  mkfs.fat -F32 /dev/$bootd
-  mkdir /mnt/boot
-  mount /dev/$bootd /mnt/boot
+  mkfs.vfat -F32 /dev/$bootd
+  mkdir -p /mnt/boot/efi
+  mount /dev/$bootd /mnt/boot/efi
   elif [[ $boots == 0 ]]; then
- read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd 
- mkdir /mnt/boot
-mount /dev/$bootd /mnt/boot
+ read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
+ mkdir -p /mnt/boot/efi
+mount /dev/$bootd /mnt/boot/efi
 fi
 ############ swap   ####################################################
  clear
  lsblk -f
-  echo ""
+echo ""
 echo 'добавим swap раздел?'
-while 
+while
     read -n1 -p  "
     1 - да
-    
+
     0 - нет: " swap # sends right after the keypress
     echo ''
     [[ "$swap" =~ [^10] ]]
@@ -109,20 +112,20 @@ done
   mkswap /dev/$swaps -L swap
   swapon /dev/$swaps
   elif [[ $swap == 0 ]]; then
-   echo 'добавление swap раздела пропущено.'   
+   echo 'добавление swap раздела пропущено.'
 fi
-################  home     ############################################################ 
+################  home     ############################################################
 clear
 echo ""
-echo " Можно использовать раздел от предыдущей системы( и его не форматировать )  
-далее в процессе установки можно будет удалить все скрытые файлы и папки в каталоге 
+echo " Можно использовать раздел от предыдущей системы( и его не форматировать )
+далее в процессе установки можно будет удалить все скрытые файлы и папки в каталоге
 пользователя"
 echo ""
 echo 'Добавим раздел  HOME ?'
-while 
+while
     read -n1 -p  "
     1 - да
-    
+
     0 - нет: " homes # sends right after the keypress
     echo ''
     [[ "$homes" =~ [^10] ]]
@@ -132,11 +135,12 @@ done
    if [[ $homes == 0 ]]; then
      echo 'пропущено'
   elif [[ $homes == 1 ]]; then
-    echo ' Форматируем HOME раздел?'
-while 
+echo ""
+echo ' Форматируем HOME раздел?'
+while
     read -n1 -p  "
     1 - да
-    
+
     0 - нет: " homeF # sends right after the keypress
     echo ''
     [[ "$homeF" =~ [^10] ]]
@@ -147,14 +151,17 @@ done
    echo ""
    lsblk -f
    read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" home
-   mkfs.ext4 /dev/$home -L home
-   mkdir /mnt/home 
+   mkfs.btrfs -f /dev/$home -L Home
+   mkdir -p /mnt/home
    mount /dev/$home /mnt/home
+   btrfs sub cr /mnt/home/@home
+   umount /dev/$home
+   mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$home /mnt/home
    elif [[ $homeF == 0 ]]; then
  lsblk -f
  read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
- mkdir /mnt/home 
- mount /dev/$homeV /mnt/home
+ mkdir -p /mnt/home
+ mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
 fi
 fi
 ##################################################################################
