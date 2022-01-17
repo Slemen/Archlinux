@@ -34,8 +34,9 @@ echo ""
 echo 'Нужна разметка диска?'
 while
    read -n1 -p  "
-   1 - да
-   0 - нет: " cfdisk # sends right after the keypress
+ 1 - да
+   
+ 0 - нет: " cfdisk # sends right after the keypress
     echo ''
     [[ "$cfdisk" =~ [^10] ]]
 do
@@ -48,7 +49,7 @@ done
 read -p " Укажите диск (sda/sdb/sdc) " cfd
 cfdisk /dev/$cfd
 elif [[ $cfdisk == 0 ]]; then
-echo 'разметка пропущена.'
+echo 'Разметка диска пропущена'
 fi
 #
  clear
@@ -67,11 +68,12 @@ echo ""
  clear
  lsblk -f
   echo ""
-echo 'форматируем BOOT?'
+echo 'Форматируем BOOT?'
 while
     read -n1 -p  "
-    1 - да
-    0 - нет: " boots # sends right after the keypress
+ 1 - да
+    
+ 0 - нет: " boots # sends right after the keypress
     echo ''
     [[ "$boots" =~ [^10] ]]
 do
@@ -83,19 +85,20 @@ done
   mkdir -p /mnt/boot/efi
   mount /dev/$bootd /mnt/boot/efi
   elif [[ $boots == 0 ]]; then
- read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
- mkdir -p /mnt/boot/efi
-mount /dev/$bootd /mnt/boot/efi
+  read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
+  mkdir -p /mnt/boot/efi
+  mount /dev/$bootd /mnt/boot/efi
 fi
 ############ swap   ####################################################
  clear
  lsblk -f
 echo ""
-echo 'добавим swap раздел?'
+echo 'Добавим swap раздел?'
 while
     read -n1 -p  "
-    1 - да
-    0 - нет: " swap # sends right after the keypress
+ 1 - да
+ 
+ 0 - нет: " swap # sends right after the keypress
     echo ''
     [[ "$swap" =~ [^10] ]]
 do
@@ -106,20 +109,21 @@ done
   mkswap /dev/$swaps -L swap
   swapon /dev/$swaps
   elif [[ $swap == 0 ]]; then
-   echo 'добавление swap раздела пропущено.'
+   echo 'Добавление swap раздела пропущено.'
 fi
 ################  home     ############################################################
-clear
+#clear
 echo ""
-echo " Можно использовать раздел от предыдущей системы( и его не форматировать )
+echo "Можно использовать раздел от предыдущей системы( и его не форматировать )
 далее в процессе установки можно будет удалить все скрытые файлы и папки в каталоге
 пользователя"
 echo ""
-echo 'Добавим раздел  HOME ?'
+echo 'Добавим раздел HOME?'
 while
     read -n1 -p  "
-    1 - да
-    0 - нет: " homes # sends right after the keypress
+ 1 - да
+    
+ 0 - нет: " homes # sends right after the keypress
     echo ''
     [[ "$homes" =~ [^10] ]]
 do
@@ -128,11 +132,13 @@ done
    if [[ $homes == 0 ]]; then
      echo 'пропущено'
   elif [[ $homes == 1 ]]; then
-    echo ' Форматируем HOME раздел?'
+  echo ""
+  echo 'Форматируем HOME раздел?'
 while
     read -n1 -p  "
-    1 - да
-    0 - нет: " homeF # sends right after the keypress
+ 1 - да
+    
+ 0 - нет: " homeF # sends right after the keypress
     echo ''
     [[ "$homeF" =~ [^10] ]]
 do
