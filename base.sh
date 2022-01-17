@@ -58,13 +58,10 @@ read -p "Укажите ROOT раздел(sda/sdb 1.2.3.4 (sda5 например
 echo ""
 mkfs.btrfs -f /dev/$root -L Root
 mount /dev/$root /mnt
-
 btrfs sub cr /mnt/@
-#btrfs subvolume create /mnt/@home
-
 umount /dev/$root
-mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
-#mkdir -p /mnt/home
+mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@ /dev/$root /mnt
+mkdir -p /mnt/home
 echo ""
 ##
  clear
@@ -147,17 +144,15 @@ done
 
     read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" home
     mkfs.btrfs -f /dev/$home -L Home
-    mkdir -p /mnt/home
     mount /dev/$home /mnt/home
-    btrfs sub cr /mnt/@home
+    btrfs sub cr /mnt/home/@home
     umount /dev/$home
-    mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$home /mnt/home
+    mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$home /mnt/home
    elif [[ $homeF == 0 ]]; then
  lsblk -f
 
  read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
-mkdir -p /mnt/home
- mount -o rw,noatime,compress-force=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
+ mount -o rw,noatime,compress=zstd,discard=async,autodefrag,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
 
 fi
 fi
