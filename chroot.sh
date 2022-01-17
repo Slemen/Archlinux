@@ -128,7 +128,6 @@ pacman -S terminus-font ttf-arphic-ukai ttf-arphic-uming ttf-caladea ttf-carlito
 pacman -S ttf-dejavu ttf-liberation ttf-sazanami unrar xclip xorg-xrandr yt-dlp zim expac --noconfirm
 clear
 
-echo ""
 echo "Добавление репозитория Archlinuxcn "
 echo '[archlinuxcn]' >> /etc/pacman.conf
 echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
