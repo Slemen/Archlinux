@@ -138,6 +138,7 @@ clear
 nano /etc/pacman.conf
 clear
 
+echo "Установка дополнительных программ из AUR "
 pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
 clear
 
@@ -147,7 +148,6 @@ clear
 #pulseaudio-bluetooth
 
 echo "Установка драйверов INTEL "
-
 pacman -S libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel libvdpau-va-gl --noconfirm
 clear
 
@@ -167,9 +167,9 @@ clear
 echo "Установка sddm "
 pacman -S sddm sddm-kcm --noconfirm
 systemctl enable sddm.service -f
-echo "[General]" >> /etc/sddm.conf
-echo "..." >> /etc/sddm.conf
-echo "Numlock=on" >> /etc/sddm.conf
+#echo "[General]" >> /etc/sddm.conf
+#echo "..." >> /etc/sddm.conf
+#echo "Numlock=on" >> /etc/sddm.conf
 clear
 
 pacman -Sy networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
@@ -191,8 +191,7 @@ chsh -s /bin/fish
 chsh -s /bin/fish $username
 clear
 
-echo "
-Данный этап может исключить возможные ошибки при первом запуске системы,
+echo "Данный этап может исключить возможные ошибки при первом запуске системы,
 фаил откроется через редактор !nano!"
 echo ""
 echo "Просмотрим/отредактируем /etc/fstab ? "
