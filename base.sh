@@ -162,9 +162,8 @@ mkdir -p /mnt/home
  mount -o rw,noatime,compress=zstd,discard=async,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
 fi
 fi
-################  раздел ################
+################################
 clear
-
 pacman -Sy --noconfirm
 clear
 ################
