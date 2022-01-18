@@ -77,11 +77,13 @@ do
     :
 done
  if [[ $boots == 1 ]]; then
+ echo ""
   read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
   mkfs.vfat -F32 /dev/$bootd
   mkdir -p /mnt/boot/efi
   mount /dev/$bootd /mnt/boot/efi
   elif [[ $boots == 0 ]]; then
+  echo ""
   read -p "Укажите BOOT раздел(sda/sdb 1.2.3.4 (sda7 например)):" bootd
   mkdir -p /mnt/boot/efi
   mount /dev/$bootd /mnt/boot/efi
@@ -102,6 +104,7 @@ do
     :
 done
  if [[ $swap == 1 ]]; then
+ echo ""
   read -p "Укажите swap раздел(sda/sdb 1.2.3.4 (sda7 например)):" swaps
   mkswap /dev/$swaps -L swap
   swapon /dev/$swaps
@@ -110,7 +113,6 @@ done
 fi
 ################ home ################
 clear
-echo ""
 echo "Можно использовать раздел от предыдущей системы( и его не форматировать )
 далее в процессе установки можно будет удалить все скрытые файлы и папки в каталоге
 пользователя"
@@ -144,7 +146,7 @@ done
    if [[ $homeF == 1 ]]; then
    echo ""
    lsblk -f
-
+   echo ""
     read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" home
     mkfs.btrfs -f /dev/$home -L Home
     mkdir -p /mnt/home
@@ -154,7 +156,7 @@ done
     mount -o rw,noatime,compress=zstd,discard=async,space_cache=v2,subvol=@home /dev/$home /mnt/home
    elif [[ $homeF == 0 ]]; then
  lsblk -f
-
+echo ""
  read -p "Укажите HOME раздел(sda/sdb 1.2.3.4 (sda6 например)):" homeV
 mkdir -p /mnt/home
  mount -o rw,noatime,compress=zstd,discard=async,space_cache=v2,subvol=@home /dev/$homeV /mnt/home
@@ -189,6 +191,7 @@ elif [[ $x_pacstrap == 2 ]]; then
 fi
  clear
 ###############################
+echo ""
 echo "Если вы производите установку используя Wifi тогда "1" "
 echo ""
 echo "если проводной интернет тогда "2" "
