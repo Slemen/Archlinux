@@ -1,1 +1,1 @@
-# Установка Archlinux BTRFS KDE
+ Установка Archlinux BTRFS KDE
