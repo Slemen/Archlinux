@@ -4,6 +4,8 @@ loadkeys ru
 setfont cyr-sun16
 clear
 
+timedatectl set-ntp true
+
 echo ""
 echo "Начнём установку? "
 while
