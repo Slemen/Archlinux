@@ -32,7 +32,6 @@ fi
 echo "Настройка localtime "
 echo ""
 ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
-timedatectl set-ntp true
 hwclock --systohc
 echo "Часовой пояс установлен "
 #####################################
