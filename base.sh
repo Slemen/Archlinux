@@ -6,7 +6,6 @@ clear
 
 timedatectl set-ntp true
 
-echo ""
 echo "Начнём установку? "
 
 while
@@ -49,7 +48,6 @@ lsblk
 pacman -Sy --noconfirm
 clear
 
-echo ""
 echo 'Установка базовой системы, будете ли вы использовать wifi?'
 while
     read -n1 -p  "
@@ -73,7 +71,6 @@ fi
  clear
 
 echo "Если вы производите установку используя Wifi тогда "1" "
-echo ""
 echo "если проводной интернет тогда "2" "
 echo ""
 echo 'wifi или dhcpcd ?'
