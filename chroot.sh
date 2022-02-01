@@ -1,48 +1,30 @@
 #!/bin/bash
 
-echo 'второй этап настройки системы в chroot '
+echo 'скрипт второй настройки системы в chroot '
 pacman -Syyu --noconfirm
 clear
 
 read -p "Введите имя компьютера: " hostname
-echo "Используйте в имени только буквы латинского алфавита "
+echo " Используйте в имени только буквы латинского алфавита "
 read -p "Введите имя пользователя: " username
+
 echo $hostname > /etc/hostname
-#####################################
-echo ""
-echo "Очистим папку конфигов, кеш, и скрытые каталоги в /home/$username от старой системы ? "
-while
-     read -n1 -p  "
- 1 - да
-    
- 0 - нет: " i_rm      # sends right after the keypress
-    echo ''
-    [[ "$i_rm" =~ [^10] ]]
-do
-    :
-done
-if [[ $i_rm == 0 ]]; then
-clear
-echo "Очистка пропущена "
-elif [[ $i_rm == 1 ]]; then
-rm -rf /home/$username/.*
-clear
-echo "Очистка завершена "
-fi
+
 echo "Настройка localtime "
-echo ""
 ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
 hwclock --systohc
 echo "Часовой пояс установлен "
-#####################################
+
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
+
 echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 echo "KEYMAP=ru" >> /etc/vconsole.conf
 echo "FONT=cyr-sun16" >> /etc/vconsole.conf
 clear
 
+echo ""
 echo "Укажите пароль для ROOT "
 passwd
 useradd -m -g users -G wheel -s /bin/bash $username
@@ -50,25 +32,25 @@ echo 'Добавляем пароль для пользователя '$username
 passwd $username
 clear
 
-nano /etc/sudoers
-clear
-
 pacman -Syy --noconfirm
 clear
 lsblk -f
-###########################################################################
+
 pacman -S grub efibootmgr --noconfirm
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=grub
 grub-mkconfig -o /boot/grub/grub.cfg
 mkinitcpio -P
 clear
-##########
+
+nano /etc/sudoers
+clear
+
 echo ""
 echo "Настроим multilib ?"
 while
     read -n1 -p  "
  1 - да
- 
+
  0 - нет : " i_multilib   # sends right after the keypress
     echo ''
     [[ "$i_multilib" =~ [^10] ]]
@@ -77,14 +59,14 @@ do
 done
 if [[ $i_multilib  == 0 ]]; then
 clear
-echo "Настройка multilib репозитория пропущена "
+echo "Настройка мультилиб репозитория пропущена"
 elif [[ $i_multilib  == 1 ]]; then
 nano /etc/pacman.conf
 clear
-echo "Multilib репозиторий настроен "
+echo "Multilib репозиторий настроен"
 fi
-######
-pacman -Sy xorg-server xf86-video-intel --noconfirm
+
+pacman -Sy xorg-server --noconfirm
 clear
 
 echo "Добавление хука автоматической очистки кэша pacman "
@@ -103,7 +85,7 @@ echo "Хук добавлен "
 clear
 
 echo ""
-echo "Установка Plasma KDE и дополнительных программ "
+echo "Установка Plasma KDE и дополнительных программ"
 
 pacman -Sy plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
 
@@ -155,12 +137,14 @@ pacman -Rns discover plasma-thunderbolt bolt plasma-firewall --noconfirm
 grub-mkfont -s 16 -o /boot/grub/ter-u16b.pf2 /usr/share/fonts/misc/ter-u16b.otb
 grub-mkconfig -o /boot/grub/grub.cfg
 clear
+
 pacman -S xorg-xinit --noconfirm
 cp /etc/X11/xinit/xinitrc /home/$username/.xinitrc
 chown $username:users /home/$username/.xinitrc
 chmod +x /home/$username/.xinitrc
 echo "exec startplasma-x11 " >> /home/$username/.xinitrc
 echo ' [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx ' >> /etc/profile
+echo ""
 clear
 
 echo "Установка sddm "
@@ -183,12 +167,14 @@ systemctl mask systemd-rfkill.service
 systemctl mask systemd-rfkill.socket
 clear
 echo ""
-echo "Plasma KDE и дополнительные программы успешно установлены "
+echo "Plasma KDE и дополнительные программы успешно установлены"
 
-echo ""
 chsh -s /bin/fish
 chsh -s /bin/fish $username
 clear
+
+echo '# /dev/sdb1 LABEL=Files
+UUID=4ad30ac8-e1fe-4ef8-930c-d743921657d8       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
 
 echo "Данный этап может исключить возможные ошибки при первом запуске системы,
 фаил откроется через редактор !nano!"
