@@ -5,7 +5,7 @@ pacman -Syyu --noconfirm
 clear
 
 read -p "Введите имя компьютера: " hostname
-echo " Используйте в имени только буквы латинского алфавита "
+echo "Используйте в имени только буквы латинского алфавита "
 read -p "Введите имя пользователя: " username
 
 echo $hostname > /etc/hostname
@@ -24,7 +24,6 @@ echo "KEYMAP=ru" >> /etc/vconsole.conf
 echo "FONT=cyr-sun16" >> /etc/vconsole.conf
 clear
 
-echo ""
 echo "Укажите пароль для ROOT "
 passwd
 useradd -m -g users -G wheel -s /bin/bash $username
@@ -45,7 +44,6 @@ clear
 nano /etc/sudoers
 clear
 
-echo ""
 echo "Настроим multilib ?"
 while
     read -n1 -p  "
@@ -84,7 +82,6 @@ Exec = /usr/bin/paccache -rvk0" >> /usr/share/libalpm/hooks/cleanup.hook
 echo "Хук добавлен "
 clear
 
-echo ""
 echo "Установка Plasma KDE и дополнительных программ"
 
 pacman -Sy plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
@@ -171,7 +168,7 @@ chsh -s /bin/fish $username
 clear
 
 echo '# /dev/sdb1 LABEL=Files
-UUID=4ad30ac8-e1fe-4ef8-930c-d743921657d8       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
+UUID=bc945ea8-3280-49c3-9537-e54f8f8729ee       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
 
 echo "Данный этап может исключить возможные ошибки при первом запуске системы,
 фаил откроется через редактор !nano!"
