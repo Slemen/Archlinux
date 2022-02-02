@@ -38,9 +38,9 @@ btrfs su cr /mnt/@
 btrfs su cr /mnt/@home
 umount /mnt
 
-mount -o rw,noatime,compress=zstd,discard=async,space_cache=v2,subvol=@ /dev/sda3 /mnt
+mount -o rw,noatime,compress=zstd:2,discard=async,space_cache=v2,subvol=@ /dev/sda3 /mnt
 mkdir -p /mnt/{boot/efi,home}
-mount -o rw,noatime,compress=zstd,discard=async,space_cache=v2,subvol=@home /dev/sda3 /mnt/home
+mount -o rw,noatime,compress=zstd:2,discard=async,space_cache=v2,subvol=@home /dev/sda3 /mnt/home
 mount /dev/sda1 /mnt/boot/efi
 clear
 lsblk
