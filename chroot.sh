@@ -41,8 +41,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 mkinitcpio -P
 clear
 
-nano /etc/sudoers
-clear
+echo '%wheel ALL=(ALL) ALL' >> /etc/sudoers
 
 echo "Настроим multilib ?"
 while
@@ -100,25 +99,25 @@ pacman -S noto-fonts-emoji p7zip pcmanfm perl-image-exiftool xdg-desktop-portal 
 
 pacman -S plasma5-applets-weather-widget python-pip python-virtualenv python-lsp-server bash-language-server qbittorrent --noconfirm
 
-pacman -S kate sox spectacle starship telegram-desktop gitui --noconfirm
+pacman -S smplayer smplayer-themes kate sox spectacle starship telegram-desktop gitui --noconfirm
 
 pacman -S terminus-font ttf-arphic-ukai ttf-arphic-uming ttf-caladea ttf-carlito ttf-croscore --noconfirm
 
 pacman -S ttf-dejavu ttf-liberation ttf-sazanami unrar xclip yt-dlp zim expac --noconfirm
 clear
 
-echo "Добавление репозитория Archlinuxcn "
-echo '[archlinuxcn]' >> /etc/pacman.conf
-echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
-pacman -Sy archlinuxcn-keyring --noconfirm
-clear
+#echo "Добавление репозитория Archlinuxcn "
+#echo '[archlinuxcn]' >> /etc/pacman.conf
+#echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
+#pacman -Sy archlinuxcn-keyring --noconfirm
+#clear
 
-nano /etc/pacman.conf
-clear
+#nano /etc/pacman.conf
+#clear
 
-echo "Установка дополнительных программ из AUR "
-pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
-clear
+#echo "Установка дополнительных программ из AUR "
+#pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
+#clear
 
 pacman -S bluez-utils pulseaudio-bluetooth --noconfirm
 systemctl enable bluetooth.service
