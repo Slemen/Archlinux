@@ -106,18 +106,18 @@ pacman -S terminus-font ttf-arphic-ukai ttf-arphic-uming ttf-caladea ttf-carlito
 pacman -S ttf-dejavu ttf-liberation ttf-sazanami unrar xclip yt-dlp zim expac --noconfirm
 clear
 
-#echo "Добавление репозитория Archlinuxcn "
-#echo '[archlinuxcn]' >> /etc/pacman.conf
-#echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
-#pacman -Sy archlinuxcn-keyring --noconfirm
-#clear
+echo "Добавление репозитория Archlinuxcn "
+echo '[archlinuxcn]' >> /etc/pacman.conf
+echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
+pacman -Sy archlinuxcn-keyring --noconfirm
+clear
 
-#nano /etc/pacman.conf
-#clear
+nano /etc/pacman.conf
+clear
 
-#echo "Установка дополнительных программ из AUR "
-#pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
-#clear
+echo "Установка дополнительных программ из AUR "
+pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
+clear
 
 pacman -S bluez-utils pulseaudio-bluetooth --noconfirm
 systemctl enable bluetooth.service
