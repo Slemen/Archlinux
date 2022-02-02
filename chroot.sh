@@ -64,7 +64,7 @@ clear
 echo "Multilib репозиторий настроен"
 fi
 
-pacman -Sy xorg-server --noconfirm
+pacman -Sy xorg-server xorg-xrandr --noconfirm
 clear
 
 echo "Добавление хука автоматической очистки кэша pacman "
@@ -88,7 +88,7 @@ pacman -Sy plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfi
 
 pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious bat bind rsync duf --noconfirm
 
-pacman -S dolphin-plugins fd filelight meld firefox firefox-i18n-ru fish fzf gvfs-mtp ntfs-3g --noconfirm
+pacman -S dolphin-plugins fd filelight meld firefox firefox-i18n-ru fish fzf gvfs gvfs-mtp ntfs-3g --noconfirm
 
 pacman -S tig git kcalc gwenview haveged highlight kfind lib32-alsa-plugins kdeconnect sshfs --noconfirm
 
@@ -104,7 +104,7 @@ pacman -S kate sox spectacle starship telegram-desktop gitui --noconfirm
 
 pacman -S terminus-font ttf-arphic-ukai ttf-arphic-uming ttf-caladea ttf-carlito ttf-croscore --noconfirm
 
-pacman -S ttf-dejavu ttf-liberation ttf-sazanami unrar xclip xorg-xrandr yt-dlp zim expac --noconfirm
+pacman -S ttf-dejavu ttf-liberation ttf-sazanami unrar xclip yt-dlp zim expac --noconfirm
 clear
 
 echo "Добавление репозитория Archlinuxcn "
@@ -120,10 +120,9 @@ echo "Установка дополнительных программ из AUR 
 pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
 clear
 
-pacman -S bluez-utils --noconfirm
+pacman -S bluez-utils pulseaudio-bluetooth --noconfirm
 systemctl enable bluetooth.service
 clear
-#pulseaudio-bluetooth
 
 echo "Установка драйверов INTEL "
 pacman -S libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel libvdpau-va-gl --noconfirm
@@ -141,7 +140,6 @@ chown $username:users /home/$username/.xinitrc
 chmod +x /home/$username/.xinitrc
 echo "exec startplasma-x11 " >> /home/$username/.xinitrc
 echo ' [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx ' >> /etc/profile
-echo ""
 clear
 
 echo "Установка sddm "
