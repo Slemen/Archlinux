@@ -20,16 +20,16 @@ echo "ru_UA.UTF-8 UTF-8" >> /etc/locale.gen
 
 locale-gen
 
-echo 'LANG=ru_UA.UTF-8"' > /etc/locale.conf
-echo 'LC_ADDRESS=ru_UA.UTF-8"' > /etc/locale.conf
-echo 'LC_IDENTIFICATION=ru_UA.UTF-8"' > /etc/locale.conf
-echo 'LC_MEASUREMENT=ru_UA.UTF-8"' > /etc/locale.conf
-echo 'LC_MONETARY=ru_UA.UTF-8"' > /etc/locale.conf
-echo 'LC_NAME=ru_UA.UTF-8"' > /etc/locale.conf
-echo 'LC_NUMERIC=ru_UA.UTF-8"' > /etc/locale.conf
-echo 'LC_PAPER=ru_UA.UTF-8"' > /etc/locale.conf
-echo 'LC_TELEPHONE=ru_UA.UTF-8"' > /etc/locale.conf
-echo 'LC_TIME=ru_UA.UTF-8"' > /etc/locale.conf
+echo 'LANG=ru_UA.UTF-8' >> /etc/locale.conf
+echo 'LC_ADDRESS=ru_UA.UTF-8' >> /etc/locale.conf
+echo 'LC_IDENTIFICATION=ru_UA.UTF-8' >> /etc/locale.conf
+echo 'LC_MEASUREMENT=ru_UA.UTF-8' >> /etc/locale.conf
+echo 'LC_MONETARY=ru_UA.UTF-8' >> /etc/locale.conf
+echo 'LC_NAME=ru_UA.UTF-8' >> /etc/locale.conf
+echo 'LC_NUMERIC=ru_UA.UTF-8' >> /etc/locale.conf
+echo 'LC_PAPER=ru_UA.UTF-8' >> /etc/locale.conf
+echo 'LC_TELEPHONE=ru_UA.UTF-8' >> /etc/locale.conf
+echo 'LC_TIME=ru_UA.UTF-8' >> /etc/locale.conf
 
 echo "KEYMAP=ru" >> /etc/vconsole.conf
 echo "FONT=cyr-sun16" >> /etc/vconsole.conf
@@ -38,6 +38,7 @@ clear
 echo " Укажите пароль для ROOT "
 passwd
 
+groupadd $username
 useradd -m -g users -G wheel -s /bin/bash $username
 echo 'Добавляем пароль для пользователя '$username' '
 passwd $username
@@ -54,6 +55,7 @@ mkinitcpio -P
 clear
 
 nano /etc/sudoers
+clear
 
 echo "Настроим multilib ?"
 while
