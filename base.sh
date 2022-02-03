@@ -61,11 +61,11 @@ do
 done
  if [[ $x_pacstrap == 1 ]]; then
   clear
-  pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware dhcpcd netctl inetutils wget pacman-contrib nano wpa_supplicant dialog btrfs-progs intel-ucode
+  pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware netctl inetutils wget pacman-contrib nano wpa_supplicant dialog btrfs-progs intel-ucode
   genfstab -U /mnt >> /mnt/etc/fstab
 elif [[ $x_pacstrap == 2 ]]; then
   clear
-  pacstrap /mnt base dhcpcd linux linux-headers which netctl inetutils pacman-contrib base-devel wget linux-firmware nano btrfs-progs intel-ucode
+  pacstrap /mnt base linux linux-headers which netctl inetutils pacman-contrib base-devel wget linux-firmware nano btrfs-progs intel-ucode
   genfstab -U /mnt >> /mnt/etc/fstab
 fi
  clear
