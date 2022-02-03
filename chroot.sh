@@ -107,7 +107,7 @@ pacman -S lib32-freetype2 lib32-glu lib32-libcurl-gnutls lib32-libpulse lib32-li
 
 pacman -S lib32-libxrandr lib32-openal lib32-openssl-1.0 lib32-sdl2_mixer nano-syntax-highlighting --noconfirm
 
-pacman -S noto-fonts-emoji p7zip pcmanfm perl-image-exiftool xdg-desktop-portal-kde --noconfirm
+pacman -S noto-fonts-emoji p7zip pcmanfm perl-image-exiftool --noconfirm
 
 pacman -S plasma5-applets-weather-widget python-pip python-virtualenv python-lsp-server bash-language-server qbittorrent --noconfirm
 
