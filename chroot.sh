@@ -16,16 +16,28 @@ hwclock --systohc
 echo "Часовой пояс установлен "
 
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
-echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen
+echo "ru_UA.UTF-8 UTF-8" >> /etc/locale.gen
+
 locale-gen
 
-echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
+echo 'LANG=ru_UA.UTF-8"' > /etc/locale.conf
+echo 'LC_ADDRESS=ru_UA.UTF-8"' > /etc/locale.conf
+echo 'LC_IDENTIFICATION=ru_UA.UTF-8"' > /etc/locale.conf
+echo 'LC_MEASUREMENT=ru_UA.UTF-8"' > /etc/locale.conf
+echo 'LC_MONETARY=ru_UA.UTF-8"' > /etc/locale.conf
+echo 'LC_NAME=ru_UA.UTF-8"' > /etc/locale.conf
+echo 'LC_NUMERIC=ru_UA.UTF-8"' > /etc/locale.conf
+echo 'LC_PAPER=ru_UA.UTF-8"' > /etc/locale.conf
+echo 'LC_TELEPHONE=ru_UA.UTF-8"' > /etc/locale.conf
+echo 'LC_TIME=ru_UA.UTF-8"' > /etc/locale.conf
+
 echo "KEYMAP=ru" >> /etc/vconsole.conf
 echo "FONT=cyr-sun16" >> /etc/vconsole.conf
 clear
 
-echo "Укажите пароль для ROOT "
+echo " Укажите пароль для ROOT "
 passwd
+
 useradd -m -g users -G wheel -s /bin/bash $username
 echo 'Добавляем пароль для пользователя '$username' '
 passwd $username
@@ -41,7 +53,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 mkinitcpio -P
 clear
 
-echo '%wheel ALL=(ALL) ALL' >> /etc/sudoers
+nano /etc/sudoers
 
 echo "Настроим multilib ?"
 while
@@ -95,7 +107,7 @@ pacman -S lib32-freetype2 lib32-glu lib32-libcurl-gnutls lib32-libpulse lib32-li
 
 pacman -S lib32-libxrandr lib32-openal lib32-openssl-1.0 lib32-sdl2_mixer nano-syntax-highlighting --noconfirm
 
-pacman -S noto-fonts-emoji p7zip pcmanfm perl-image-exiftool xdg-desktop-portal --noconfirm
+pacman -S noto-fonts-emoji p7zip pcmanfm perl-image-exiftool xdg-desktop-portal-kde --noconfirm
 
 pacman -S plasma5-applets-weather-widget python-pip python-virtualenv python-lsp-server bash-language-server qbittorrent --noconfirm
 
@@ -109,10 +121,9 @@ clear
 echo "Добавление репозитория Archlinuxcn "
 echo '[archlinuxcn]' >> /etc/pacman.conf
 echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
-pacman -Sy archlinuxcn-keyring --noconfirm
-clear
-
 nano /etc/pacman.conf
+clear
+pacman -Sy archlinuxcn-keyring --noconfirm
 clear
 
 echo "Установка дополнительных программ из AUR "
