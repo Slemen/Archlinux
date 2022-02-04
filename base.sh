@@ -25,7 +25,7 @@ done
    exit
 fi
 
-cfdisk /dev/sda --zero
+cfdisk -z /dev/sda
 clear
 
 mkfs.vfat -F32 /dev/sda1
@@ -38,9 +38,9 @@ btrfs su cr /mnt/@
 btrfs su cr /mnt/@home
 umount /mnt
 
-mount -o rw,noatime,compress=zstd:2,discard=async,space_cache=v2,subvol=@ /dev/sda3 /mnt
+mount -o noatime,compress=zstd:2,discard=async,space_cache=v2,subvol=@ /dev/sda3 /mnt
 mkdir -p /mnt/{boot/efi,home}
-mount -o rw,noatime,compress=zstd:2,discard=async,space_cache=v2,subvol=@home /dev/sda3 /mnt/home
+mount -o noatime,compress=zstd:2,discard=async,space_cache=v2,subvol=@home /dev/sda3 /mnt/home
 mount /dev/sda1 /mnt/boot/efi
 clear
 lsblk
