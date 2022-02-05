@@ -28,7 +28,7 @@ fi
 cfdisk -z /dev/sda
 clear
 
-mkfs.vfat -F32 /dev/sda1
+mkfs.fat -F32 /dev/sda1
 mkswap -L swap /dev/sda2
 swapon /dev/sda2
 mkfs.btrfs -f -L Root /dev/sda3
