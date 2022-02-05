@@ -48,59 +48,15 @@ lsblk
 pacman -Sy --noconfirm
 clear
 
-echo 'Установка базовой системы, будете ли вы использовать wifi?'
-while
-    read -n1 -p  "
- 1 - да
+pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware wget pacman-contrib nano btrfs-progs intel-ucode
+genfstab -U /mnt >> /mnt/etc/fstab
+clear
 
- 2 - нет: " x_pacstrap  # sends right after the keypress
-    echo ''
-    [[ "$x_pacstrap" =~ [^12] ]]
-do
-    :
-done
- if [[ $x_pacstrap == 1 ]]; then
-  clear
-  pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware netctl inetutils wget pacman-contrib nano wpa_supplicant dialog btrfs-progs intel-ucode
-  genfstab -U /mnt >> /mnt/etc/fstab
-elif [[ $x_pacstrap == 2 ]]; then
-  clear
-  pacstrap /mnt base linux linux-headers which netctl inetutils pacman-contrib base-devel wget linux-firmware nano btrfs-progs intel-ucode
-  genfstab -U /mnt >> /mnt/etc/fstab
-fi
- clear
-
-echo "Если вы производите установку используя Wifi тогда "1" "
-echo "если проводной интернет тогда "2" "
-echo ""
-echo 'wifi или dhcpcd ?'
-while
-    read -n1 -p "1 - wifi, 2 - dhcpcd: " int # sends right after the keypress
-    echo ''
-    [[ "$int" =~ [^12] ]]
-do
-    :
-done
-if [[ $int == 1 ]]; then
-
-  curl -LO https://raw.githubusercontent.com/Slemen/Archlinux/master/chroot.sh
-  mv chroot.sh /mnt
-  chmod +x /mnt/chroot.sh
-  echo ""
-  echo 'первый этап готов '
-  echo 'archLinux chroot'
-  echo '1. проверь  интернет для продолжения установки в черуте || 2.команда для запуска ./chroot.sh '
-  arch-chroot /mnt
+echo 'первый этап готов '
+echo 'archLinux chroot'
+arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/Slemen/Archlinux/master/chroot.sh)"
 umount -a
 reboot
-  elif [[ $int == 2 ]]; then
-  echo ""
-  echo 'первый этап готов '
-  echo 'archLinux chroot'
-  arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/Slemen/Archlinux/master/chroot.sh)"
-umount -a
-reboot
-fi
 
 elif [[ $menu == 0 ]]; then
 exit
