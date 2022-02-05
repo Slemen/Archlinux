@@ -4,8 +4,11 @@ echo 'скрипт второй настройки системы в chroot '
 pacman -Syyu --noconfirm
 clear
 
+echo ""
 read -p "Введите имя компьютера: " hostname
+echo ""
 echo "Используйте в имени только буквы латинского алфавита "
+echo ""
 read -p "Введите имя пользователя: " username
 
 echo $hostname > /etc/hostname
@@ -35,12 +38,16 @@ echo "KEYMAP=ru" >> /etc/vconsole.conf
 echo "FONT=cyr-sun16" >> /etc/vconsole.conf
 clear
 
-echo " Укажите пароль для ROOT "
+echo ""
+echo "Укажите пароль для ROOT "
 passwd
 
+echo ""
 groupadd $username
 useradd -m -g users -G wheel -s /bin/bash $username
+echo ""
 echo 'Добавляем пароль для пользователя '$username' '
+echo ""
 passwd $username
 clear
 
