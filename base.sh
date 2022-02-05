@@ -25,23 +25,23 @@ done
    exit
 fi
 
-cfdisk -z /dev/vda
+cfdisk -z /dev/sda
 clear
 
-mkfs.vfat -F32 /dev/vda1
-mkswap -L swap /dev/vda2
-swapon /dev/vda2
-mkfs.btrfs -f -L Root /dev/vda3
+mkfs.fat -F32 /dev/sda1
+mkswap -L swap /dev/sda2
+swapon /dev/sda2
+mkfs.btrfs -f -L Root /dev/sda3
 
-mount /dev/vda3 /mnt
+mount /dev/sda3 /mnt
 btrfs su cr /mnt/@
 btrfs su cr /mnt/@home
 umount /mnt
 
-mount -o noatime,compress=zstd:2,discard=async,space_cache=v2,subvol=@ /dev/vda3 /mnt
+mount -o noatime,compress=zstd:2,discard=async,space_cache=v2,subvol=@ /dev/sda3 /mnt
 mkdir -p /mnt/{boot/efi,home}
-mount -o noatime,compress=zstd:2,discard=async,space_cache=v2,subvol=@home /dev/vda3 /mnt/home
-mount /dev/vda1 /mnt/boot/efi
+mount -o noatime,compress=zstd:2,discard=async,space_cache=v2,subvol=@home /dev/sda3 /mnt/home
+mount /dev/sda1 /mnt/boot/efi
 clear
 lsblk
 
@@ -61,11 +61,11 @@ do
 done
  if [[ $x_pacstrap == 1 ]]; then
   clear
-  pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware wget pacman-contrib nano wpa_supplicant dialog btrfs-progs intel-ucode
+  pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware netctl inetutils wget pacman-contrib nano wpa_supplicant dialog btrfs-progs intel-ucode
   genfstab -U /mnt >> /mnt/etc/fstab
 elif [[ $x_pacstrap == 2 ]]; then
   clear
-  pacstrap /mnt base linux linux-headers which pacman-contrib base-devel wget linux-firmware nano btrfs-progs intel-ucode
+  pacstrap /mnt base linux linux-headers which netctl inetutils pacman-contrib base-devel wget linux-firmware nano btrfs-progs intel-ucode
   genfstab -U /mnt >> /mnt/etc/fstab
 fi
  clear
