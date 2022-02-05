@@ -77,7 +77,7 @@ clear
 echo "Multilib репозиторий настроен"
 fi
 
-pacman -Sy xorg-server xorg-xrandr --noconfirm
+pacman -Sy xorg-server xorg-xrandr xorg-xinit --noconfirm
 clear
 
 echo "Добавление хука автоматической очистки кэша pacman "
@@ -99,7 +99,7 @@ echo "Установка Plasma KDE и дополнительных програ
 
 pacman -Sy plasma kde-system-meta konsole yakuake htop dkms --noconfirm
 
-pacman -S xorg-xinit --noconfirm
+#pacman -S xorg-xinit --noconfirm
 cp /etc/X11/xinit/xinitrc /home/$username/.xinitrc
 chown $username:users /home/$username/.xinitrc
 chmod +x /home/$username/.xinitrc
@@ -108,14 +108,15 @@ echo ' [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx ' >> /etc/profile
 clear
 
 echo "Установка sddm "
-pacman -S sddm sddm-kcm --noconfirm
+#pacman -S sddm sddm-kcm --noconfirm
 systemctl enable sddm.service -f
 clear
 
-pacman -Sy networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
+pacman -Sy networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
 systemctl enable NetworkManager.service
 systemctl enable ModemManager.service
 clear
+#networkmanager
 
 echo "Данный этап может исключить возможные ошибки при первом запуске системы,
 фаил откроется через редактор !nano!"
