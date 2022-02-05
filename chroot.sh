@@ -172,6 +172,7 @@ echo "Данный этап может исключить возможные о�
 echo ""
 echo "Просмотрим/отредактируем /etc/fstab ? "
 while
+echo ""
     read -n1 -p  "1 - да, 0 - нет: " vm_fstab # sends right after the keypress
     echo ''
     [[ "$vm_fstab" =~ [^10] ]]
