@@ -54,7 +54,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 mkinitcpio -P
 clear
 
-nano /etc/sudoers
+EDITOR=nano visudo
 clear
 
 echo "Настроим multilib ?"
