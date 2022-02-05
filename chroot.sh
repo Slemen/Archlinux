@@ -106,13 +106,13 @@ echo "Установка Plasma KDE и дополнительных програ
 
 pacman -Sy plasma kde-system-meta konsole yakuake htop dkms --noconfirm
 
-pacman -S alsa-utils ark bind rsync duf aspell aspell-en aspell-ru audacious smplayer smplayer-themes telegram-desktop --noconfirm
+pacman -S alsa-utils alsa-plugins lib32-alsa-plugins ark bind rsync duf aspell aspell-en aspell-ru pcmanfm --noconfirm
 
-pacman -S dolphin-plugins meld firefox firefox-i18n-ru fzf gvfs gvfs-mtp ntfs-3g nano-syntax-highlighting --noconfirm
+pacman -S dolphin-plugins meld firefox firefox-i18n-ru fzf gvfs gvfs-mtp ntfs-3g nano-syntax-highlighting unrar --noconfirm
 
-pacman -S git kcalc gwenview haveged kdeconnect sshfs kate spectacle yt-dlp bash-language-server qbittorrent --noconfirm
+pacman -S git kcalc gwenview haveged kdeconnect sshfs kate spectacle yt-dlp bash-language-server qbittorrent audacious smplayer smplayer-themes telegram-desktop --noconfirm
 
-pacman -S ttf-dejavu ttf-liberation unrar --noconfirm
+pacman -S ttf-dejavu ttf-liberation ttf-croscore  --noconfirm
 clear
 
 echo "Добавление репозитория Archlinuxcn "
