@@ -99,53 +99,6 @@ echo "Установка Plasma KDE и дополнительных програ
 
 pacman -Sy plasma kde-system-meta konsole yakuake htop dkms --noconfirm
 
-pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious bat bind rsync duf --noconfirm
-
-pacman -S dolphin-plugins fd filelight meld firefox firefox-i18n-ru fish fzf gvfs gvfs-mtp ntfs-3g --noconfirm
-
-pacman -S tig git kcalc gwenview haveged highlight kfind lib32-alsa-plugins kdeconnect sshfs --noconfirm
-
-pacman -S lib32-freetype2 lib32-glu lib32-libcurl-gnutls lib32-libpulse lib32-libxft lib32-libxinerama --noconfirm
-
-pacman -S lib32-libxrandr lib32-openal lib32-openssl-1.0 lib32-sdl2_mixer nano-syntax-highlighting --noconfirm
-
-pacman -S noto-fonts-emoji p7zip pcmanfm perl-image-exiftool --noconfirm
-
-pacman -S plasma5-applets-weather-widget python-pip python-virtualenv python-lsp-server bash-language-server qbittorrent --noconfirm
-
-pacman -S smplayer smplayer-themes kate sox spectacle starship telegram-desktop gitui --noconfirm
-
-pacman -S terminus-font ttf-arphic-ukai ttf-arphic-uming ttf-caladea ttf-carlito ttf-croscore --noconfirm
-
-pacman -S ttf-dejavu ttf-liberation ttf-sazanami unrar xclip yt-dlp zim expac --noconfirm
-clear
-
-echo "Добавление репозитория Archlinuxcn "
-echo '[archlinuxcn]' >> /etc/pacman.conf
-echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
-nano /etc/pacman.conf
-clear
-pacman -Sy archlinuxcn-keyring --noconfirm
-clear
-
-echo "Установка дополнительных программ из AUR "
-pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
-clear
-
-pacman -S bluez-utils pulseaudio-bluetooth --noconfirm
-systemctl enable bluetooth.service
-clear
-
-echo "Установка драйверов INTEL "
-pacman -S libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel libvdpau-va-gl --noconfirm
-clear
-
-pacman -Rns discover plasma-thunderbolt bolt plasma-firewall --noconfirm
-
-grub-mkfont -s 16 -o /boot/grub/ter-u16b.pf2 /usr/share/fonts/misc/ter-u16b.otb
-grub-mkconfig -o /boot/grub/grub.cfg
-clear
-
 pacman -S xorg-xinit --noconfirm
 cp /etc/X11/xinit/xinitrc /home/$username/.xinitrc
 chown $username:users /home/$username/.xinitrc
@@ -163,22 +116,6 @@ pacman -Sy networkmanager networkmanager-openvpn network-manager-applet usb_mode
 systemctl enable NetworkManager.service
 systemctl enable ModemManager.service
 clear
-
-pacman -S tlp tlp-rdw --noconfirm
-systemctl enable tlp.service
-systemctl enable NetworkManager-dispatcher.service
-systemctl mask systemd-rfkill.service
-systemctl mask systemd-rfkill.socket
-clear
-echo ""
-echo "Plasma KDE и дополнительные программы успешно установлены"
-
-chsh -s /bin/fish
-chsh -s /bin/fish $username
-clear
-
-echo '# /dev/sdb1 LABEL=Files
-UUID=bc945ea8-3280-49c3-9537-e54f8f8729ee       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
 
 echo "Данный этап может исключить возможные ошибки при первом запуске системы,
 фаил откроется через редактор !nano!"
