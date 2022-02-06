@@ -1,5 +1,4 @@
 #!/bin/bash
-
 echo 'скрипт второй настройки системы в chroot '
 pacman -Syyu --noconfirm
 clear
@@ -13,6 +12,7 @@ echo $hostname > /etc/hostname
 echo "Настройка localtime "
 ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
 hwclock --systohc
+echo "Часовой пояс установлен "
 
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 echo "ru_UA.UTF-8 UTF-8" >> /etc/locale.gen
@@ -97,13 +97,25 @@ echo "Установка Plasma KDE и дополнительных програ
 
 pacman -Sy plasma kde-system-meta konsole yakuake htop dkms --noconfirm
 
-pacman -S alsa-utils alsa-plugins lib32-alsa-plugins ark bind rsync duf aspell aspell-en aspell-ru pcmanfm --noconfirm
+pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious rsync --noconfirm
 
-pacman -S dolphin-plugins meld firefox firefox-i18n-ru gvfs gvfs-mtp ntfs-3g nano-syntax-highlighting unrar --noconfirm
+pacman -S dolphin-plugins filelight meld firefox firefox-i18n-ru fish gvfs gvfs-mtp ntfs-3g --noconfirm
 
-pacman -S git kcalc gwenview haveged kdeconnect sshfs kate spectacle yt-dlp bash-language-server qbittorrent audacious smplayer smplayer-themes telegram-desktop --noconfirm
+pacman -S kcalc gwenview haveged highlight lib32-alsa-plugins kdeconnect sshfs --noconfirm
 
-pacman -S ttf-dejavu ttf-liberation ttf-croscore  --noconfirm
+pacman -S lib32-freetype2 lib32-glu lib32-libcurl-gnutls lib32-libpulse lib32-libxft lib32-libxinerama --noconfirm
+
+pacman -S lib32-libxrandr lib32-openal lib32-openssl-1.0 lib32-sdl2_mixer nano-syntax-highlighting --noconfirm
+
+pacman -S noto-fonts-emoji p7zip pcmanfm bash-language-server --noconfirm
+
+pacman -S plasma5-applets-weather-widget python-pip python-virtualenv python-lsp-server  qbittorrent --noconfirm
+
+pacman -S smplayer smplayer-themes kate spectacle starship telegram-desktop --noconfirm
+
+pacman -S terminus-font ttf-arphic-ukai ttf-arphic-uming ttf-caladea ttf-carlito ttf-croscore --noconfirm
+
+pacman -S ttf-dejavu ttf-liberation ttf-sazanami yt-dlp expac --noconfirm
 clear
 
 echo "Добавление репозитория Archlinuxcn "
@@ -128,10 +140,6 @@ clear
 
 pacman -Rns discover plasma-thunderbolt bolt plasma-firewall --noconfirm
 
-#grub-mkfont -s 16 -o /boot/grub/ter-u16b.pf2 /usr/share/fonts/misc/ter-u16b.otb
-#grub-mkconfig -o /boot/grub/grub.cfg
-#clear
-
 pacman -S xorg-xinit --noconfirm
 cp /etc/X11/xinit/xinitrc /home/$username/.xinitrc
 chown $username:users /home/$username/.xinitrc
@@ -141,15 +149,14 @@ echo ' [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx ' >> /etc/profile
 clear
 
 echo "Установка sddm "
-#pacman -S sddm sddm-kcm --noconfirm
+pacman -S sddm sddm-kcm --noconfirm
 systemctl enable sddm.service -f
 clear
 
-pacman -Sy networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
+pacman -Sy networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
 systemctl enable NetworkManager.service
 systemctl enable ModemManager.service
 clear
-#networkmanager
 
 pacman -S tlp tlp-rdw --noconfirm
 systemctl enable tlp.service
@@ -160,19 +167,18 @@ clear
 echo ""
 echo "Plasma KDE и дополнительные программы успешно установлены"
 
-#chsh -s /bin/fish
-#chsh -s /bin/fish $username
-#clear
+chsh -s /bin/fish
+chsh -s /bin/fish $username
+clear
 
 echo '# /dev/sdb1 LABEL=Files
 UUID=bc945ea8-3280-49c3-9537-e54f8f8729ee       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
 
 echo "Данный этап может исключить возможные ошибки при первом запуске системы,
 фаил откроется через редактор !nano!"
-echo ""
 echo "Просмотрим/отредактируем /etc/fstab ? "
 while
-echo ""
+    echo ""
     read -n1 -p  "1 - да, 0 - нет: " vm_fstab # sends right after the keypress
     echo ''
     [[ "$vm_fstab" =~ [^10] ]]
