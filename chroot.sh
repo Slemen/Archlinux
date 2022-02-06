@@ -99,7 +99,7 @@ pacman -Sy plasma kde-system-meta konsole yakuake htop dkms --noconfirm
 
 pacman -S alsa-utils alsa-plugins lib32-alsa-plugins ark bind rsync duf aspell aspell-en aspell-ru pcmanfm --noconfirm
 
-pacman -S dolphin-plugins meld firefox firefox-i18n-ru fzf gvfs gvfs-mtp ntfs-3g nano-syntax-highlighting unrar --noconfirm
+pacman -S dolphin-plugins meld firefox firefox-i18n-ru gvfs gvfs-mtp ntfs-3g nano-syntax-highlighting unrar --noconfirm
 
 pacman -S git kcalc gwenview haveged kdeconnect sshfs kate spectacle yt-dlp bash-language-server qbittorrent audacious smplayer smplayer-themes telegram-desktop --noconfirm
 
