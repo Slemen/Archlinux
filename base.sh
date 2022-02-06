@@ -52,7 +52,7 @@ pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware wget pa
 genfstab -U /mnt >> /mnt/etc/fstab
 clear
 
-echo 'первый этап готов '
+echo 'скрипт первой настройки системы готов '
 echo 'archLinux chroot'
 arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/Slemen/Archlinux/master/chroot.sh)"
 umount -a
