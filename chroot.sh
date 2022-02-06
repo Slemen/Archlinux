@@ -99,9 +99,9 @@ pacman -Sy plasma kde-system-meta konsole yakuake htop dkms --noconfirm
 
 pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious rsync --noconfirm
 
-pacman -S dolphin-plugins filelight meld firefox firefox-i18n-ru fish gvfs gvfs-mtp ntfs-3g --noconfirm
+pacman -S dolphin-plugins filelight meld firefox firefox-i18n-ru fish fzf gvfs gvfs-mtp ntfs-3g --noconfirm
 
-pacman -S kcalc gwenview haveged highlight lib32-alsa-plugins kdeconnect sshfs --noconfirm
+pacman -S git kcalc gwenview haveged highlight kfind lib32-alsa-plugins kdeconnect sshfs --noconfirm
 
 pacman -S lib32-freetype2 lib32-glu lib32-libcurl-gnutls lib32-libpulse lib32-libxft lib32-libxinerama --noconfirm
 
