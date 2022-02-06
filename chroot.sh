@@ -95,7 +95,7 @@ clear
 
 echo "Установка Plasma KDE и дополнительных программ"
 
-pacman -Sy plasma kde-system-meta konsole yakuake htop dkms --noconfirm
+pacman -Sy plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
 
 pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious rsync --noconfirm
 
@@ -107,7 +107,7 @@ pacman -S lib32-freetype2 lib32-glu lib32-libcurl-gnutls lib32-libpulse lib32-li
 
 pacman -S lib32-libxrandr lib32-openal lib32-openssl-1.0 lib32-sdl2_mixer nano-syntax-highlighting --noconfirm
 
-pacman -S noto-fonts-emoji p7zip pcmanfm bash-language-server --noconfirm
+pacman -S noto-fonts-emoji p7zip pcmanfm xdg-desktop-portal-kde bash-language-server --noconfirm
 
 pacman -S plasma5-applets-weather-widget python-pip python-virtualenv python-lsp-server  qbittorrent --noconfirm
 
