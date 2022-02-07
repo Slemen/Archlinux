@@ -132,8 +132,8 @@ pacman -S bluez-utils pulseaudio-bluetooth --noconfirm
 systemctl enable bluetooth.service
 clear
 
-echo "Установка драйверов INTEL "
-pacman -S libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel libvdpau-va-gl --noconfirm
+echo "Установка драйверов "
+pacman -S libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel libvdpau-va-gl opencl-icd-loader lib32-opencl-icd-loader --noconfirm
 clear
 
 pacman -Rns discover plasma-thunderbolt bolt plasma-firewall --noconfirm
