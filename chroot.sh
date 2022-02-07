@@ -109,7 +109,7 @@ pacman -S lib32-libxrandr lib32-openal lib32-openssl-1.0 lib32-sdl2_mixer nano-s
 
 pacman -S p7zip pcmanfm pkgfile xdg-desktop-portal bash-language-server --noconfirm
 
-pacman -S plasma5-applets-weather-widget python-pip python-virtualenv python-lsp-server  qbittorrent --noconfirm
+pacman -S python-pip python-virtualenv python-lsp-server qbittorrent --noconfirm
 
 pacman -S smplayer smplayer-themes kate spectacle starship telegram-desktop unrar yt-dlp expac --noconfirm
 
