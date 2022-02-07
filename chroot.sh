@@ -97,7 +97,7 @@ echo "Установка Plasma KDE и дополнительных програ
 
 pacman -Sy plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
 
-pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious rsync --noconfirm
+pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious rsync duf --noconfirm
 
 pacman -S dolphin-plugins filelight meld firefox firefox-i18n-ru fish fzf gvfs gvfs-mtp ntfs-3g --noconfirm
 
@@ -107,15 +107,13 @@ pacman -S lib32-freetype2 lib32-glu lib32-libcurl-gnutls lib32-libpulse lib32-li
 
 pacman -S lib32-libxrandr lib32-openal lib32-openssl-1.0 lib32-sdl2_mixer nano-syntax-highlighting --noconfirm
 
-pacman -S noto-fonts-emoji p7zip pcmanfm xdg-desktop-portal-kde bash-language-server --noconfirm
+pacman -S noto-fonts-emoji p7zip pcmanfm pkgfile xdg-desktop-portal-kde bash-language-server --noconfirm
 
 pacman -S plasma5-applets-weather-widget python-pip python-virtualenv python-lsp-server  qbittorrent --noconfirm
 
-pacman -S smplayer smplayer-themes kate spectacle starship telegram-desktop --noconfirm
+pacman -S smplayer smplayer-themes kate spectacle starship telegram-desktop unrar yt-dlp expac --noconfirm
 
-pacman -S terminus-font ttf-arphic-ukai ttf-arphic-uming ttf-caladea ttf-carlito ttf-croscore --noconfirm
-
-pacman -S ttf-dejavu ttf-liberation ttf-sazanami yt-dlp expac --noconfirm
+pacman -S terminus-font ttf-arphic-ukai ttf-arphic-uming ttf-caladea ttf-carlito ttf-croscore ttf-dejavu ttf-liberation ttf-sazanami --noconfirm
 clear
 
 echo "Добавление репозитория Archlinuxcn "
