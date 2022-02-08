@@ -97,7 +97,7 @@ echo "Установка Plasma KDE и дополнительных програ
 
 pacman -Sy plasma kde-system-meta plasma-wayland-session kio-extras konsole yakuake htop dkms --noconfirm
 
-pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious rsync duf --noconfirm
+pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious rsync duf kio-gdrive --noconfirm
 
 pacman -S dolphin-plugins filelight meld firefox firefox-i18n-ru fish fzf gvfs gvfs-mtp ntfs-3g --noconfirm
 
