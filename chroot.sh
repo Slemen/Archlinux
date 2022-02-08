@@ -111,10 +111,7 @@ pacman -S p7zip pcmanfm pkgfile kwalletmanager xdg-desktop-portal bash-language-
 
 pacman -S smplayer smplayer-themes kate spectacle starship telegram-desktop qbittorrent unrar yt-dlp expac --noconfirm
 
-pacman -S terminus-font ttf-arphic-ukai ttf-arphic-uming ttf-caladea ttf-carlito --noconfirm
-
-pacman -S ttf-dejavu ttf-liberation ttf-sazanami noto-fonts-emoji ttf-croscore --noconfirm
-
+pacman -S ttf-dejavu ttf-liberation noto-fonts-emoji --noconfirm
 clear
 
 echo "Добавление репозитория Archlinuxcn "
