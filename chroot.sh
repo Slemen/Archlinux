@@ -109,7 +109,7 @@ pacman -S lib32-libxrandr lib32-openal lib32-openssl-1.0 lib32-sdl2_mixer nano-s
 
 pacman -S p7zip pcmanfm pkgfile kwalletmanager xdg-desktop-portal xclip bash-language-server --noconfirm
 
-pacman -S smplayer smplayer-themes kate spectacle starship telegram-desktop qbittorrent unrar yt-dlp expac --noconfirm
+pacman -S smplayer smplayer-themes kate spectacle telegram-desktop qbittorrent unrar yt-dlp expac --noconfirm
 
 pacman -S ttf-dejavu ttf-liberation terminus-font noto-fonts-emoji --noconfirm
 clear
