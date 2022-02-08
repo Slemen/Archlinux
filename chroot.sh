@@ -107,7 +107,7 @@ pacman -S lib32-freetype2 lib32-glu lib32-libcurl-gnutls lib32-libpulse lib32-li
 
 pacman -S lib32-libxrandr lib32-openal lib32-openssl-1.0 lib32-sdl2_mixer nano-syntax-highlighting --noconfirm
 
-pacman -S p7zip pcmanfm pkgfile xdg-desktop-portal bash-language-server --noconfirm
+pacman -S p7zip pcmanfm pkgfile kwalletmanager xdg-desktop-portal bash-language-server --noconfirm
 
 pacman -S python-pip python-virtualenv python-lsp-server qbittorrent --noconfirm
 
