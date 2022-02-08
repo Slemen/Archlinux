@@ -109,11 +109,12 @@ pacman -S lib32-libxrandr lib32-openal lib32-openssl-1.0 lib32-sdl2_mixer nano-s
 
 pacman -S p7zip pcmanfm pkgfile kwalletmanager xdg-desktop-portal bash-language-server --noconfirm
 
-pacman -S python-pip python-virtualenv python-lsp-server qbittorrent --noconfirm
+pacman -S smplayer smplayer-themes kate spectacle starship telegram-desktop qbittorrent unrar yt-dlp expac --noconfirm
 
-pacman -S smplayer smplayer-themes kate spectacle starship telegram-desktop unrar yt-dlp expac --noconfirm
+pacman -S terminus-font ttf-arphic-ukai ttf-arphic-uming ttf-caladea ttf-carlito --noconfirm
 
-pacman -S terminus-font ttf-arphic-ukai ttf-arphic-uming ttf-caladea ttf-carlito ttf-croscore ttf-dejavu ttf-liberation ttf-sazanami noto-fonts-emoji --noconfirm
+pacman -S ttf-dejavu ttf-liberation ttf-sazanami noto-fonts-emoji ttf-croscore --noconfirm
+
 clear
 
 echo "Добавление репозитория Archlinuxcn "
