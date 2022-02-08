@@ -99,7 +99,7 @@ pacman -Sy plasma kde-system-meta plasma-wayland-session kio-extras konsole yaku
 
 pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious rsync duf kio-gdrive --noconfirm
 
-pacman -S dolphin-plugins filelight meld firefox firefox-i18n-ru fish gvfs gvfs-mtp ntfs-3g --noconfirm
+pacman -S dolphin-plugins filelight meld firefox firefox-i18n-ru fish fzf gvfs gvfs-mtp ntfs-3g --noconfirm
 
 pacman -S git kcalc gwenview haveged highlight kfind lib32-alsa-plugins kdeconnect sshfs --noconfirm
 
