@@ -95,7 +95,7 @@ clear
 
 echo "Установка Plasma KDE и дополнительных программ"
 
-pacman -Sy plasma kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
+pacman -Sy plasma kde-system-meta plasma-wayland-session kio-extras konsole yakuake htop dkms --noconfirm
 
 pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious rsync duf --noconfirm
 
