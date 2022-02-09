@@ -107,7 +107,7 @@ pacman -S lib32-freetype2 lib32-glu lib32-libcurl-gnutls lib32-libpulse lib32-li
 
 pacman -S lib32-libxrandr lib32-openal lib32-openssl-1.0 lib32-sdl2_mixer nano-syntax-highlighting --noconfirm
 
-pacman -S p7zip pcmanfm kwalletmanager xdg-desktop-portal xclip bash-language-server --noconfirm
+pacman -S p7zip pcmanfm kwalletmanager xdg-desktop-portal xclip bash-language-server egl-wayland --noconfirm
 
 pacman -S smplayer smplayer-themes kate spectacle telegram-desktop qbittorrent unrar yt-dlp expac --noconfirm
 
@@ -170,13 +170,33 @@ clear
 echo '# /dev/sdb1 LABEL=Files
 UUID=bc945ea8-3280-49c3-9537-e54f8f8729ee       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
 
+echo "Просмотрим/отредактируем kde_settings ? "
+while
+    read -n1 -p  "
+ 1 - да
+
+ 0 - нет: " vm_kde_settings # sends right after the keypress
+    echo ''
+    [[ "$vm_kde_settings" =~ [^10] ]]
+do
+    :
+done
+if [[ $vm_kde_settings == 0 ]]; then
+  echo 'этап пропущен'
+elif [[ $vm_kde_settings == 1 ]]; then
+nano /etc/sddm.conf.d/kde_settings.conf
+clear
+fi
+
 echo "Данный этап может исключить возможные ошибки при первом запуске системы,
 фаил откроется через редактор !nano!"
 echo ""
 echo "Просмотрим/отредактируем /etc/fstab ? "
 while
-    echo ""
-    read -n1 -p  "1 - да, 0 - нет: " vm_fstab # sends right after the keypress
+    read -n1 -p  "
+ 1 - да
+
+ 0 - нет: " vm_fstab # sends right after the keypress
     echo ''
     [[ "$vm_fstab" =~ [^10] ]]
 do
