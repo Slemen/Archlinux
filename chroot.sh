@@ -101,7 +101,7 @@ pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious rsync duf kio-gdri
 
 pacman -S dolphin-plugins filelight meld firefox firefox-i18n-ru fish fzf gvfs gvfs-mtp ntfs-3g --noconfirm
 
-pacman -S git kcalc gwenview haveged highlight kfind lib32-alsa-plugins kdeconnect sshfs --noconfirm
+pacman -S git kcalc gwenview haveged highlight kfind lib32-alsa-plugins kdeconnect sshfs mesa-utils --noconfirm
 
 pacman -S lib32-freetype2 lib32-glu lib32-libcurl-gnutls lib32-libpulse lib32-libxft lib32-libxinerama --noconfirm
 
