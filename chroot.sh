@@ -170,24 +170,6 @@ clear
 echo '# /dev/sdb1 LABEL=Files
 UUID=bc945ea8-3280-49c3-9537-e54f8f8729ee       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
 
-echo "Просмотрим/отредактируем kde_settings ? "
-while
-    read -n1 -p  "
- 1 - да
-
- 0 - нет: " vm_kde_settings # sends right after the keypress
-    echo ''
-    [[ "$vm_kde_settings" =~ [^10] ]]
-do
-    :
-done
-if [[ $vm_kde_settings == 0 ]]; then
-  echo 'этап пропущен'
-elif [[ $vm_kde_settings == 1 ]]; then
-nano /etc/sddm.conf.d/kde_settings.conf
-clear
-fi
-
 echo "Данный этап может исключить возможные ошибки при первом запуске системы,
 фаил откроется через редактор !nano!"
 echo ""
