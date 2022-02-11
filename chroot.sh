@@ -107,7 +107,7 @@ pacman -S lib32-freetype2 lib32-glu lib32-libcurl-gnutls lib32-libpulse lib32-li
 
 pacman -S lib32-libxrandr lib32-openal lib32-openssl-1.0 lib32-sdl2_mixer nano-syntax-highlighting --noconfirm
 
-pacman -S p7zip pcmanfm kwalletmanager xdg-desktop-portal xclip bash-language-server egl-wayland --noconfirm
+pacman -S p7zip pcmanfm kwalletmanager xdg-desktop-portal xclip bash-language-server --noconfirm
 
 pacman -S smplayer smplayer-themes kate spectacle telegram-desktop qbittorrent unrar yt-dlp expac --noconfirm
 
