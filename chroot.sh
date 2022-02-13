@@ -123,7 +123,7 @@ pacman -Sy archlinuxcn-keyring --noconfirm
 clear
 
 echo "Установка дополнительных программ из AUR "
-pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
+pacman -S pamac-aur pamac-tray-icon-plasma downgrade yay timeshift ventoy-bin --noconfirm
 clear
 
 pacman -S bluez-utils pulseaudio-bluetooth --noconfirm
