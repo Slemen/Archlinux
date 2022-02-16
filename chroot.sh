@@ -72,7 +72,7 @@ clear
 echo "Multilib репозиторий настроен"
 fi
 
-pacman -S xorg-server xorg-xrandr --noconfirm
+pacman -Sy xorg-server xorg-xrandr --noconfirm
 clear
 
 echo "Добавление хука автоматической очистки кэша pacman "
