@@ -1,7 +1,5 @@
 #!/bin/bash
 echo 'скрипт второй настройки системы в chroot '
-pacman -Syyu --noconfirm
-clear
 
 read -p "Введите имя компьютера: " hostname
 echo "Используйте в имени только буквы латинского алфавита "
@@ -72,7 +70,10 @@ clear
 echo "Multilib репозиторий настроен"
 fi
 
-pacman -Sy xorg-server xorg-xrandr --noconfirm
+pacman -Syu --noconfirm
+clear
+
+pacman -S xorg-server xorg-xrandr --noconfirm
 clear
 
 echo "Добавление хука автоматической очистки кэша pacman "
