@@ -41,9 +41,6 @@ useradd -m -g users -G wheel -s /bin/bash $username
 echo 'Добавляем пароль для пользователя '$username' '
 passwd $username
 clear
-
-pacman -Syy --noconfirm
-clear
 lsblk -f
 
 pacman -S grub efibootmgr --noconfirm
@@ -75,7 +72,7 @@ clear
 echo "Multilib репозиторий настроен"
 fi
 
-pacman -Sy xorg-server xorg-xrandr --noconfirm
+pacman -S xorg-server xorg-xrandr --noconfirm
 clear
 
 echo "Добавление хука автоматической очистки кэша pacman "
@@ -95,19 +92,19 @@ clear
 
 echo "Установка Plasma KDE и дополнительных программ"
 
-pacman -Sy plasma plasma-wayland-session kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
+pacman -S plasma plasma-wayland-session kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
 
 pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious rsync duf kio-gdrive --noconfirm
 
-pacman -S dolphin-plugins filelight meld firefox firefox-i18n-ru fish fzf gvfs gvfs-mtp ntfs-3g --noconfirm
+pacman -S dolphin-plugins filelight meld firefox firefox-i18n-ru fzf gvfs gvfs-mtp ntfs-3g --noconfirm
 
 pacman -S git kcalc gwenview haveged highlight kfind lib32-alsa-plugins kdeconnect sshfs --noconfirm
 
-pacman -S lib32-freetype2 lib32-glu lib32-libcurl-gnutls lib32-libpulse lib32-libxft lib32-libxinerama --noconfirm
+#pacman -S lib32-freetype2 lib32-glu lib32-libcurl-gnutls lib32-libpulse lib32-libxft lib32-libxinerama --noconfirm
 
-pacman -S lib32-libxrandr lib32-openal lib32-openssl-1.0 lib32-sdl2_mixer nano-syntax-highlighting --noconfirm
+#pacman -S lib32-libxrandr lib32-openal lib32-openssl-1.0 lib32-sdl2_mixer  --noconfirm
 
-pacman -S p7zip pcmanfm kwalletmanager xdg-desktop-portal xclip bash-language-server --noconfirm
+pacman -S p7zip pcmanfm kwalletmanager xdg-desktop-portal xclip bash-language-server nano-syntax-highlighting --noconfirm
 
 pacman -S smplayer smplayer-themes kate spectacle telegram-desktop qbittorrent unrar yt-dlp expac --noconfirm
 
@@ -149,7 +146,7 @@ pacman -S sddm sddm-kcm --noconfirm
 systemctl enable sddm.service -f
 clear
 
-pacman -Sy networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
+pacman -S networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
 systemctl enable NetworkManager.service
 systemctl enable ModemManager.service
 clear
@@ -162,10 +159,6 @@ systemctl mask systemd-rfkill.socket
 clear
 echo ""
 echo "Plasma KDE и дополнительные программы успешно установлены"
-
-chsh -s /bin/fish
-chsh -s /bin/fish $username
-clear
 
 echo '# /dev/sdb1 LABEL=Files
 UUID=bc945ea8-3280-49c3-9537-e54f8f8729ee       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
