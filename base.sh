@@ -25,28 +25,28 @@ done
    exit
 fi
 
-cfdisk -z /dev/sda
-clear
+#cfdisk -z /dev/sda
+#clear
 
-mkfs.fat -F32 /dev/sda1
-mkswap -L swap /dev/sda2
-swapon /dev/sda2
-mkfs.btrfs -f -L Root /dev/sda3
+#mkfs.fat -F32 /dev/sda1
+#mkswap -L swap /dev/sda2
+#swapon /dev/sda2
+#mkfs.btrfs -f -L Root /dev/sda3
 
-mount /dev/sda3 /mnt
-btrfs su cr /mnt/@
-btrfs su cr /mnt/@home
-umount /mnt
+#mount /dev/sda3 /mnt
+#btrfs su cr /mnt/@
+#btrfs su cr /mnt/@home
+#umount /mnt
 
-mount -o noatime,compress=zstd:2,discard=async,space_cache=v2,subvol=@ /dev/sda3 /mnt
-mkdir -p /mnt/{boot/efi,home}
-mount -o noatime,compress=zstd:2,discard=async,space_cache=v2,subvol=@home /dev/sda3 /mnt/home
-mount /dev/sda1 /mnt/boot/efi
-clear
-lsblk
+#mount -o noatime,compress=zstd:2,discard=async,space_cache=v2,subvol=@ /dev/sda3 /mnt
+#mkdir -p /mnt/{boot/efi,home}
+#mount -o noatime,compress=zstd:2,discard=async,space_cache=v2,subvol=@home /dev/sda3 /mnt/home
+#mount /dev/sda1 /mnt/boot/efi
+#clear
+#lsblk
 
-pacman -Sy --noconfirm
-clear
+#pacman -Sy --noconfirm
+#clear
 
 pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware wget pacman-contrib nano btrfs-progs intel-ucode
 genfstab -U /mnt >> /mnt/etc/fstab
