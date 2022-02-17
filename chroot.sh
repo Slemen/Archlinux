@@ -1,5 +1,7 @@
 #!/bin/bash
 echo 'скрипт второй настройки системы в chroot '
+pacman -Syyu --noconfirm
+clear
 
 read -p "Введите имя компьютера: " hostname
 echo "Используйте в имени только буквы латинского алфавита "
@@ -39,6 +41,9 @@ useradd -m -g users -G wheel -s /bin/bash $username
 echo 'Добавляем пароль для пользователя '$username' '
 passwd $username
 clear
+
+pacman -Syy --noconfirm
+clear
 lsblk -f
 
 pacman -S grub efibootmgr --noconfirm
@@ -70,10 +75,7 @@ clear
 echo "Multilib репозиторий настроен"
 fi
 
-pacman -Syu --noconfirm
-clear
-
-pacman -S xorg-server xorg-xrandr --noconfirm
+pacman -Sy xorg-server xorg-xrandr --noconfirm
 clear
 
 echo "Добавление хука автоматической очистки кэша pacman "
@@ -93,11 +95,11 @@ clear
 
 echo "Установка Plasma KDE и дополнительных программ"
 
-pacman -S plasma plasma-wayland-session kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
+pacman -Sy plasma plasma-wayland-session kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
 
 pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious rsync duf kio-gdrive --noconfirm
 
-pacman -S dolphin-plugins filelight meld firefox firefox-i18n-ru fzf gvfs gvfs-mtp ntfs-3g --noconfirm
+pacman -S dolphin-plugins filelight meld firefox firefox-i18n-ru fish fzf gvfs gvfs-mtp ntfs-3g --noconfirm
 
 pacman -S git kcalc gwenview haveged highlight kfind lib32-alsa-plugins kdeconnect sshfs --noconfirm
 
@@ -160,6 +162,10 @@ systemctl mask systemd-rfkill.socket
 clear
 echo ""
 echo "Plasma KDE и дополнительные программы успешно установлены"
+
+chsh -s /bin/fish
+chsh -s /bin/fish $username
+clear
 
 echo '# /dev/sdb1 LABEL=Files
 UUID=bc945ea8-3280-49c3-9537-e54f8f8729ee       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
