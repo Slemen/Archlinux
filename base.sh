@@ -43,6 +43,10 @@ mkdir -p /mnt/{boot/efi,home}
 mount -o noatime,compress=zstd:2,discard=async,space_cache=v2,subvol=@home /dev/sda3 /mnt/home
 mount /dev/sda1 /mnt/boot/efi
 clear
+lsblk
+
+pacman -Sy --noconfirm
+clear
 
 pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware wget pacman-contrib nano btrfs-progs intel-ucode
 genfstab -U /mnt >> /mnt/etc/fstab
