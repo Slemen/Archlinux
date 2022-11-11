@@ -99,13 +99,13 @@ pacman -Sy plasma plasma-wayland-session kde-system-meta kio-extras konsole yaku
 
 pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious rsync duf kio-gdrive --noconfirm
 
-pacman -S dolphin-plugins filelight meld firefox firefox-i18n-ru fish fzf gvfs gvfs-mtp ntfs-3g --noconfirm
+pacman -S dolphin-plugins filelight meld firefox firefox-i18n-ru fish fzf ntfs-3g --noconfirm
 
-pacman -S git kcalc gwenview haveged highlight kfind lib32-alsa-plugins kdeconnect sshfs --noconfirm
+pacman -S git kcalc gwenview haveged highlight kfind lib32-alsa-plugins --noconfirm
 
 #pacman -S lib32-freetype2 lib32-glu lib32-libcurl-gnutls lib32-libpulse lib32-libxft lib32-libxinerama --noconfirm
 
-#pacman -S lib32-libxrandr lib32-openal lib32-openssl-1.0 lib32-sdl2_mixer  --noconfirm
+#pacman -S lib32-libxrandr lib32-openal lib32-openssl-1.0 lib32-sdl2_mixer --noconfirm
 
 pacman -S p7zip pcmanfm kwalletmanager xdg-desktop-portal xclip bash-language-server nano-syntax-highlighting --noconfirm
 
