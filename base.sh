@@ -48,7 +48,7 @@ fi
 #pacman -Sy --noconfirm
 #clear
 
-pacstrap /mnt base base-devel linux-zen linux-zen-headers linux-firmware wget pacman-contrib nano btrfs-progs intel-ucode
+pacstrap -K /mnt base base-devel linux-zen linux-zen-headers linux-firmware wget pacman-contrib nano btrfs-progs intel-ucode
 genfstab -U /mnt >> /mnt/etc/fstab
 clear
 
