@@ -167,8 +167,8 @@ chsh -s /bin/fish
 chsh -s /bin/fish $username
 clear
 
-echo '# /dev/sdb1 LABEL=Files
-UUID=bc945ea8-3280-49c3-9537-e54f8f8729ee       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
+#echo '# /dev/sdb1 LABEL=Files
+#UUID=bc945ea8-3280-49c3-9537-e54f8f8729ee       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
 
 echo "Данный этап может исключить возможные ошибки при первом запуске системы,
 фаил откроется через редактор !nano!"
