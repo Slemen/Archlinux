@@ -93,7 +93,12 @@ Exec = /usr/bin/paccache -rvk0" >> /usr/share/libalpm/hooks/cleanup.hook
 echo "Хук добавлен "
 clear
 
+echo "Установка Plasma KDE и дополнительных программ"
+pacman -Sy plasma sddm --noconfirm
+pacman -S konsole kate firefox --noconfirm
 
-
+echo "Активируем SDDM:"
+sudo systemctl enable --now sddm
+clear
 echo "Установка завершена, не забудте извлечь USB-накопитель... "
 exit
