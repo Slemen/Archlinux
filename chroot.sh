@@ -94,11 +94,99 @@ echo "Хук добавлен "
 clear
 
 echo "Установка Plasma KDE и дополнительных программ"
-pacman -Sy plasma sddm --noconfirm
-pacman -S konsole kate firefox --noconfirm
 
-echo "Активируем SDDM:"
-sudo systemctl enable --now sddm
+pacman -Sy plasma plasma-wayland-session kde-system-meta kio-extras konsole yakuake htop dkms --noconfirm
+
+pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious rsync duf kio-gdrive --noconfirm
+
+pacman -S dolphin-plugins filelight meld firefox firefox-i18n-ru fish fzf ntfs-3g --noconfirm
+
+pacman -S git kcalc gwenview haveged highlight kfind lib32-alsa-plugins --noconfirm
+
+#pacman -S lib32-freetype2 lib32-glu lib32-libcurl-gnutls lib32-libpulse lib32-libxft lib32-libxinerama --noconfirm
+
+#pacman -S lib32-libxrandr lib32-openal lib32-openssl-1.0 lib32-sdl2_mixer --noconfirm
+
+pacman -S p7zip pcmanfm kwalletmanager xdg-desktop-portal xclip bash-language-server nano-syntax-highlighting --noconfirm
+
+pacman -S smplayer smplayer-themes kate spectacle telegram-desktop qbittorrent unrar yt-dlp expac --noconfirm
+
+pacman -S ttf-dejavu ttf-liberation terminus-font noto-fonts-emoji ttf-arphic-ukai ttf-arphic-uming ttf-sazanami --noconfirm
 clear
-echo "Установка завершена, не забудте извлечь USB-накопитель... "
-exit
+
+echo "Добавление репозитория Archlinuxcn "
+echo '[archlinuxcn]' >> /etc/pacman.conf
+echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
+nano /etc/pacman.conf
+clear
+pacman -Sy archlinuxcn-keyring --noconfirm
+clear
+
+echo "Установка дополнительных программ из AUR "
+pacman -S pamac-aur downgrade yay timeshift ventoy-bin --noconfirm
+clear
+
+pacman -S bluez-utils pulseaudio-bluetooth --noconfirm
+systemctl enable bluetooth.service
+clear
+
+echo "Установка драйверов "
+pacman -S libva-utils libva-intel-driver vulkan-intel lib32-libva lib32-libva-intel-driver lib32-vulkan-intel libvdpau-va-gl opencl-icd-loader lib32-opencl-icd-loader --noconfirm
+clear
+
+pacman -Rns discover plasma-thunderbolt bolt plasma-firewall --noconfirm
+
+pacman -S xorg-xinit --noconfirm
+cp /etc/X11/xinit/xinitrc /home/$username/.xinitrc
+chown $username:users /home/$username/.xinitrc
+chmod +x /home/$username/.xinitrc
+echo "exec startplasma-x11 " >> /home/$username/.xinitrc
+echo ' [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx ' >> /etc/profile
+clear
+
+echo "Установка sddm "
+pacman -S sddm sddm-kcm --noconfirm
+systemctl enable sddm.service -f
+clear
+
+pacman -S networkmanager networkmanager-openvpn network-manager-applet usb_modeswitch --noconfirm
+systemctl enable NetworkManager.service
+systemctl enable ModemManager.service
+clear
+
+pacman -S tlp tlp-rdw --noconfirm
+systemctl enable tlp.service
+systemctl enable NetworkManager-dispatcher.service
+systemctl mask systemd-rfkill.service
+systemctl mask systemd-rfkill.socket
+clear
+echo ""
+echo "Plasma KDE и дополнительные программы успешно установлены"
+
+chsh -s /bin/fish
+chsh -s /bin/fish $username
+clear
+
+#echo '# /dev/sdb1 LABEL=Files
+#UUID=bc945ea8-3280-49c3-9537-e54f8f8729ee       /files          ext4            defaults,noatime,data=ordered 0 0' >> /etc/fstab
+
+echo "Данный этап может исключить возможные ошибки при первом запуске системы,
+фаил откроется через редактор !nano!"
+echo ""
+echo "Просмотрим/отредактируем /etc/fstab ? "
+while
+    read -n1 -p  "
+ 1 - да
+
+ 0 - нет: " vm_fstab # sends right after the keypress
+    echo ''
+    [[ "$vm_fstab" =~ [^10] ]]
+do
+    :
+done
+if [[ $vm_fstab == 0 ]]; then
+  echo 'этап пропущен'
+elif [[ $vm_fstab == 1 ]]; then
+nano /etc/fstab
+fi
+clear
