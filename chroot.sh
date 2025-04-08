@@ -112,16 +112,16 @@ clear
 
 pacman -S bluez-utils pulseaudio-bluetooth --noconfirm
 systemctl enable bluetooth.service
-clear
+#clear
 
 pacman -S networkmanager networkmanager-openvpn network-manager-applet --noconfirm
 systemctl enable NetworkManager.service
-clear
+#clear
 
 echo "Установка sddm "
 pacman -S sddm 	sddm-kcm
 systemctl enable --now sddm
-clear
+#clear
 
 echo "Данный этап может исключить возможные ошибки при первом запуске системы,
 фаил откроется через редактор !nano!"
