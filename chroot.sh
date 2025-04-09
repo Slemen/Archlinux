@@ -112,6 +112,19 @@ clear
 
 pacman -Rns discover --noconfirm
 
+echo ""
+echo "Добавление репозитория Archlinuxcn"
+echo '[archlinuxcn]' >> /etc/pacman.conf
+echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
+nano /etc/pacman.conf
+clear
+
+pacman -Sy archlinuxcn-keyring --noconfirm
+clear
+
+pacman -S pamac-aur downgrade yay ventoy-bin --noconfirm
+clear
+
 pacman -S bluez-utils pulseaudio-bluetooth --noconfirm
 systemctl enable bluetooth.service
 #clear
@@ -124,6 +137,10 @@ echo "Установка sddm "
 pacman -S sddm 	sddm-kcm --noconfirm
 systemctl enable sddm.service -f
 #clear
+
+chsh -s /bin/fish
+chsh -s /bin/fish $username
+clear
 
 echo "Данный этап может исключить возможные ошибки при первом запуске системы,
 фаил откроется через редактор !nano!"
