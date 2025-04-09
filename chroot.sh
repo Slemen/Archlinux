@@ -110,6 +110,8 @@ pacman -S smplayer smplayer-themes kate spectacle qbittorrent unrar yt-dlp expac
 pacman -S ttf-dejavu ttf-liberation terminus-font noto-fonts-emoji ttf-arphic-ukai ttf-arphic-uming ttf-sazanami --noconfirm
 clear
 
+pacman -Rns discover --noconfirm
+
 pacman -S bluez-utils pulseaudio-bluetooth --noconfirm
 systemctl enable bluetooth.service
 #clear
@@ -119,8 +121,8 @@ systemctl enable NetworkManager.service
 #clear
 
 echo "Установка sddm "
-pacman -S sddm 	sddm-kcm
-systemctl enable --now sddm
+pacman -S sddm 	sddm-kcm --noconfirm
+systemctl enable sddm.service -f
 #clear
 
 echo "Данный этап может исключить возможные ошибки при первом запуске системы,
