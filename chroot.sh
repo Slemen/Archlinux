@@ -122,7 +122,7 @@ clear
 pacman -Sy archlinuxcn-keyring --noconfirm
 clear
 
-pacman -S pamac-aur downgrade yay ventoy-bin --noconfirm
+pacman -S pamac-aur downgrade yay ventoy --noconfirm
 clear
 
 pacman -S bluez-utils pulseaudio-bluetooth --noconfirm
