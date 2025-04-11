@@ -101,7 +101,7 @@ pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious rsync duf kio-gdri
 
 pacman -S dolphin-plugins filelight meld firefox firefox-i18n-ru fish fzf ntfs-3g --noconfirm
 
-pacman -S git kcalc gwenview haveged highlight kfind lib32-alsa-plugins --noconfirm
+pacman -S git kcalc gwenview haveged highlight kfind lib32-alsa-plugins sof-firmware alsa-ucm-conf sof-tools power-profiles-daemon powerdevil --noconfirm
 
 pacman -S p7zip pcmanfm kwalletmanager xdg-desktop-portal xclip bash-language-server nano-syntax-highlighting --noconfirm
 
