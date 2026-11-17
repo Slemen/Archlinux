@@ -1,85 +1,65 @@
-#!/bin/bash
-echo 'скрипт второй настройки системы в chroot '
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "=========================================="
+echo "  НАСТРОЙКА ARCH LINUX ВНУТРИ CHROOT"
+echo "=========================================="
+
 pacman -Syyu --noconfirm
-clear
 
-read -p "Введите имя компьютера: " hostname
-echo "Используйте в имени только буквы латинского алфавита "
-read -p "Введите имя пользователя: " username
+read -rp "Введите имя компьютера (латиницей, например arch-pc): " hostname
+read -rp "Введите имя пользователя (латиницей, например slemen): " username
 
-echo $hostname > /etc/hostname
+echo "$hostname" > /etc/hostname
+cat << EOF > /etc/hosts
+127.0.0.1   localhost
+::1         localhost
+127.0.1.1   ${hostname}.localdomain ${hostname}
+EOF
 
-echo "Настройка localtime "
+echo "Настройка часового пояса и локали..."
 ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
 hwclock --systohc
-echo "Часовой пояс установлен "
 
-echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
-echo "ru_UA.UTF-8 UTF-8" >> /etc/locale.gen
+sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+sed -i 's/^#ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
 
-echo 'LANG=ru_UA.UTF-8' >> /etc/locale.conf
-echo 'LC_ADDRESS=ru_UA.UTF-8' >> /etc/locale.conf
-echo 'LC_IDENTIFICATION=ru_UA.UTF-8' >> /etc/locale.conf
-echo 'LC_MEASUREMENT=ru_UA.UTF-8' >> /etc/locale.conf
-echo 'LC_MONETARY=ru_UA.UTF-8' >> /etc/locale.conf
-echo 'LC_NAME=ru_UA.UTF-8' >> /etc/locale.conf
-echo 'LC_NUMERIC=ru_UA.UTF-8' >> /etc/locale.conf
-echo 'LC_PAPER=ru_UA.UTF-8' >> /etc/locale.conf
-echo 'LC_TELEPHONE=ru_UA.UTF-8' >> /etc/locale.conf
-echo 'LC_TIME=ru_UA.UTF-8' >> /etc/locale.conf
+echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
+cat << EOF > /etc/vconsole.conf
+KEYMAP=ru
+FONT=cyr-sun16
+EOF
 
-echo "KEYMAP=ru" >> /etc/vconsole.conf
-echo "FONT=cyr-sun16" >> /etc/vconsole.conf
-clear
-
-echo "Укажите пароль для ROOT "
+echo ""
+echo "Укажите пароль для ROOT:"
 passwd
 
-groupadd $username
-useradd -m -g users -G wheel -s /bin/bash $username
-echo 'Добавляем пароль для пользователя '$username' '
-passwd $username
-clear
+useradd -m -G wheel,audio,video,storage -s /bin/fish "$username"
+echo "Укажите пароль для пользователя $username:"
+passwd "$username"
 
-pacman -Syy --noconfirm
-clear
-lsblk -f
+echo "%wheel ALL=(ALL:ALL) ALL" > /etc/sudoers.d/wheel
+chmod 440 /etc/sudoers.d/wheel
 
-pacman -S grub efibootmgr --noconfirm
-grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=grub
-grub-mkconfig -o /boot/grub/grub.cfg
-mkinitcpio -P
-clear
-
-EDITOR=nano visudo
-clear
-
-echo "Настроим multilib ?"
-while
-    read -n1 -p  "
- 1 - да
-
- 0 - нет : " i_multilib   # sends right after the keypress
-    echo ''
-    [[ "$i_multilib" =~ [^10] ]]
-do
-    :
-done
-if [[ $i_multilib  == 0 ]]; then
-clear
-echo "Настройка мультилиб репозитория пропущена"
-elif [[ $i_multilib  == 1 ]]; then
-nano /etc/pacman.conf
-clear
-echo "Multilib репозиторий настроен"
+echo ""
+read -rp "Включить репозиторий multilib (32-бит для Steam/Wine)? (1 - да, 0 - нет): " i_multilib
+if [[ "$i_multilib" == "1" ]]; then
+    sed -i '/\[multilib\]/,/Include/s/^#//' /etc/pacman.conf
+    pacman -Syy --noconfirm
+    echo "Multilib включён."
 fi
 
-#pacman -Sy xorg-server xorg-xrandr --noconfirm
-#clear
+echo "Установка загрузчика GRUB..."
+pacman -S --noconfirm grub efibootmgr os-prober
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
+grub-mkconfig -o /boot/grub/grub.cfg
+mkinitcpio -P
 
-echo "Добавление хука автоматической очистки кэша pacman "
-echo "[Trigger]
+echo "Настройка хука очистки кэша pacman..."
+mkdir -p /etc/pacman.d/hooks
+cat << 'EOF' > /etc/pacman.d/hooks/cleanup.hook
+[Trigger]
 Operation = Remove
 Operation = Install
 Operation = Upgrade
@@ -87,78 +67,65 @@ Type = Package
 Target = *
 
 [Action]
-Description = Removing unnecessary cached files…
+Description = Очистка старого кэша пакетов...
 When = PostTransaction
-Exec = /usr/bin/paccache -rvk0" >> /usr/share/libalpm/hooks/cleanup.hook
-echo "Хук добавлен "
-clear
-
-echo "Установка Plasma KDE и дополнительных программ"
-
-pacman -Sy plasma kde-system-meta kio-extras konsole yakuake htop dkms timeshift --noconfirm
-
-pacman -S alsa-utils ark aspell aspell-en aspell-ru audacious rsync duf kio-gdrive --noconfirm
-
-pacman -S dolphin-plugins filelight meld firefox firefox-i18n-ru fish fzf ntfs-3g --noconfirm
-
-pacman -S git kcalc gwenview haveged highlight kfind lib32-alsa-plugins sof-firmware alsa-ucm-conf sof-tools power-profiles-daemon powerdevil --noconfirm
-
-pacman -S p7zip pcmanfm kwalletmanager xdg-desktop-portal xclip bash-language-server nano-syntax-highlighting --noconfirm
-
-pacman -S smplayer smplayer-themes kate spectacle qbittorrent unrar yt-dlp expac --noconfirm
-
-pacman -S ttf-dejavu ttf-liberation terminus-font noto-fonts-emoji ttf-arphic-ukai ttf-arphic-uming ttf-sazanami --noconfirm
-clear
-
-pacman -Rns discover --noconfirm
+Exec = /usr/bin/paccache -rvk1
+EOF
 
 echo ""
-echo "Добавление репозитория Archlinuxcn"
-echo '[archlinuxcn]' >> /etc/pacman.conf
-echo 'Server = http://repo.archlinuxcn.org/$arch' >> /etc/pacman.conf
-nano /etc/pacman.conf
-clear
+echo "Установка KDE Plasma 6 и актуального набора программ..."
+pacman -S --noconfirm --needed \
+    plasma-meta kde-system-meta sddm kio-extras konsole yakuake \
+    htop btop dkms alsa-utils ark aspell aspell-en aspell-ru \
+    hunspell hunspell-ru audacious bat bind rsync duf \
+    dolphin-plugins fd filelight meld firefox firefox-i18n-ru \
+    fish fzf gvfs-mtp tig git kcalc gwenview haveged highlight \
+    kfind kdeconnect sshfs nano-syntax-highlighting \
+    noto-fonts noto-fonts-cjk noto-fonts-emoji p7zip pcmanfm \
+    perl-image-exiftool xdg-desktop-portal xdg-desktop-portal-kde \
+    python-pip python-virtualenv qbittorrent kate smplayer \
+    sox spectacle starship telegram-desktop gitui terminus-font \
+    ttf-caladea ttf-carlito ttf-croscore ttf-dejavu ttf-liberation \
+    unrar xclip xorg-xrandr yt-dlp zim expac
 
-pacman -Sy archlinuxcn-keyring --noconfirm
-clear
+pacman -S --noconfirm --needed \
+    mesa libva-utils libva-intel-driver intel-media-driver vulkan-intel
 
-pacman -S pamac-aur downgrade yay ventoy --noconfirm
-clear
-
-pacman -S bluez-utils pulseaudio-bluetooth --noconfirm
-systemctl enable bluetooth.service
-#clear
-
-pacman -S networkmanager networkmanager-openvpn network-manager-applet --noconfirm
-systemctl enable NetworkManager.service
-#clear
-
-echo "Установка sddm "
-pacman -S sddm 	sddm-kcm --noconfirm
-systemctl enable sddm.service -f
-#clear
-
-chsh -s /bin/fish
-chsh -s /bin/fish $username
-clear
-
-echo "Данный этап может исключить возможные ошибки при первом запуске системы,
-фаил откроется через редактор !nano!"
-echo ""
-echo "Просмотрим/отредактируем /etc/fstab ? "
-while
-    read -n1 -p  "
- 1 - да
-
- 0 - нет: " vm_fstab # sends right after the keypress
-    echo ''
-    [[ "$vm_fstab" =~ [^10] ]]
-do
-    :
-done
-if [[ $vm_fstab == 0 ]]; then
-  echo 'этап пропущен'
-elif [[ $vm_fstab == 1 ]]; then
-nano /etc/fstab
+if [[ "$i_multilib" == "1" ]]; then
+    pacman -S --noconfirm --needed \
+        lib32-mesa lib32-vulkan-intel lib32-libva lib32-libva-intel-driver \
+        lib32-alsa-plugins lib32-freetype2 lib32-glu lib32-libcurl-gnutls \
+        lib32-libpulse lib32-libxft lib32-libxinerama lib32-libxrandr \
+        lib32-openal lib32-sdl2_mixer
 fi
-clear
+
+echo "Установка AUR-помощника yay..."
+sudo -u "$username" bash -c '
+    cd /tmp
+    git clone https://archlinux.org
+    cd yay-bin
+    makepkg -si --noconfirm
+    cd /tmp && rm -rf yay-bin
+'
+
+echo "Настройка системных служб..."
+pacman -S --noconfirm --needed bluez bluez-utils networkmanager-openvpn network-manager-applet usb_modeswitch tlp tlp-rdw timeshift
+
+systemctl enable sddm.service
+systemctl enable NetworkManager.service
+systemctl enable bluetooth.service
+systemctl enable tlp.service
+systemctl enable NetworkManager-dispatcher.service
+systemctl mask systemd-rfkill.service systemd-rfkill.socket
+
+mkdir -p /etc/sddm.conf.d
+cat << 'EOF' > /etc/sddm.conf.d/numlock.conf
+[General]
+Numlock=on
+EOF
+
+echo ""
+echo "=========================================="
+echo "  УСТАНОВКА ARCH LINUX ПОЛНОСТЬЮ ЗАВЕРШЕНА!"
+echo "=========================================="
+EOF
