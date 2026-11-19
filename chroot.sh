@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ==============================================================================
-# СКРИПТ НАСТРОЙКИ ВНУТРИ ARCH-CHROOT (KDE Plasma 6, ZRAM, CachyOS tweaks, Fish)
+# НАСТРОЙКА СИСТЕМЫ ВНУТРИ ARCH-CHROOT (KDE Plasma 6 + Wayland + Fish + ZRAM)
 # ВНИМАНИЕ: Скрипт создан автором под собственные нужды и конкретное железо
 # (Acer Nitro V 15). Автор не несёт ответственности за последствия его использования.
 # ==============================================================================
@@ -13,11 +13,11 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 
 echo -e "${CYAN}======================================================================${NC}"
-echo -e "${CYAN}  НАСТРОЙКА СИСТЕМЫ ВНУТРИ CHROOT (KDE PLASMA 6 + OPTIMIZATIONS)${NC}"
+echo -e "${CYAN}  НАСТРОЙКА СИСТЕМЫ В CHROOT (KDE Plasma 6 + Оптимизации + Fish)${NC}"
 echo -e "${CYAN}======================================================================${NC}"
 
-# 1. Часовой пояс и локализация
-ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime
+echo -e "\n${YELLOW}[1/10] Настройка часового пояса, локали и имени хоста...${NC}"
+ln -sf /usr/share/zoneinfo/Europe/Kyiv /etc/localtime
 hwclock --systohc
 
 sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
@@ -25,62 +25,48 @@ sed -i 's/^#ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
 
 echo "LANG=ru_RU.UTF-8" > /etc/locale.conf
-cat << 'EOF' > /etc/vconsole.conf
-KEYMAP=ru
-FONT=cyr-sun16
-EOF
+echo "KEYMAP=ru" > /etc/vconsole.conf
+echo "FONT=cyr-sun16" >> /etc/vconsole.conf
 
-# 2. Имя хоста и файл hosts
-read -rp "Введите имя компьютера (hostname, например arch-nitro): " HOSTNAME
-HOSTNAME=${HOSTNAME:-arch-nitro}
-echo "$HOSTNAME" > /etc/hostname
+read -rp "Введите имя компьютера (hostname, например arch-nitro): " hostname
+hostname=${hostname:-arch-nitro}
+echo "$hostname" > /etc/hostname
 
 cat << EOF > /etc/hosts
 127.0.0.1   localhost
 ::1         localhost
-127.0.1.1   ${HOSTNAME}.localdomain ${HOSTNAME}
+127.0.1.1   ${hostname}.localdomain ${hostname}
 EOF
 
-# 3. Пароль root и создание пользователя
-echo -e "\n${YELLOW}Задайте пароль для администратора root:${NC}"
+echo -e "\n${YELLOW}[2/10] Настройка пароля root и создание пользователя...${NC}"
+echo "Задайте пароль для root:"
 passwd
 
-read -rp "Введите имя нового пользователя (латиницей, например slemen): " username
-username=${username:-slemen}
+read -rp "Введите имя нового пользователя (например, slemen): " username
 useradd -m -G wheel,audio,video,storage -s /bin/bash "$username"
-echo -e "${YELLOW}Задайте пароль для пользователя $username:${NC}"
+echo "Задайте пароль для пользователя $username:"
 passwd "$username"
 
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
-# 4. Ускорение pacman, включение [multilib] и многопоточная сборка makepkg
-sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
+echo -e "\n${YELLOW}[3/10] Оптимизация pacman (ParallelDownloads, multilib) и makepkg...${NC}"
 sed -i 's/^#Color/Color/' /etc/pacman.conf
-grep -q "^ILoveCandy" /etc/pacman.conf || sed -i '/^Color/a ILoveCandy' /etc/pacman.conf
-sed -i '/^#\[multilib\]/{N;s/#\[multilib\]\n#Include = \/etc\/pacman.d\/mirrorlist/\[multilib\]\nInclude = \/etc\/pacman.d\/mirrorlist/}' /etc/pacman.conf
+sed -i 's/^#ParallelDownloads.*/ParallelDownloads = 10/' /etc/pacman.conf
+grep -q "ILoveCandy" /etc/pacman.conf || sed -i '/^Color/a ILoveCandy' /etc/pacman.conf
+
+if grep -q "^#\[multilib\]" /etc/pacman.conf; then
+    sed -i '/^#\[multilib\]/{N;s/#\[multilib\]\n#Include = \/etc\/pacman.d\/mirrorlist/\[multilib\]\nInclude = \/etc\/pacman.d\/mirrorlist/}' /etc/pacman.conf
+fi
 
 sed -i 's/^#MAKEFLAGS=.*/MAKEFLAGS="-j$(nproc)"/' /etc/makepkg.conf
-pacman -Sy --noconfirm
+pacman -Syu --noconfirm
 
-# 5. Установка KDE Plasma 6, драйверов Intel, звука PipeWire и утилит
-echo -e "\n${YELLOW}Установка KDE Plasma 6, PipeWire, ZRAM и системных утилит...${NC}"
-pacman -S --noconfirm --needed \
-    xorg-xwayland \
-    plasma-meta konsole dolphin kate ark spectacle gwenview kcalc \
-    sddm sddm-kcm \
-    mesa vulkan-intel intel-media-driver \
-    pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber gst-plugin-pipewire \
-    bluez bluez-utils \
-    networkmanager network-manager-applet networkmanager-openvpn usb_modeswitch \
-    power-profiles-daemon \
-    zram-generator earlyoom reflector pacman-contrib \
-    fish starship fzf gvfs-mtp tig highlight p7zip unrar unzip \
-    ttf-jetbrains-mono-nerd noto-fonts noto-fonts-cjk noto-fonts-emoji
+echo -e "\n${YELLOW}[4/10] Установка KDE Plasma 6, графики Intel, звука и утилит...${NC}"
+pacman -S --noconfirm --needed     xorg-xwayland plasma-meta konsole dolphin kate ark spectacle gwenview kcalc     sddm packagekit-qt6 flatpak     mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver     pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber gst-plugin-pipewire     bluez bluez-utils networkmanager-openvpn network-manager-applet usb_modeswitch     power-profiles-daemon timeshift pacman-contrib zram-generator earlyoom     fish fzf starship gvfs-mtp tig git haveged highlight     ttf-jetbrains-mono-nerd ttf-dejavu noto-fonts noto-fonts-cjk noto-fonts-emoji
 
-# Переключение оболочки пользователя на Fish после установки пакета
 chsh -s /bin/fish "$username"
 
-# 6. Настройка сжатой памяти ZRAM (zstd)
+echo -e "\n${YELLOW}[5/10] Настройка сжатой памяти ZRAM (zstd)...${NC}"
 cat << 'EOF' > /etc/systemd/zram-generator.conf
 [zram0]
 zram-size = ram / 2
@@ -89,57 +75,34 @@ swap-priority = 100
 fs-type = swap
 EOF
 
-# 7. Твики ядра sysctl (CachyOS) и планировщик NVMe
+echo -e "\n${YELLOW}[6/10] Применение ядерных твиков sysctl (CachyOS), udev NVMe и блокировка iTCO_wdt...${NC}"
 cat << 'EOF' > /etc/sysctl.d/99-performance-tweaks.conf
-# Игровой лимит областей памяти (Steam / Proton)
 vm.max_map_count = 2147483642
-
-# Плавный сброс кэша на NVMe SSD без микрофризов
 vm.dirty_bytes = 268435456
 vm.dirty_background_bytes = 67108864
 vm.dirty_writeback_centisecs = 1500
-
-# Оптимизация ZRAM и кэша VFS
 vm.page-cluster = 0
 vm.vfs_cache_pressure = 50
-
-# Отключение NMI watchdog и разрешающий режим i915 perf
 kernel.nmi_watchdog = 0
 dev.i915.perf_stream_paranoid = 0
-
-# Сетевой стек Google BBR и буферы
 net.core.default_qdisc = fq
 net.ipv4.tcp_congestion_control = bbr
 net.core.rmem_max = 16777216
 net.core.wmem_max = 16777216
-net.core.netdev_max_backlog = 16384
 EOF
 
 cat << 'EOF' > /etc/udev/rules.d/60-ioschedulers.rules
-ACTION=="add|change", KERNEL=="nvme[0-9]n[0-9]", ATTR{queue/scheduler}="none"
+ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="none"
 EOF
 
-# 8. Блокировка аппаратного watchdog Intel (iTCO_wdt)
 cat << 'EOF' > /etc/modprobe.d/watchdog.conf
 blacklist iTCO_vendor_support
 blacklist iTCO_wdt
 EOF
 
-# 9. Сборка yay-bin из AUR от имени пользователя
-echo -e "\n${YELLOW}Сборка AUR-помощника yay-bin...${NC}"
-sudo -u "$username" bash -c '
-    cd /tmp
-    git clone https://aur.archlinux.org/yay-bin.git
-    cd yay-bin
-    makepkg -si --noconfirm
-    cd /tmp && rm -rf yay-bin
-'
-
-# 10. Персональная настройка Konsole (Newbl1nk), Fish, Starship, .nanorc и Wayland
+echo -e "\n${YELLOW}[7/10] Настройка Konsole (Newbl1nk), Fish, Starship и .nanorc...${NC}"
 USER_HOME="/home/${username}"
-mkdir -p "${USER_HOME}/.local/share/konsole"
-mkdir -p "${USER_HOME}/.config/fish"
-mkdir -p "${USER_HOME}/.config/environment.d"
+mkdir -p "${USER_HOME}/.local/share/konsole" "${USER_HOME}/.config/fish" "${USER_HOME}/.config/environment.d"
 
 cat << 'EOF' > "${USER_HOME}/.local/share/konsole/Newbl1nk.colorscheme"
 [Background]
@@ -296,6 +259,11 @@ if status is-interactive
 end
 EOF
 
+cat << 'EOF' > "${USER_HOME}/.config/environment.d/wayland.conf"
+ELECTRON_OZONE_PLATFORM_HINT=auto
+MOZ_ENABLE_WAYLAND=1
+EOF
+
 cat << 'EOF' > "${USER_HOME}/.nanorc"
 set historylog
 set linenumbers
@@ -306,23 +274,21 @@ set stripecolor ,yellow
 set numbercolor bold,cyan
 set keycolor bold,green
 bind ^S savefile main
-include "/usr/share/nano/*.nanorc"
+include "/usr/share/nano-syntax-highlighting/*.nanorc"
 EOF
+
 cp "${USER_HOME}/.nanorc" /root/.nanorc
-
-cat << 'EOF' > "${USER_HOME}/.config/environment.d/wayland.conf"
-ELECTRON_OZONE_PLATFORM_HINT=auto
-MOZ_ENABLE_WAYLAND=1
-EOF
-
 chown -R "${username}:${username}" "${USER_HOME}"
 
-# 11. Установка загрузчика GRUB (UEFI)
-echo -e "\n${YELLOW}Установка и настройка загрузчика GRUB...${NC}"
-grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
-grub-mkconfig -o /boot/grub/grub.cfg
+echo -e "\n${YELLOW}[8/10] Установка AUR-помощника yay-bin...${NC}"
+su - "$username" -c "
+    git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin &&
+    cd /tmp/yay-bin &&
+    makepkg -si --noconfirm &&
+    rm -rf /tmp/yay-bin
+"
 
-# 12. Включение системных служб
+echo -e "\n${YELLOW}[9/10] Включение системных служб...${NC}"
 systemctl enable NetworkManager.service
 systemctl enable bluetooth.service
 systemctl enable sddm.service
@@ -331,4 +297,10 @@ systemctl enable earlyoom.service
 systemctl enable fstrim.timer
 systemctl enable paccache.timer
 
-echo -e "${GREEN}Настройка внутри chroot успешно завершена!${NC}"
+echo -e "\n${YELLOW}[10/10] Установка и настройка загрузчика GRUB (UEFI)...${NC}"
+pacman -S --noconfirm --needed grub efibootmgr os-prober
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
+sed -i 's/^#GRUB_DISABLE_OS_PROBER=false/GRUB_DISABLE_OS_PROBER=false/' /etc/default/grub
+grub-mkconfig -o /boot/grub/grub.cfg
+
+echo -e "\n${GREEN}Настройка chroot.sh успешно завершена!${NC}"

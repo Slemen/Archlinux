@@ -12,6 +12,7 @@
 | :--- | :--- | :--- |
 | **`base.sh`** | Разметка диска (`cfdisk`), субтома Btrfs (`@`, `@home`, `@snapshots`, `@var_log`), установка ядра **`linux-zen`** + резервного **`linux-lts`** (с заголовками `*-headers`), автозапуск `chroot.sh`, авторазмонтирование и запрос перезагрузки. | Live-образ Arch Linux (`root`) |
 | **`chroot.sh`** | Настройка локалей и времени, ускорение `pacman`/`makepkg`, установка **KDE Plasma 6**, ZRAM (`zstd`), твиков ядра `sysctl` (CachyOS), `earlyoom`, блокировка `iTCO_wdt`, профиль Konsole **`Newbl1nk`**, **`Fish`**, **`Starship`**, **`.nanorc`**, `yay-bin` и загрузчика GRUB. | Запускается автоматически из `base.sh` |
+| **`menu.sh`** | Интерактивное меню пост-установки: позволяет в одном окне выбрать установку драйверов NVIDIA, программ, диагностику или перезагрузку. | Установленная система (пользователь) |
 | **`nvidia.sh`** | Установка драйверов **`nvidia-dkms`**, **`nvidia-prime`** (`prime-run`), Vulkan, VA-API, настройка Early KMS в `mkinitcpio`, параметров Wayland в GRUB, служб сна и `nvidia.hook`. | Установленная система (пользователь) |
 | **`apps.sh`** | Установка игровых и повседневных программ (`steam`, `gamemode`, `libreoffice-fresh-ru`, `vlc`, `qbittorrent`, `yt-dlp`, `ffmpeg`) и настройка игрового буфера звука PipeWire. | Установленная система (пользователь) |
 | **`verify_arch.sh`** | Автоматическая диагностика всех 10 ключевых узлов системы после установки и перезагрузки. | Установленная система (пользователь) |
@@ -23,7 +24,7 @@
 ### 1. Базовая установка и KDE Plasma 6 (из Live-образа Arch Linux)
 Подключитесь к интернету (через `iwctl` или кабель) и выполните:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Slemen/Archlinux/master/base.sh -o base.sh && chmod +x base.sh && ./base.sh
+curl -fsSL https://slemen.github.io/Archlinux/base.sh -o base.sh && chmod +x base.sh && ./base.sh
 ```
 *(Скрипт `chroot.sh` скачается и запустится изнутри `base.sh` автоматически, а в конце выполнит размонтирование и предложит перезагрузить ПК).*
 
@@ -37,26 +38,28 @@ curl -fsSL https://raw.githubusercontent.com/Slemen/Archlinux/master/base.sh -o 
 
 ---
 
-### 2. Установка драйверов NVIDIA (после перезагрузки в KDE)
-Если в ноутбуке установлена дискретная видеокарта NVIDIA, запустите от имени обычного пользователя:
+### 2. Интерактивное меню пост-установки (рекомендуется после перезагрузки в KDE)
+После входа в KDE Plasma откройте Konsole и запустите единое меню — оно само скачает и запустит нужные скрипты по вашему выбору:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Slemen/Archlinux/master/nvidia.sh -o ~/nvidia.sh && chmod +x ~/nvidia.sh && ~/nvidia.sh
-```
-После завершения перезагрузите систему (`reboot`).
-
----
-
-### 3. Установка программ (Steam, LibreOffice, медиа, PipeWire)
-```bash
-curl -fsSL https://raw.githubusercontent.com/Slemen/Archlinux/master/apps.sh -o ~/apps.sh && chmod +x ~/apps.sh && ~/apps.sh
+curl -fsSL https://slemen.github.io/Archlinux/menu.sh -o ~/menu.sh && chmod +x ~/menu.sh && ~/menu.sh
 ```
 
 ---
 
-### 4. Проверка всех настроек системы
-```bash
-curl -fsSL https://raw.githubusercontent.com/Slemen/Archlinux/master/verify_arch.sh -o ~/verify_arch.sh && chmod +x ~/verify_arch.sh && ~/verify_arch.sh
-```
+### 3. Отдельный запуск скриптов (при необходимости)
+
+* **Установка драйверов NVIDIA:**
+  ```bash
+  curl -fsSL https://slemen.github.io/Archlinux/nvidia.sh -o ~/nvidia.sh && chmod +x ~/nvidia.sh && ~/nvidia.sh
+  ```
+* **Установка программ (Steam, LibreOffice, медиа, PipeWire):**
+  ```bash
+  curl -fsSL https://slemen.github.io/Archlinux/apps.sh -o ~/apps.sh && chmod +x ~/apps.sh && ~/apps.sh
+  ```
+* **Проверка всех настроек системы:**
+  ```bash
+  curl -fsSL https://slemen.github.io/Archlinux/verify_arch.sh -o ~/verify_arch.sh && chmod +x ~/verify_arch.sh && ~/verify_arch.sh
+  ```
 
 ---
 

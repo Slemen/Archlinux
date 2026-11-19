@@ -26,7 +26,6 @@ echo -e "\n${CYAN}==============================================================
 echo -e "${CYAN}  УСТАНОВКА И НАСТРОЙКА ДРАЙВЕРОВ NVIDIA (DKMS + Wayland + PRIME)${NC}"
 echo -e "${CYAN}======================================================================${NC}"
 
-# 1. Проверка репозитория [multilib] для 32-битных библиотек Steam/Proton
 echo -e "\n${YELLOW}[1/6] Проверка репозитория [multilib] в /etc/pacman.conf...${NC}"
 if grep -q "^#\[multilib\]" /etc/pacman.conf; then
     sudo sed -i '/^#\[multilib\]/{N;s/#\[multilib\]\n#Include = \/etc\/pacman.d\/mirrorlist/\[multilib\]\nInclude = \/etc\/pacman.d\/mirrorlist/}' /etc/pacman.conf
@@ -35,23 +34,10 @@ else
     echo -e "${GREEN}✔ Репозиторий [multilib] уже включён.${NC}"
 fi
 
-# 2. Установка драйверов NVIDIA, 32-битных библиотек, Vulkan, VA-API и PRIME
 echo -e "${YELLOW}[2/6] Установка пакетов nvidia-dkms, nvidia-prime, Vulkan и VA-API...${NC}"
-sudo pacman -Syu --noconfirm --needed \
-    nvidia-dkms \
-    nvidia-utils \
-    lib32-nvidia-utils \
-    nvidia-settings \
-    nvidia-prime \
-    opencl-nvidia \
-    lib32-opencl-nvidia \
-    libva-nvidia-driver \
-    vulkan-icd-loader \
-    lib32-vulkan-icd-loader \
-    mesa-utils
+sudo pacman -Syu --noconfirm --needed     nvidia-dkms     nvidia-utils     lib32-nvidia-utils     nvidia-settings     nvidia-prime     opencl-nvidia     lib32-opencl-nvidia     libva-nvidia-driver     vulkan-icd-loader     lib32-vulkan-icd-loader     mesa-utils
 echo -e "${GREEN}✔ Драйверы NVIDIA и утилита prime-run успешно установлены.${NC}"
 
-# 3. Настройка ранней загрузки модулей NVIDIA в /etc/mkinitcpio.conf (Early KMS)
 echo -e "${YELLOW}[3/6] Добавление модулей NVIDIA в /etc/mkinitcpio.conf...${NC}"
 sudo cp /etc/mkinitcpio.conf /etc/mkinitcpio.conf.bak
 if ! grep -q "nvidia_drm" /etc/mkinitcpio.conf; then
@@ -62,7 +48,6 @@ else
     echo -e "${GREEN}✔ Модули NVIDIA уже присутствуют в mkinitcpio.conf.${NC}"
 fi
 
-# 4. Настройка параметров ядра в GRUB (nvidia-drm.modeset=1 и nvidia-drm.fbdev=1 для Wayland)
 echo -e "${YELLOW}[4/6] Настройка параметров GRUB для KDE Plasma Wayland...${NC}"
 if [[ -f /etc/default/grub ]]; then
     sudo cp /etc/default/grub /etc/default/grub.bak
@@ -74,7 +59,6 @@ if [[ -f /etc/default/grub ]]; then
     fi
 fi
 
-# 5. Настройка управления питанием (сон/гибернация) и modprobe
 echo -e "${YELLOW}[5/6] Настройка служб сна NVIDIA и параметров modprobe...${NC}"
 sudo tee /etc/modprobe.d/nvidia.conf > /dev/null << 'EOF'
 options nvidia_drm modeset=1 fbdev=1
@@ -84,8 +68,7 @@ EOF
 sudo systemctl enable nvidia-suspend.service nvidia-hibernate.service nvidia-resume.service
 echo -e "${GREEN}✔ Службы сохранения видеопамяти при сне включены.${NC}"
 
-# 6. Pacman-хук для автоматической пересборки initramfs при обновлении драйвера или ядра
-echo -e "${YELLOW}[6/6] Создание pacman-хука /etc/pacman.d/hooks/nvidia.hook...${NC}"
+echo -e "${YELLOW}[6/6] Создание pacman-хука /etc/pacman.d/hooks/nvidia.hook и пересборка initramfs...${NC}"
 sudo mkdir -p /etc/pacman.d/hooks
 sudo tee /etc/pacman.d/hooks/nvidia.hook > /dev/null << 'EOF'
 [Trigger]
@@ -106,7 +89,6 @@ NeedsTargets
 Exec=/bin/sh -c 'while read -r trg; do case $trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
 EOF
 
-echo -e "${YELLOW}Пересборка initramfs и обновление конфигурации GRUB...${NC}"
 sudo mkinitcpio -P
 if [[ -f /etc/default/grub ]]; then
     sudo grub-mkconfig -o /boot/grub/grub.cfg
