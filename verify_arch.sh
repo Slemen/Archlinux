@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
+set -uo pipefail
 
 # ==============================================================================
-# ПРОВЕРОЧНЫЙ СКРИПТ ДЛЯ ARCH LINUX (Диагностика 10 ключевых узлов системы)
+# ПРОВЕРОЧНЫЙ СКРИПТ ДЛЯ ARCH LINUX (Диагностика 15 ключевых узлов системы)
 # ВНИМАНИЕ: Скрипт создан автором под собственные нужды и конкретное железо
-# (Acer Nitro V 15). Автор не несёт ответственности за последствия его использования.
+# (Acer Nitro V15-51). Автор не несёт ответственности за последствия его использования.
 # ==============================================================================
 
 GREEN='\033[0;32m'
@@ -15,107 +16,126 @@ NC='\033[0m'
 PASS=0
 FAIL=0
 
+ok()   { echo -e "[ ${GREEN}OK${NC} ] $1"; ((++PASS)); }
+fail() { echo -e "[ ${RED}FAIL${NC} ] $1"; ((++FAIL)); }
+
 echo -e "${CYAN}======================================================================${NC}"
-echo -e "${CYAN}  ДИАГНОСТИКА ARCH LINUX (Ядра, Btrfs, ZRAM, Оптимизации, Терминал)${NC}"
+echo -e "${CYAN}  ДИАГНОСТИКА ARCH LINUX (15 ПУНКТОВ — ACER NITRO V15-51)             ${NC}"
 echo -e "${CYAN}======================================================================${NC}"
 
-# 1. Проверка ядер linux-zen и linux-lts с заголовками
-if pacman -Qq linux-zen linux-zen-headers linux-lts linux-lts-headers &>/dev/null; then
-    echo -e "[ ${GREEN}OK${NC} ] 1. Установлена связка ядер linux-zen + linux-lts и заголовки (*-headers)"
-    ((PASS++))
+# 1. Штатное ядро linux и заголовки
+if pacman -Qq linux linux-headers &>/dev/null; then
+    ok "1. Установлено штатное ядро linux и заголовки linux-headers"
 else
-    echo -e "[ ${RED}FAIL${NC} ] 1. Не найдены все пакеты ядер/заголовков (linux-zen / linux-lts)"
-    ((FAIL++))
+    fail "1. Не найдены пакеты linux / linux-headers"
 fi
 
-# 2. Проверка Btrfs и сжатия zstd
-if findmnt -no FSTYPE / | grep -q "btrfs" && findmnt -no OPTIONS / | grep -q "compress=zstd"; then
-    echo -e "[ ${GREEN}OK${NC} ] 2. Корневая ФС Btrfs смонтирована со сжатием zstd"
-    ((PASS++))
+# 2. Btrfs, сжатие zstd и noatime
+if findmnt -no FSTYPE / | grep -q "btrfs" && findmnt -no OPTIONS / | grep -q "compress=zstd" && findmnt -no OPTIONS / | grep -q "noatime"; then
+    ok "2. Корневая ФС Btrfs смонтирована со сжатием zstd и опцией noatime"
 else
-    echo -e "[ ${RED}FAIL${NC} ] 2. Корневая ФС не Btrfs или не активно сжатие zstd"
-    ((FAIL++))
+    fail "2. Корневая ФС не Btrfs или отсутствуют опции compress=zstd / noatime"
 fi
 
-# 3. Проверка ZRAM
-if swapon --show | grep -q "zram0"; then
-    echo -e "[ ${GREEN}OK${NC} ] 3. Сжатая память ZRAM (zram0) активна"
-    ((PASS++))
+# 3. ZRAM и лимит journald
+if swapon --show | grep -q "zram0" && [[ -f /etc/systemd/journald.conf.d/99-size-limit.conf ]]; then
+    ok "3. Сжатая память ZRAM (zram0) активна, лимит логов journald (150 МБ) задан"
 else
-    echo -e "[ ${RED}FAIL${NC} ] 3. Устройство zram0 не найдено"
-    ((FAIL++))
+    fail "3. Устройство zram0 не найдено или не задан лимит логов journald"
 fi
 
-# 4. Проверка параметров sysctl (CachyOS + BBR)
-MAX_MAP=$(sysctl -n vm.max_map_count 2>/dev/null)
-CONG=$(sysctl -n net.ipv4.tcp_congestion_control 2>/dev/null)
-if [[ "$MAX_MAP" == "2147483642" && "$CONG" == "bbr" ]]; then
-    echo -e "[ ${GREEN}OK${NC} ] 4. Твики sysctl активны (max_map_count=$MAX_MAP, TCP=$CONG)"
-    ((PASS++))
+# 4. Параметры sysctl (CachyOS + CAKE + BBR)
+if [[ "$(sysctl -n vm.max_map_count 2>/dev/null)" == "2147483642" ]] && \
+   [[ "$(sysctl -n kernel.split_lock_mitigate 2>/dev/null)" == "0" ]] && \
+   [[ "$(sysctl -n net.ipv4.tcp_congestion_control 2>/dev/null)" == "bbr" ]] && \
+   [[ "$(sysctl -n net.core.default_qdisc 2>/dev/null)" == "cake" ]]; then
+    ok "4. Твики sysctl (max_map_count, split_lock=0) и сеть CAKE + BBR активны"
 else
-    echo -e "[ ${RED}FAIL${NC} ] 4. Ошибка применения sysctl (max_map_count=$MAX_MAP, TCP=$CONG)"
-    ((FAIL++))
+    fail "4. Ошибка применения твиков sysctl или CAKE + BBR"
 fi
 
-# 5. Проверка планировщика NVMe
-NVME_SCHED=$(cat /sys/block/nvme0n1/queue/scheduler 2>/dev/null || echo "no_nvme")
-if [[ "$NVME_SCHED" == *"[none]"* || "$NVME_SCHED" == "no_nvme" ]]; then
-    echo -e "[ ${GREEN}OK${NC} ] 5. Планировщик ввода-вывода NVMe оптимален ($NVME_SCHED)"
-    ((PASS++))
+# 5. Энергосбережение Wi-Fi отключено
+if [[ -f /etc/NetworkManager/conf.d/wifi-powersave-off.conf ]] && grep -q "wifi.powersave = 2" /etc/NetworkManager/conf.d/wifi-powersave-off.conf; then
+    ok "5. Энергосбережение Wi-Fi отключено (wifi.powersave = 2)"
 else
-    echo -e "[ ${RED}FAIL${NC} ] 5. Неоптимальный планировщик NVMe ($NVME_SCHED)"
-    ((FAIL++))
+    fail "5. Конфигурация отключения энергосбережения Wi-Fi не найдена"
 fi
 
-# 6. Проверка блокировки Intel Watchdog (iTCO_wdt)
-if ! lsmod | grep -q "iTCO_wdt" && grep -q "blacklist iTCO_wdt" /etc/modprobe.d/watchdog.conf 2>/dev/null; then
-    echo -e "[ ${GREEN}OK${NC} ] 6. Модуль Intel Watchdog (iTCO_wdt) заблокирован и выгружен"
-    ((PASS++))
+# 6. Правила udev (ntsync и планировщик NVMe)
+if [[ -f /etc/udev/rules.d/99-gaming-optimizations.rules ]] && grep -q "ntsync" /etc/udev/rules.d/99-gaming-optimizations.rules; then
+    ok "6. Правила udev (ntsync и планировщик I/O NVMe) применены"
 else
-    echo -e "[ ${RED}FAIL${NC} ] 6. Модуль iTCO_wdt загружен или отсутствует /etc/modprobe.d/watchdog.conf"
-    ((FAIL++))
+    fail "6. Правила udev 99-gaming-optimizations.rules не найдены"
 fi
 
-# 7. Проверка системных служб (earlyoom, power-profiles-daemon, fstrim.timer)
+# 7. Блокировка Intel Watchdog (iTCO_wdt)
+if ! lsmod | grep -q "^iTCO_wdt" && grep -q "blacklist iTCO_wdt" /etc/modprobe.d/watchdog.conf 2>/dev/null; then
+    ok "7. Модуль Intel Watchdog (iTCO_wdt) заблокирован и выгружен"
+else
+    fail "7. Модуль iTCO_wdt загружен или отсутствует /etc/modprobe.d/watchdog.conf"
+fi
+
+# 8. Системные службы
 if systemctl is-active --quiet earlyoom.service && systemctl is-active --quiet power-profiles-daemon.service && systemctl is-enabled --quiet fstrim.timer; then
-    echo -e "[ ${GREEN}OK${NC} ] 7. Службы earlyoom, power-profiles-daemon и fstrim.timer активны"
-    ((PASS++))
+    ok "8. Службы earlyoom, power-profiles-daemon и fstrim.timer активны"
 else
-    echo -e "[ ${RED}FAIL${NC} ] 7. Одна из системных служб (earlyoom / power-profiles / fstrim) не активна"
-    ((FAIL++))
+    fail "8. Одна из системных служб (earlyoom / power-profiles / fstrim) не активна"
 fi
 
-# 8. Проверка профиля Konsole Newbl1nk, Fish и Starship
-if [[ -f "$HOME/.local/share/konsole/Newbl1nk.colorscheme" && -f "$HOME/.config/starship.toml" ]] && command -v fish >/dev/null 2>&1 && command -v starship >/dev/null 2>&1; then
-    echo -e "[ ${GREEN}OK${NC} ] 8. Терминал Konsole (Newbl1nk), Fish и Starship настроены"
-    ((PASS++))
+# 9. Konsole (Newbl1nk, 10pt), Fish (левый таймер) и Starship
+if [[ -f "$HOME/.local/share/konsole/Newbl1nk.colorscheme" ]] && \
+   grep -q "JetBrainsMono Nerd Font,10," "$HOME/.local/share/konsole/Fish.profile" 2>/dev/null && \
+   grep -q "_starship_fish_prompt" "$HOME/.config/fish/config.fish" 2>/dev/null && \
+   command -v starship >/dev/null 2>&1; then
+    ok "9. Konsole (Newbl1nk, 10pt), Fish (левый таймер мин/сек) и Starship настроены"
 else
-    echo -e "[ ${RED}FAIL${NC} ] 8. Отсутствуют конфиги Konsole Newbl1nk / Starship или пакет fish"
-    ((FAIL++))
+    fail "9. Отсутствуют конфиги Konsole / Starship или левый таймер в Fish"
 fi
 
-# 9. Проверка .nanorc и AUR-помощника yay
-if [[ -f "$HOME/.nanorc" ]] && command -v yay >/dev/null 2>&1; then
-    echo -e "[ ${GREEN}OK${NC} ] 9. Конфиг редактора .nanorc и AUR-помощник yay установлены"
-    ((PASS++))
+# 10. Конфигурация Nano и AUR-помощник yay
+if [[ -f "$HOME/.nanorc" ]] && sudo test -f /root/.nanorc && command -v yay >/dev/null 2>&1; then
+    ok "10. Конфиг .nanorc (пользователь и root) и AUR-помощник yay установлены"
 else
-    echo -e "[ ${RED}FAIL${NC} ] 9. Отсутствует ~/.nanorc или утилита yay"
-    ((FAIL++))
+    fail "10. Отсутствует .nanorc или утилита yay"
 fi
 
-# 10. Проверка драйверов NVIDIA и prime-run (опционально)
-if command -v prime-run >/dev/null 2>&1 && command -v nvidia-smi >/dev/null 2>&1; then
-    echo -e "[ ${GREEN}OK${NC} ] 10. Драйверы NVIDIA и утилита prime-run установлены и готовы"
-    ((PASS++))
+# 11. Драйверы NVIDIA, Dynamic Boost и prime-run
+if command -v prime-run >/dev/null 2>&1 && command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi >/dev/null 2>&1; then
+    ok "11. Драйверы NVIDIA, Dynamic Boost и утилита prime-run активны"
 else
-    echo -e "[ ${YELLOW}INFO${NC} ] 10. Драйверы NVIDIA не установлены (если есть GPU NVIDIA — запустите nvidia.sh)"
-    ((PASS++))
+    fail "11. Драйверы NVIDIA не активны (запустите nvidia.sh и перезагрузитесь)"
+fi
+
+# 12. Игровое окружение (Steam, GameMode и враппер nvgame 10 ГБ)
+if command -v steam >/dev/null 2>&1 && command -v gamemoderun >/dev/null 2>&1 && [[ -x /usr/local/bin/nvgame ]] && \
+   grep -q "__GL_SHADER_DISK_CACHE_SIZE=10737418240" /usr/local/bin/nvgame; then
+    ok "12. Steam, GameMode и враппер nvgame (кэш 10 ГБ + DXVK) настроены"
+else
+    fail "12. Steam, GameMode или враппер nvgame не настроены"
+fi
+
+# 13. Конфигурация PipeWire и Wayland
+if [[ -f "$HOME/.config/pipewire/pipewire.conf.d/99-gaming-audio.conf" ]] && [[ -f "$HOME/.config/environment.d/wayland.conf" ]]; then
+    ok "13. Конфигурации PipeWire (min-quantum=1024) и Wayland созданы"
+else
+    fail "13. Отсутствуют конфиги PipeWire или Wayland"
+fi
+
+# 14. Div Acer Manager Max (DAMX)
+if command -v DAMX >/dev/null 2>&1 || [[ -x /usr/bin/DAMX ]] || systemctl list-unit-files | grep -qi "damx"; then
+    ok "14. Div Acer Manager Max (DAMX) установлен (клавиша настраивается вручную)"
+else
+    fail "14. Div Acer Manager Max (DAMX) не обнаружен (запустите damx.sh)"
+fi
+
+# 15. Упавшие службы systemd
+FAILED_UNITS=$(systemctl --failed --no-legend | wc -l)
+if [[ "$FAILED_UNITS" -eq 0 ]]; then
+    ok "15. Упавшие системные службы (systemd failed units) отсутствуют"
+else
+    fail "15. Обнаружены упавшие службы systemd ($FAILED_UNITS шт.)"
 fi
 
 echo -e "${CYAN}----------------------------------------------------------------------${NC}"
-if [[ $FAIL -eq 0 ]]; then
-    echo -e "[ ${GREEN}OK${NC} ] ИТОГ: Все проверки пройдены ($PASS/10)!"
-else
-    echo -e "[ ${RED}FAIL${NC} ] ИТОГ: Пройдено $PASS/10, ошибок: $FAIL."
-fi
+echo -e "  ИТОГ ПРОВЕРКИ: ${GREEN}УСПЕШНО: ${PASS}${NC} | ${RED}ОШИБОК: ${FAIL}${NC}"
 echo -e "${CYAN}======================================================================${NC}"

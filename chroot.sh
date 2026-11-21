@@ -4,7 +4,7 @@ set -euo pipefail
 # ==============================================================================
 # НАСТРОЙКА СИСТЕМЫ ВНУТРИ ARCH-CHROOT (KDE Plasma 6 + Wayland + Fish + ZRAM)
 # ВНИМАНИЕ: Скрипт создан автором под собственные нужды и конкретное железо
-# (Acer Nitro V 15). Автор не несёт ответственности за последствия его использования.
+# (Acer Nitro V15-51). Автор не несёт ответственности за последствия его использования.
 # ==============================================================================
 
 GREEN='\033[0;32m'
@@ -13,7 +13,7 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 
 echo -e "${CYAN}======================================================================${NC}"
-echo -e "${CYAN}  НАСТРОЙКА СИСТЕМЫ В CHROOT (KDE Plasma 6 + Оптимизации + Fish)${NC}"
+echo -e "${CYAN}  НАСТРОЙКА СИСТЕМЫ В CHROOT (KDE Plasma 6 + Оптимизации + Fish)      ${NC}"
 echo -e "${CYAN}======================================================================${NC}"
 
 echo -e "\n${YELLOW}[1/10] Настройка часового пояса, локали и имени хоста...${NC}"
@@ -62,11 +62,20 @@ sed -i 's/^#MAKEFLAGS=.*/MAKEFLAGS="-j$(nproc)"/' /etc/makepkg.conf
 pacman -Syu --noconfirm
 
 echo -e "\n${YELLOW}[4/10] Установка KDE Plasma 6, графики Intel, звука и утилит...${NC}"
-pacman -S --noconfirm --needed     xorg-xwayland plasma-meta konsole dolphin kate ark spectacle gwenview kcalc     sddm packagekit-qt6 flatpak     mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver     pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber gst-plugin-pipewire     bluez bluez-utils networkmanager-openvpn network-manager-applet usb_modeswitch     power-profiles-daemon timeshift pacman-contrib zram-generator earlyoom     fish fzf starship gvfs-mtp tig git haveged highlight     ttf-jetbrains-mono-nerd ttf-dejavu noto-fonts noto-fonts-cjk noto-fonts-emoji
+pacman -S --noconfirm --needed \
+    xorg-xwayland plasma-meta konsole dolphin kate ark spectacle gwenview kcalc \
+    sddm packagekit-qt6 flatpak \
+    mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver \
+    pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber gst-plugin-pipewire \
+    bluez bluez-utils networkmanager-openvpn network-manager-applet usb_modeswitch \
+    power-profiles-daemon timeshift pacman-contrib zram-generator earlyoom \
+    fish fzf starship gvfs-mtp tig git haveged highlight \
+    aspell aspell-en aspell-ru hunspell hunspell-en_us hunspell-ru \
+    ttf-jetbrains-mono-nerd ttf-dejavu noto-fonts noto-fonts-cjk noto-fonts-emoji
 
 chsh -s /bin/fish "$username"
 
-echo -e "\n${YELLOW}[5/10] Настройка сжатой памяти ZRAM (zstd)...${NC}"
+echo -e "\n${YELLOW}[5/10] Настройка сжатой памяти ZRAM (zstd) и лимита логов journald...${NC}"
 cat << 'EOF' > /etc/systemd/zram-generator.conf
 [zram0]
 zram-size = ram / 2
@@ -75,32 +84,58 @@ swap-priority = 100
 fs-type = swap
 EOF
 
-echo -e "\n${YELLOW}[6/10] Применение ядерных твиков sysctl (CachyOS), udev NVMe и блокировка iTCO_wdt...${NC}"
+mkdir -p /etc/systemd/journald.conf.d
+cat << 'EOF' > /etc/systemd/journald.conf.d/99-size-limit.conf
+[Journal]
+SystemMaxUse=150M
+RuntimeMaxUse=50M
+EOF
+
+echo -e "\n${YELLOW}[6/10] Применение ядерных твиков sysctl (CachyOS/Nobara), Wi-Fi, udev и блокировка iTCO_wdt...${NC}"
+cat << 'EOF' > /etc/modules-load.d/network-tuning.conf
+tcp_bbr
+sch_cake
+EOF
+
 cat << 'EOF' > /etc/sysctl.d/99-performance-tweaks.conf
+vm.swappiness = 180
 vm.max_map_count = 2147483642
 vm.dirty_bytes = 268435456
 vm.dirty_background_bytes = 67108864
 vm.dirty_writeback_centisecs = 1500
 vm.page-cluster = 0
 vm.vfs_cache_pressure = 50
+vm.compaction_proactiveness = 0
+fs.file-max = 2097152
 kernel.nmi_watchdog = 0
+kernel.split_lock_mitigate = 0
 dev.i915.perf_stream_paranoid = 0
-net.core.default_qdisc = fq
+net.core.default_qdisc = cake
 net.ipv4.tcp_congestion_control = bbr
 net.core.rmem_max = 16777216
 net.core.wmem_max = 16777216
+net.core.netdev_max_backlog = 16384
 EOF
 
-cat << 'EOF' > /etc/udev/rules.d/60-ioschedulers.rules
+mkdir -p /etc/NetworkManager/conf.d
+cat << 'EOF' > /etc/NetworkManager/conf.d/wifi-powersave-off.conf
+[connection]
+wifi.powersave = 2
+EOF
+
+cat << 'EOF' > /etc/udev/rules.d/99-gaming-optimizations.rules
+KERNEL=="ntsync", MODE="0660", TAG+="uaccess"
 ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="none"
 EOF
 
 cat << 'EOF' > /etc/modprobe.d/watchdog.conf
 blacklist iTCO_vendor_support
 blacklist iTCO_wdt
+install iTCO_wdt /bin/true
+install iTCO_vendor_support /bin/true
 EOF
 
-echo -e "\n${YELLOW}[7/10] Настройка Konsole (Newbl1nk), Fish, Starship и .nanorc...${NC}"
+echo -e "\n${YELLOW}[7/10] Настройка Konsole (Newbl1nk, 10pt), Fish, Starship и .nanorc...${NC}"
 USER_HOME="/home/${username}"
 mkdir -p "${USER_HOME}/.local/share/konsole" "${USER_HOME}/.config/fish" "${USER_HOME}/.config/environment.d"
 
@@ -206,7 +241,7 @@ EOF
 cat << 'EOF' > "${USER_HOME}/.local/share/konsole/Fish.profile"
 [Appearance]
 ColorScheme=Newbl1nk
-Font=JetBrainsMono Nerd Font,11,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
+Font=JetBrainsMono Nerd Font,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1
 
 [General]
 Command=/bin/fish
@@ -226,6 +261,9 @@ add_newline = false
 success_symbol = "[·❯❯](bold green)"
 error_symbol = "[✗](bold red)[❯](bold yellow)[❯](bold green)"
 
+[cmd_duration]
+disabled = true
+
 [directory]
 read_only = " 🔒"
 read_only_style = "cyan"
@@ -234,34 +272,40 @@ read_only_style = "cyan"
 symbol = "[ ](bold green)"
 truncation_length = 6
 truncation_symbol = ""
-
-[git_commit]
-commit_hash_length = 4
-tag_symbol = "🔖 "
-
-[git_status]
-conflicted = "🏳 "
-ahead = "🏎💨"
-behind = "😰"
-diverged = "😵"
-untracked = "🤷‍"
-stashed = "📦 "
-modified = "📝"
-staged = '[++\($count\)](green)'
-renamed = "👅"
-deleted = "🗑 "
 EOF
 
 cat << 'EOF' > "${USER_HOME}/.config/fish/config.fish"
 set -g -x fish_greeting ''
+
+alias upd='sudo pacman -Syu'
+alias clean='sudo pacman -Sc --noconfirm && sudo paccache -rk2'
+alias gpuinfo='nvidia-smi'
+
 if status is-interactive
     starship init fish | source
+
+    functions -c fish_prompt _starship_fish_prompt
+    function fish_prompt
+        if set -q CMD_DURATION; and test $CMD_DURATION -gt 2000
+            set -l total_s (math -s0 "$CMD_DURATION / 1000")
+            set -l m (math -s0 "$total_s / 60")
+            set -l s (math "$total_s % 60")
+            if test $m -gt 0
+                echo -n (set_color --bold yellow)"[время: "$m"м "$s"с] "(set_color normal)
+            else
+                set -l s_dec (math -s1 "$CMD_DURATION / 1000")
+                echo -n (set_color --bold yellow)"[время: "$s_dec"с] "(set_color normal)
+            end
+        end
+        _starship_fish_prompt
+    end
 end
 EOF
 
 cat << 'EOF' > "${USER_HOME}/.config/environment.d/wayland.conf"
 ELECTRON_OZONE_PLATFORM_HINT=auto
 MOZ_ENABLE_WAYLAND=1
+NVD_BACKEND=direct
 EOF
 
 cat << 'EOF' > "${USER_HOME}/.nanorc"
@@ -301,6 +345,7 @@ echo -e "\n${YELLOW}[10/10] Установка и настройка загру�
 pacman -S --noconfirm --needed grub efibootmgr os-prober
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
 sed -i 's/^#GRUB_DISABLE_OS_PROBER=false/GRUB_DISABLE_OS_PROBER=false/' /etc/default/grub
+sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="\([^"]*\)"/GRUB_CMDLINE_LINUX_DEFAULT="\1 modprobe.blacklist=iTCO_wdt,iTCO_vendor_support"/' /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 
 echo -e "\n${GREEN}Настройка chroot.sh успешно завершена!${NC}"
