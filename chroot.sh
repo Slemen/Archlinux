@@ -334,12 +334,15 @@ cp "${USER_HOME}/.nanorc" /root/.nanorc
 chown -R "${username}:${username}" "${USER_HOME}"
 
 echo -e "\n${YELLOW}[8/10] Установка AUR-помощника yay-bin...${NC}"
+echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/99-yay-temp
+chmod 440 /etc/sudoers.d/99-yay-temp
 su - "$username" -c "
     git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin &&
     cd /tmp/yay-bin &&
     makepkg -si --noconfirm &&
     rm -rf /tmp/yay-bin
 "
+rm -f /etc/sudoers.d/99-yay-temp
 
 echo -e "\n${YELLOW}[9/10] Включение системных служб...${NC}"
 systemctl enable NetworkManager.service
