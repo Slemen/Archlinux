@@ -16,6 +16,8 @@ NC='\033[0m'
 PASS=0
 FAIL=0
 
+sudo -v 2>/dev/null || true
+
 ok()   { echo -e "[ ${GREEN}OK${NC} ] $1"; ((++PASS)); }
 fail() { echo -e "[ ${RED}FAIL${NC} ] $1"; ((++FAIL)); }
 

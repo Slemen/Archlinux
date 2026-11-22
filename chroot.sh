@@ -25,7 +25,7 @@ sed -i 's/^#ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
 
 echo "LANG=ru_RU.UTF-8" > /etc/locale.conf
-echo "KEYMAP=ru" > /etc/vconsole.conf
+echo "KEYMAP=ruwin_alt_sh-UTF-8" > /etc/vconsole.conf
 echo "FONT=cyr-sun16" >> /etc/vconsole.conf
 
 read -rp "Введите имя компьютера (hostname, например arch-nitro): " hostname
@@ -69,7 +69,7 @@ pacman -S --noconfirm --needed \
     pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber gst-plugin-pipewire \
     bluez bluez-utils networkmanager-openvpn network-manager-applet usb_modeswitch \
     power-profiles-daemon timeshift pacman-contrib zram-generator earlyoom \
-    fish fzf starship gvfs-mtp tig git haveged highlight \
+    fish fzf starship gvfs-mtp tig git github-cli haveged highlight \
     aspell aspell-en aspell-ru hunspell hunspell-en_us hunspell-ru \
     ttf-jetbrains-mono-nerd ttf-dejavu noto-fonts noto-fonts-cjk noto-fonts-emoji
 
@@ -280,6 +280,15 @@ set -g -x fish_greeting ''
 alias upd='sudo pacman -Syu'
 alias clean='sudo pacman -Sc --noconfirm && sudo paccache -rk2'
 alias gpuinfo='nvidia-smi'
+alias c='clear'
+
+function pushall --description "Add, commit and push all changes"
+    set -l msg "Update scripts"
+    if test (count $argv) -gt 0
+        set msg "$argv"
+    end
+    git add . && git commit -m "$msg" && git push
+end
 
 if status is-interactive
     starship init fish | source
@@ -344,6 +353,7 @@ systemctl enable paccache.timer
 mkdir -p /etc/pacman.d/hooks
 cat << 'EOF' > /etc/pacman.d/hooks/10-timeshift-autosnap.hook
 [Trigger]
+Operation = Install
 Operation = Upgrade
 Type = Package
 Target = linux

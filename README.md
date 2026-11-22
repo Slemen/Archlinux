@@ -37,7 +37,10 @@ curl -fsSL "https://slemen.github.io/Archlinux/base.sh?t=$(date +%s)" -o base.sh
 
 ---
 
-### 2. Интерактивное меню пост-установки (после перезагрузки в KDE)
+### 2. Первичная настройка Timeshift (обязательно перед первым обновлением)
+Откройте приложение **Timeshift** в меню KDE, выберите тип снимков **BTRFS**, укажите корневой раздел диска (`/dev/nvme0n1p2`) и завершите мастер настройки. После этого хук `pacman` будет автоматически создавать снимки перед каждым обновлением ядра, NVIDIA, Mesa и Plasma.
+
+### 3. Интерактивное меню пост-установки (после перезагрузки в KDE)
 После входа в KDE Plasma откройте Konsole и запустите единое меню:
 ```bash
 curl -fsSL "https://slemen.github.io/Archlinux/menu.sh?t=$(date +%s)" -o /tmp/menu.sh && bash /tmp/menu.sh
