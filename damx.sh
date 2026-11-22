@@ -85,6 +85,25 @@ chmod +x "$INSTALL_SCRIPT"
 cd "$(dirname "$INSTALL_SCRIPT")"
 sudo ./"$(basename "$INSTALL_SCRIPT")" </dev/tty
 
+LINUWU_DIR=$(find "$WORK_DAMX" -name "linuwu_sense.c" -exec dirname {} \; | head -n 1 || true)
+if [[ -n "$LINUWU_DIR" && -f "$LINUWU_DIR/Makefile" ]]; then
+    sudo rm -rf /usr/src/linuwu-sense
+    sudo cp -r "$LINUWU_DIR" /usr/src/linuwu-sense
+    sudo mkdir -p /etc/pacman.d/hooks
+    sudo tee /etc/pacman.d/hooks/95-linuwu-sense.hook > /dev/null << 'EOF'
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = linux-headers
+
+[Action]
+Description = Автоматическая пересборка модуля ядра linuwu_sense (DAMX) под новое ядро...
+When = PostTransaction
+Exec = /bin/sh -c 'if [ -d /usr/src/linuwu-sense ]; then make -C /usr/src/linuwu-sense clean all && make -C /usr/src/linuwu-sense install && depmod -a; fi'
+EOF
+fi
+
 rm -f "$LOCAL_ARCHIVE"
 echo -e "${CYAN}Установочный архив удалён из папки Документы.${NC}"
 

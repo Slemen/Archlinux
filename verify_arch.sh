@@ -122,7 +122,7 @@ else
 fi
 
 # 14. Div Acer Manager Max (DAMX)
-if command -v DAMX >/dev/null 2>&1 || [[ -x /usr/bin/DAMX ]] || systemctl list-unit-files | grep -qi "damx"; then
+if (command -v DAMX >/dev/null 2>&1 || [[ -x /usr/bin/DAMX ]] || systemctl list-unit-files | grep -qi "damx") && [[ -f /etc/pacman.d/hooks/95-linuwu-sense.hook ]]; then
     ok "14. Div Acer Manager Max (DAMX) установлен (клавиша настраивается вручную)"
 else
     fail "14. Div Acer Manager Max (DAMX) не обнаружен (запустите damx.sh)"

@@ -341,6 +341,23 @@ systemctl enable earlyoom.service
 systemctl enable fstrim.timer
 systemctl enable paccache.timer
 
+mkdir -p /etc/pacman.d/hooks
+cat << 'EOF' > /etc/pacman.d/hooks/10-timeshift-autosnap.hook
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = linux
+Target = nvidia
+Target = nvidia-utils
+Target = mesa
+Target = plasma-desktop
+
+[Action]
+Description = Создание снимка Btrfs в Timeshift перед обновлением критических пакетов...
+When = PreTransaction
+Exec = /bin/sh -c 'if [ -f /etc/timeshift/timeshift.json ] && command -v timeshift >/dev/null 2>&1; then /usr/bin/timeshift --create --comments "Pacman-Auto-Snap" --tags O --scripted; fi'
+EOF
+
 echo -e "\n${YELLOW}[10/10] Установка и настройка загрузчика GRUB (UEFI)...${NC}"
 pacman -S --noconfirm --needed grub efibootmgr os-prober
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
