@@ -64,7 +64,7 @@ pacman -Syu --noconfirm
 echo -e "\n${YELLOW}[4/10] Установка KDE Plasma 6, графики Intel, звука и утилит...${NC}"
 pacman -S --noconfirm --needed \
     xorg-xwayland plasma-meta dolphin kde-utilities kde-graphics kde-system firefox firefox-i18n-ru \
-    sddm packagekit-qt6 xdg-desktop-portal-kde 7zip unrar unzip ufw flatpak \
+    sddm packagekit-qt6 xdg-desktop-portal-kde 7zip unrar unzip ufw \
     mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver \
     pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber gst-plugin-pipewire \
     bluez bluez-utils networkmanager-openvpn network-manager-applet usb_modeswitch \
