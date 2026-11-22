@@ -63,7 +63,7 @@ pacman -Syu --noconfirm
 
 echo -e "\n${YELLOW}[4/10] Установка KDE Plasma 6, графики Intel, звука и утилит...${NC}"
 pacman -S --noconfirm --needed \
-    xorg-xwayland plasma-meta konsole dolphin kate ark spectacle gwenview kcalc \
+    xorg-xwayland plasma-meta kde-utilities kde-graphics kde-system firefox firefox-i18n-ru \
     sddm packagekit-qt6 flatpak \
     mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver \
     pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber gst-plugin-pipewire \
