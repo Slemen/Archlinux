@@ -64,7 +64,7 @@ pacman -Syu --noconfirm
 echo -e "\n${YELLOW}[4/10] Установка KDE Plasma 6, графики Intel, звука и утилит...${NC}"
 pacman -S --noconfirm --needed \
     xorg-xwayland plasma-meta dolphin kde-utilities kde-graphics kde-system firefox firefox-i18n-ru \
-    sddm packagekit-qt6 \
+    sddm packagekit-qt6 xdg-desktop-portal-kde 7zip unrar unzip ufw flatpak \
     mesa lib32-mesa vulkan-intel lib32-vulkan-intel intel-media-driver \
     pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber gst-plugin-pipewire \
     bluez bluez-utils networkmanager-openvpn network-manager-applet usb_modeswitch \
@@ -331,7 +331,17 @@ include "/usr/share/nano-syntax-highlighting/*.nanorc"
 EOF
 
 cp "${USER_HOME}/.nanorc" /root/.nanorc
+mkdir -p "${USER_HOME}/.config"
+cat << 'EOF' > "${USER_HOME}/.config/kxkbrc"
+[Layout]
+DisplayNames=,
+LayoutList=us,ru
+Options=grp:alt_shift_toggle
+ResetOldOptions=true
+Use=true
+EOF
 chown -R "${username}:${username}" "${USER_HOME}"
+
 
 echo -e "\n${YELLOW}[8/10] Установка AUR-помощника yay-bin...${NC}"
 echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/99-yay-temp
@@ -346,6 +356,10 @@ rm -f /etc/sudoers.d/99-yay-temp
 
 echo -e "\n${YELLOW}[9/10] Включение системных служб...${NC}"
 systemctl enable NetworkManager.service
+systemctl enable ufw.service
+ufw default deny incoming
+ufw default allow outgoing
+ufw --force enable
 systemctl enable bluetooth.service
 systemctl enable sddm.service
 systemctl enable power-profiles-daemon.service
