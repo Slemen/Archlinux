@@ -69,7 +69,7 @@ pacman -S --noconfirm --needed \
     pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber gst-plugin-pipewire \
     bluez bluez-utils networkmanager-openvpn network-manager-applet usb_modeswitch \
     power-profiles-daemon timeshift pacman-contrib zram-generator earlyoom \
-    fish fzf starship gvfs-mtp tig git github-cli haveged highlight nano-syntax-highlighting nano-syntax-highlighting \
+    fish fzf starship gvfs-mtp tig git github-cli haveged highlight nano-syntax-highlighting \
     aspell aspell-en aspell-ru hunspell hunspell-en_us hunspell-ru \
     ttf-jetbrains-mono-nerd ttf-dejavu noto-fonts noto-fonts-cjk noto-fonts-emoji
 

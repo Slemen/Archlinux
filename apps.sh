@@ -39,7 +39,6 @@ mkdir -p "$HOME/.local/share/Steam" "$HOME/.cache/nvidia/GLCache"
 if command -v balooctl6 >/dev/null 2>&1; then
     balooctl6 config add excludeFolders "$HOME/.local/share/Steam" 2>/dev/null || true
     balooctl6 restart 2>/dev/null || true
-    balooctl6 restart 2>/dev/null || true
 fi
 
 sudo tee /usr/local/bin/nvgame > /dev/null << 'EOF'
