@@ -100,7 +100,7 @@ Target = linux-headers
 [Action]
 Description = Автоматическая пересборка модуля ядра linuwu_sense (DAMX) под новое ядро...
 When = PostTransaction
-Exec = /bin/sh -c 'if [ -d /usr/src/linuwu-sense ]; then make -C /usr/src/linuwu-sense clean all && make -C /usr/src/linuwu-sense install && depmod -a; fi'
+Exec = /bin/sh -c 'if [ -d /usr/src/linuwu-sense ]; then KVER=$(ls -1 /usr/lib/modules | sort -V | tail -n 1); make -C /usr/src/linuwu-sense KVER="$KVER" KERNELRELEASE="$KVER" clean all && make -C /usr/src/linuwu-sense KVER="$KVER" KERNELRELEASE="$KVER" install && depmod -a; fi'
 EOF
 fi
 

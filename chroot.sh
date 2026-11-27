@@ -69,7 +69,7 @@ pacman -S --noconfirm --needed \
     pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber gst-plugin-pipewire \
     bluez bluez-utils networkmanager-openvpn network-manager-applet usb_modeswitch \
     power-profiles-daemon timeshift pacman-contrib zram-generator earlyoom \
-    fish fzf starship gvfs-mtp tig git github-cli haveged highlight \
+    fish fzf starship gvfs-mtp tig git github-cli haveged highlight nano-syntax-highlighting nano-syntax-highlighting \
     aspell aspell-en aspell-ru hunspell hunspell-en_us hunspell-ru \
     ttf-jetbrains-mono-nerd ttf-dejavu noto-fonts noto-fonts-cjk noto-fonts-emoji
 
@@ -346,7 +346,7 @@ chown -R "${username}:${username}" "${USER_HOME}"
 echo -e "\n${YELLOW}[8/10] Установка AUR-помощника yay-bin...${NC}"
 echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/99-yay-temp
 chmod 440 /etc/sudoers.d/99-yay-temp
-su - "$username" -c "
+su -s /bin/bash - "$username" -c "
     git clone https://aur.archlinux.org/yay-bin.git /tmp/yay-bin &&
     cd /tmp/yay-bin &&
     makepkg -si --noconfirm &&

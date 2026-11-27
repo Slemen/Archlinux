@@ -29,7 +29,7 @@ echo -e "${CYAN}================================================================
 echo -e "\n${YELLOW}[1/3] Установка Steam, GameMode, кодеков и повседневных программ...${NC}"
 sudo pacman -Syu --noconfirm --needed \
     steam gamemode lib32-gamemode bc \
-    libreoffice-fresh libreoffice-fresh-ru vlc qbittorrent yt-dlp ffmpeg
+    libreoffice-fresh libreoffice-fresh-ru vlc vlc-plugins-all qbittorrent yt-dlp ffmpeg
 sudo usermod -aG gamemode "$USER" 2>/dev/null || true
 echo -e "${GREEN}✔ Программы и игровой стек установлены.${NC}"
 
@@ -38,6 +38,8 @@ mkdir -p "$HOME/.local/share/Steam" "$HOME/.cache/nvidia/GLCache"
 
 if command -v balooctl6 >/dev/null 2>&1; then
     balooctl6 config add excludeFolders "$HOME/.local/share/Steam" 2>/dev/null || true
+    balooctl6 restart 2>/dev/null || true
+    balooctl6 restart 2>/dev/null || true
 fi
 
 sudo tee /usr/local/bin/nvgame > /dev/null << 'EOF'
